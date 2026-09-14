@@ -27,13 +27,6 @@ Built strictly matching the **Enigame Figma Design System**, featuring a mobile-
 
 ## Key Features
 
-### 0. Complete Figma Onboarding & Auth Journey
-- **01 - Splash Screen:** Lavender backdrop (`#8E97FD`), dashed journey loops, brand title `ENIGAME`, slogan `Adventure is in us`, and copyright footer `© Copyright Enigmavity 2020. All rights reserved`. Interactive tap to begin with instant skip control.
-- **02 - Select Language:** Multi-language gateway with Portugal (`Bandera Portugal.png`) and USA circular flag badges, interactive hover effects, and automatic locale setting.
-- **03 - Create Account / Login:** Exact Figma frame 03 with Facebook (`#6979F8`), Google OAuth pills, email login fields (`Gabriel`, `Gabriel@gmail.com`, masked password with eye toggle), policy agreement checkbox, and `Get Started` CTA.
-- **04 to 04.3 - User Guide Flow:** 4-stage visual guide using Figma illustration cutouts (`Userguide.png` to `Userguide4.png`), 4-bar progress indicator, and the iconic `Let the Adventure Begin >` action button leading into the main dashboard.
-
-
 ### 1. Home Discovery Dashboard
 * **Dynamic Search & Quick Action Grid**: Instant search across routes, historical monuments, and districts with 4 elevated shortcut pills (`Map`, `Routes`, `QR Code`, `Users`).
 * **Category Filters**: Filter between *Experiences*, *Adventure*, and *Tour* itineraries.
