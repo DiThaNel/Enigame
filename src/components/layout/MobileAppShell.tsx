@@ -114,11 +114,13 @@ export const MobileAppShell: React.FC = () => {
             <TopStatusBar />
 
             <main className="flex-1 overflow-y-auto no-scrollbar relative">
-              {activeTab === 'home' && <HomeDashboard />}
-              {activeTab === 'routes' && <RoutesCatalog />}
-              {activeTab === 'meetup' && <MeetupHub />}
-              {activeTab === 'points' && <PointsStoreView />}
-              {activeTab === 'profile' && <ProfileView />}
+              <div key={activeTab} className="w-full h-full animate-tab-enter">
+                {activeTab === 'home' && <HomeDashboard />}
+                {activeTab === 'routes' && <RoutesCatalog />}
+                {activeTab === 'meetup' && <MeetupHub />}
+                {activeTab === 'points' && <PointsStoreView />}
+                {activeTab === 'profile' && <ProfileView />}
+              </div>
             </main>
 
             <BottomNavBar />

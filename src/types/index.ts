@@ -1,4 +1,13 @@
-export type Difficulty = 'Easy' | 'Medium' | 'Hard';
+export type RouteDifficulty = 1 | 2 | 3 | 4; // 1: Easy, 2: Medium, 3: Hard, 4: Explorer
+export type Difficulty = 'Easy' | 'Medium' | 'Hard' | 'Explorer' | RouteDifficulty;
+
+export const DIFFICULTY_LABELS: Record<RouteDifficulty, string> = {
+  1: 'Easy',
+  2: 'Medium',
+  3: 'Hard',
+  4: 'Explorer',
+};
+
 export type RouteCategory = 'experiences' | 'adventure' | 'tour';
 
 export interface Checkpoint {
@@ -19,7 +28,9 @@ export interface Route {
   city: string;
   country: string;
   coverImage: string;
-  difficulty: Difficulty;
+  difficulty: RouteDifficulty;
+  culture: 1 | 2 | 3;
+  price: number;
   distanceKm: number;
   durationMinutes: number;
   rewardPoints: number;

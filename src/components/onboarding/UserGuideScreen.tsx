@@ -75,7 +75,7 @@ export const UserGuideScreen: React.FC = () => {
 
         <button
           onClick={() => setAppStage('main')}
-          className="text-xs font-semibold px-3 py-1 rounded-full bg-white/50 hover:bg-white/80 text-[#3F414E] transition-all cursor-pointer"
+          className="text-xs font-semibold px-3 py-1 rounded-full bg-[#8E97FD] hover:bg-white/80 text-[#FFFFFF] hover:text-[#8E97FD] transition-all cursor-pointer"
         >
           Skip
         </button>
@@ -84,7 +84,7 @@ export const UserGuideScreen: React.FC = () => {
       {/* Main Illustration and Text from Figma Frames 04 - 04.3 */}
       <div className="w-full flex-1 px-6 flex flex-col items-center justify-center text-center z-10 my-auto">
         {/* Illustration */}
-        <div className="w-full max-w-[300px] h-[260px] sm:h-[290px] flex items-center justify-center">
+        <div className="w-full flex items-center justify-center">
           <img
             src={current.image}
             alt={current.title}
@@ -94,10 +94,11 @@ export const UserGuideScreen: React.FC = () => {
 
         {/* Text Block */}
         <div className="mt-4 max-w-xs flex flex-col items-center">
-          <h2 className="text-xl sm:text-2xl font-bold text-[#4D5BC9] leading-tight">
+          <h2 className="text-xl sm:text-2xl font-medium text-[#4D5BC9] leading-tight">
             {current.title}
           </h2>
-          <p className="text-xs sm:text-sm text-[#5B6082] mt-3 leading-relaxed font-normal">
+          <div className="w-40 h-0.5 bg-[#4D5BC9] my-3 rounded-full" />
+          <p className="text-md sm:text-md text-[#4D5BC9] mt-1 leading-relaxed font-regular">
             {current.description}
           </p>
         </div>
@@ -107,7 +108,7 @@ export const UserGuideScreen: React.FC = () => {
           <div className="w-full max-w-xs mt-6">
             <button
               onClick={() => setAppStage('main')}
-              className="w-full h-13 py-3.5 px-6 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-sm tracking-wide shadow-[0_12px_24px_rgba(142,151,253,0.35)] transition-all active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full h-13 py-3.5 px-6 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-semibold text-sm tracking-wide shadow-[0_12px_24px_rgba(142,151,253,0.35)] transition-all active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Let the Adventure Begin</span>
               <ChevronRight size={18} />
@@ -117,10 +118,10 @@ export const UserGuideScreen: React.FC = () => {
           <div className="w-full max-w-xs mt-6">
             <button
               onClick={handleNext}
-              className="w-full h-12 py-3 px-6 rounded-full bg-white hover:bg-neutral-50 text-[#4D5BC9] font-bold text-xs tracking-wide shadow-sm border border-[#E0E2EE] transition-all active:scale-[0.99] flex items-center justify-center gap-1.5 cursor-pointer"
+              className="w-full h-12 py-3 px-6 rounded-full bg-white hover:bg-neutral-50 text-[#4D5BC9] font-semibold text-sm tracking-wide shadow-sm border border-[#E0E2EE] transition-all active:scale-[0.99] flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <span>Next</span>
-              <ChevronRight size={16} />
+              <ChevronRight size={18} />
             </button>
           </div>
         )}

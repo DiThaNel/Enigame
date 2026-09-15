@@ -2,7 +2,28 @@
 
 import React, { useState, useRef } from 'react';
 import { useEnigameStore } from '@/store/useEnigameStore';
-import { ChevronLeft, ChevronRight, Star, Info } from 'lucide-react';
+import { RouteMapPreview } from './RouteMapPreview';
+import { ChevronLeft, ChevronRight, Star, Info, Check, Clock } from 'lucide-react';
+import { DIFFICULTY_LABELS, RouteDifficulty } from '@/types';
+
+export const formatRouteDuration = (minutes: number): string => {
+  if (minutes === 60) return '1 Hour';
+  if (minutes % 60 === 0) return `${minutes / 60} Hours`;
+  if (minutes > 60) {
+    const hours = Math.floor(minutes / 60);
+    const rem = minutes % 60;
+    return rem > 0 ? `${hours}h ${rem}m` : `${hours} Hours`;
+  }
+  return `${minutes} min`;
+};
+
+const DIFFICULTY_OPTIONS: Array<{ key: 'All' | RouteDifficulty; label: string; stars?: number }> = [
+  { key: 'All', label: 'All' },
+  { key: 1, label: 'Easy', stars: 1 },
+  { key: 2, label: 'Medium', stars: 2 },
+  { key: 3, label: 'Hard', stars: 3 },
+  { key: 4, label: 'Explorer', stars: 4 },
+];
 
 export const RoutesCatalog: React.FC = () => {
   const {
@@ -60,8 +81,7 @@ export const RoutesCatalog: React.FC = () => {
   const [isCityDragging, setIsCityDragging] = useState(false);
   const startXRef = useRef(0);
 
-  // Category filter in 07.2
-  const [activeCategory, setActiveCategory] = useState<'Tech Route' | 'Tech/Explorer' | 'Explorer'>('Tech Route');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<'All' | RouteDifficulty>('All');
   const [giftCode, setGiftCode] = useState('');
   const [isGiftChecked, setIsGiftChecked] = useState(true);
 
@@ -127,39 +147,13 @@ export const RoutesCatalog: React.FC = () => {
   if (routesViewStep === 'select-city') {
     return (
       <div
-        className="w-full min-h-[calc(100vh-140px)] pb-20 bg-[#EEF0FA] flex flex-col items-center justify-center px-4 relative overflow-hidden select-none"
+        className="w-full min-h-[calc(100vh-140px)] bg-[#EEF0FA] flex flex-col items-center justify-center px-4 relative overflow-hidden select-none animate-route-enter"
         style={{
           backgroundImage: 'url(/assets/Lenguaje.png)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       >
-        {/* Pagination Dots placed ABOVE the card */}
-        <div className="flex items-center gap-2 mb-2 z-20">
-          {cities.map((_, idx) => {
-            const isActive = activeCityIndex % cityCount === idx;
-            return (
-              <button
-                key={idx}
-                onClick={() => {
-                  if (idx !== activeCityIndex % cityCount) {
-                    setCityShuffleDir(idx > activeCityIndex % cityCount ? 'right' : 'left');
-                    setTimeout(() => {
-                      setActiveCityIndex(idx);
-                      setCityShuffleDir(null);
-                    }, 280);
-                  }
-                }}
-                className={
-                  'h-2 rounded-full transition-all duration-300 cursor-pointer ' +
-                  (isActive ? 'w-6 bg-[#6979F8] shadow-sm' : 'w-2 bg-[#8E97FD]/40 hover:bg-[#8E97FD]/70')
-                }
-                aria-label={`Select city ${idx + 1}`}
-              />
-            );
-          })}
-        </div>
-
         {/* 3D Card Shuffle Deck Container for Cities */}
         <div
           className="relative w-full max-w-[315px] h-[600px] mt-4 flex items-center justify-center cursor-grab active:cursor-grabbing"
@@ -183,7 +177,7 @@ export const RoutesCatalog: React.FC = () => {
             let transform = '';
             let zIndex = 10;
             let opacity = 0.7;
-            let transition = isCityDragging && isFront ? 'none' : 'all 340ms cubic-bezier(0.34, 1.56, 0.64, 1)';
+            let transition = isCityDragging && isFront ? 'none' : 'all 380ms cubic-bezier(0.22, 1, 0.36, 1)';
 
             if (isFront) {
               zIndex = 30;
@@ -251,14 +245,41 @@ export const RoutesCatalog: React.FC = () => {
                   </p>
                 </div>
 
-                {/* Select City Button at Bottom */}
-                <div className="relative z-10 p-6 pb-7 flex flex-col items-center">
+                {/* Select City Button and Dots at Bottom */}
+                <div className="relative z-10 p-6 pb-7 flex flex-col items-center gap-3">
+                  {/* Pagination Dots placed INSIDE the card, ABOVE the select city button */}
+                  <div className="flex items-center gap-2 mb-0.5 z-20">
+                    {cities.map((_, dotIdx) => {
+                      const isActive = activeCityIndex % cityCount === dotIdx;
+                      return (
+                        <button
+                          key={dotIdx}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (dotIdx !== activeCityIndex % cityCount) {
+                              setCityShuffleDir(dotIdx > activeCityIndex % cityCount ? 'right' : 'left');
+                              setTimeout(() => {
+                                setActiveCityIndex(dotIdx);
+                                setCityShuffleDir(null);
+                              }, 280);
+                            }
+                          }}
+                          className={
+                            'h-2 rounded-full transition-all duration-300 cursor-pointer ' +
+                            (isActive ? 'w-6 bg-[#8E97FD] shadow-sm' : 'w-2 bg-white/40 hover:bg-white/70')
+                          }
+                          aria-label={`Select city ${dotIdx + 1}`}
+                        />
+                      );
+                    })}
+                  </div>
+
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       handleSelectCity(city.cityKey);
                     }}
-                    className="w-full max-w-[230px] h-12 py-3 px-6 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-extrabold text-xs tracking-wider uppercase shadow-lg shadow-indigo-400/30 transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center"
+                    className="w-full max-w-[230px] h-12 py-3 px-6 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-sm tracking-wider shadow-lg shadow-indigo-400/30 transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center"
                   >
                     Select City
                   </button>
@@ -273,22 +294,39 @@ export const RoutesCatalog: React.FC = () => {
 
   // ==========================================
   // STEP 2: 07.2 - Routes (City Selected)
-  // Matching Figma frame 07.2 with Category Tabs & Vertical Route Cards
+  // Top image with circular bottom curve & category tabs removed
   // ==========================================
   if (routesViewStep === 'city-routes') {
+    const cityRoutes = routes.filter((rt) =>
+      rt.city.toLowerCase().includes(selectedCity.toLowerCase()) ||
+      selectedCity.toLowerCase().includes(rt.city.toLowerCase())
+    );
+    const baseRoutes = cityRoutes.length > 0 ? cityRoutes : routes;
+
+    const filteredRoutes = baseRoutes.filter((rt) => {
+      if (selectedDifficulty === 'All') return true;
+      return rt.difficulty === selectedDifficulty;
+    });
+
     return (
-      <div className="w-full min-h-screen pb-24 bg-[#EEF0FA] flex flex-col relative overflow-y-auto no-scrollbar">
-        {/* Top Cover Banner with City Photo & Back Arrow */}
-        <div className="relative h-56 w-full overflow-hidden shrink-0 bg-[#1E1F3D]">
+      <div className="w-full min-h-screen pb-24 bg-[#EEF0FA] flex flex-col relative overflow-y-auto no-scrollbar animate-route-enter">
+        {/* Top Cover Banner with City Photo & Circular Bottom Radius */}
+        <div className="relative h-64 w-full overflow-hidden shrink-0 bg-[#1E1F3D] rounded-b-[44px] shadow-md z-10">
           <img
-            src="/assets/HomeImage.png"
+            src={
+              selectedCity.includes('Porto')
+                ? '/assets/HomeImage.png'
+                : selectedCity.includes('Lisboa')
+                ? '/assets/ExperiencesCarousel.png'
+                : '/assets/BragancaHome.png'
+            }
             alt={selectedCity}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/40" />
 
-          {/* Top Header with Back < and Info icon */}
-          <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
+          {/* Top Header with Back < and City Badge */}
+          <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
             <button
               onClick={() => setRoutesViewStep('select-city')}
               className="w-9 h-9 rounded-full bg-white/80 backdrop-blur-md text-[#1E1F3D] flex items-center justify-center hover:bg-white transition-all shadow-sm cursor-pointer"
@@ -297,82 +335,154 @@ export const RoutesCatalog: React.FC = () => {
               <ChevronLeft size={22} />
             </button>
 
-            <div className="flex items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-semibold">
-                {selectedCity}
-              </span>
-            </div>
+            <span className="px-3.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-semibold">
+              {selectedCity}
+            </span>
+          </div>
+
+          {/* City Headline in Banner */}
+          <div className="absolute bottom-5 left-6 right-6 z-10">
+            <h2 className="text-white text-xl sm:text-2xl font-black drop-shadow-md">
+              {selectedCity}
+            </h2>
+            <p className="text-white/80 text-xs font-medium mt-0.5">
+              Select an adventure to begin exploring
+            </p>
           </div>
         </div>
 
-        {/* Content Container with Rounded Top */}
-        <div className="relative -mt-6 mx-3 bg-white rounded-t-[30px] rounded-b-[24px] p-4 shadow-lg border border-[#EBEFFE] flex-1 flex flex-col">
-          {/* Category Filter Tabs: Tech Route, Tech/Explorer, Explorer */}
-          <div className="flex items-center justify-around border-b border-[#F0F2FA] pb-3 mb-4">
-            {(['Tech Route', 'Tech/Explorer', 'Explorer'] as const).map((cat) => {
-              const isActive = activeCategory === cat;
+        {/* Vertical Feed of Route Cards directly below the circular banner with Difficulty Filter */}
+        <div className="w-full px-4 pt-4 flex-1 flex flex-col">
+          {/* Header Row */}
+          <div className="flex items-center justify-between mb-2.5 px-1">
+            <h3 className="text-xs font-bold text-[#1E1F3D] uppercase tracking-wider">
+              Available Routes ({filteredRoutes.length})
+            </h3>
+          </div>
+
+          {/* Difficulty Filter Chips with smooth horizontal scroll */}
+          <div className="w-full overflow-x-auto no-scrollbar pb-3 mb-2 px-1 flex items-center gap-2 touch-pan-x scroll-smooth select-none">
+            {DIFFICULTY_OPTIONS.map((opt) => {
+              const isSelected = selectedDifficulty === opt.key;
               return (
                 <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
+                  key={String(opt.key)}
+                  onClick={() => setSelectedDifficulty(opt.key)}
                   className={
-                    'text-xs font-bold transition-all relative pb-1.5 cursor-pointer ' +
-                    (isActive
-                      ? 'text-[#6979F8] font-extrabold'
-                      : 'text-[#8E90A6] hover:text-[#1E1F3D]')
+                    'px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center gap-1.5 shrink-0 active:scale-95 ' +
+                    (isSelected
+                      ? 'bg-[#6979F8] text-white shadow-md shadow-indigo-300/40 scale-105 font-bold'
+                      : 'bg-white text-[#6F728F] border border-[#E4E7F4] hover:border-[#6979F8]/40 hover:text-[#1E1F3D]')
                   }
                 >
-                  <span>{cat}</span>
-                  {isActive && (
-                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#6979F8]" />
+                  <span>{opt.label}</span>
+                  {opt.stars && (
+                    <div className="flex items-center gap-0.5">
+                      {Array.from({ length: opt.stars }).map((_, sIdx) => (
+                        <img
+                          key={sIdx}
+                          src="/assets/StarSingle.png"
+                          alt="★"
+                          className="w-2.5 h-2.5 object-contain"
+                        />
+                      ))}
+                    </div>
                   )}
                 </button>
               );
             })}
           </div>
 
-          {/* Vertical Feed of Route Cards matching Figma Frame 07.2 */}
+          {/* Route Cards */}
           <div className="w-full flex flex-col gap-3.5">
-            {routes.map((rt, idx) => (
+            {filteredRoutes.length === 0 ? (
+              <div className="w-full py-8 text-center bg-white rounded-2xl border border-[#E4E7F4] p-4 flex flex-col items-center gap-2">
+                <p className="text-xs text-[#8E90B0]">
+                  No routes found for{' '}
+                  <span className="font-bold text-[#1E1F3D]">
+                    {selectedDifficulty === 'All' ? 'this filter' : DIFFICULTY_LABELS[selectedDifficulty as RouteDifficulty]}
+                  </span>{' '}
+                  difficulty.
+                </p>
+                <button
+                  onClick={() => setSelectedDifficulty('All')}
+                  className="text-xs font-bold text-[#6979F8] hover:underline cursor-pointer"
+                >
+                  Show all routes
+                </button>
+              </div>
+            ) : (
+              filteredRoutes.map((rt, idx) => (
               <div
                 key={rt.id}
                 onClick={() => viewRouteDetail(rt, 'routes')}
-                className="relative rounded-[24px] overflow-hidden shadow-sm hover:shadow-md cursor-pointer group active:scale-[0.99] transition-all bg-[#1E1F3D] border border-black/5"
+                className="relative rounded-[24px] overflow-hidden shadow-sm hover:shadow-md cursor-pointer group active:scale-[0.99] transition-all bg-[#1E1F3D] border border-[#6979F8]"
               >
-                <div className="relative h-40 w-full overflow-hidden">
+                <div className="relative h-60 w-full overflow-hidden">
                   <img
-                    src={idx % 2 === 0 ? '/assets/BragancaHome.png' : '/assets/HomeImage.png'}
+                    src={rt.coverImage || (idx % 2 === 0 ? '/assets/BragancaHome.png' : '/assets/HomeImage.png')}
                     alt={rt.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/15" />
 
-                  {/* Route Title */}
-                  <div className="absolute top-3.5 left-4 right-4 z-10">
-                    <h3 className="text-white text-base font-extrabold leading-snug drop-shadow-md line-clamp-2">
+                  {/* Route Title & Dynamic Price Badge */}
+                  <div className="absolute top-3.5 left-4 right-4 z-10 flex items-start justify-between gap-2">
+                    <h4 className="text-white text-xl font-medium leading-snug drop-shadow-md line-clamp-2">
                       {rt.title}
-                    </h3>
+                    </h4>
+                    <span className="px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white font-bold text-xs shadow-md border border-white/20 shrink-0">
+                      {rt.price}€
+                    </span>
                   </div>
 
-                  {/* Bottom details: Medal Badge & Difficulty Stars */}
+                  {/* Bottom details: Medal Badge, Duration & Culture, Difficulty Stars */}
                   <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between z-10">
-                    <div className="w-6 h-6 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
-                      <img src="/assets/RouteNameBadge.png" alt="Medal" className="w-4 h-4 object-contain" />
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0">
+                        <img src="/assets/RouteNameBadge.png" alt="Medal" className="w-6 h-6 object-contain" />
+                      </div>
+                      <div className="flex flex-col text-white/90">
+                        <span className="text-[11px] font-bold flex items-center gap-1">
+                          <Clock size={11} className="text-[#8E97FD]" />
+                          {formatRouteDuration(rt.durationMinutes)}
+                        </span>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <div className="flex items-center gap-0.5">
+                            {Array.from({ length: rt.culture }).map((_, cIdx) => (
+                              <img
+                                key={cIdx}
+                                src="/assets/CultureSingle.png"
+                                alt="Culture"
+                                className="w-3.5 h-3.5 object-contain"
+                              />
+                            ))}
+                          </div>
+                          <span className="text-[10px] text-white/80 font-medium">Culture</span>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-[10px] font-bold text-white tracking-wider">
-                      <span className="text-white/80">DIFFICULTY:</span>
-                      <div className="flex items-center text-amber-400">
-                        <Star size={12} fill="currentColor" />
-                        <Star size={12} fill="currentColor" />
-                        <Star size={12} fill="currentColor" />
-                        {rt.difficulty === 'Hard' && <Star size={12} fill="currentColor" />}
+                    <div className="flex flex-col items-end gap-1 text-[10px] font-medium text-white tracking-wider">
+                      <span className="text-white/80 font-bold text-[9px] uppercase">
+                        DIFFICULTY: {DIFFICULTY_LABELS[rt.difficulty]}
+                      </span>
+                      <div className="flex items-center gap-0.5">
+                        {Array.from({ length: rt.difficulty }).map((_, sIdx) => (
+                          <img
+                            key={sIdx}
+                            src="/assets/StarSingle.png"
+                            alt="★"
+                            className="w-3.5 h-3.5 object-contain"
+                          />
+                        ))}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
+            ))
+          )}
           </div>
         </div>
       </div>
@@ -381,7 +491,7 @@ export const RoutesCatalog: React.FC = () => {
 
   // ==========================================
   // STEP 3: 07.3 - Routes (Route Selected)
-  // Full Page Detail View matching Figma frame 07.3
+  // Full Page Detail View: Circular bottom top banner + Vector Route Map Preview
   // ==========================================
   const activeRoute = selectedRoute || routes[0];
 
@@ -400,18 +510,18 @@ export const RoutesCatalog: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-h-screen pb-24 bg-[#EEF0FA] flex flex-col relative overflow-y-auto no-scrollbar">
-      {/* Castle Cover Top Banner */}
-      <div className="relative h-60 w-full overflow-hidden shrink-0 bg-[#1E1F3D]">
+    <div className="w-full min-h-screen pb-24 bg-[#EEF0FA] flex flex-col relative overflow-y-auto no-scrollbar animate-route-enter">
+      {/* Castle Cover Top Banner with Circular Bottom Radius */}
+      <div className="relative h-64 w-full overflow-hidden shrink-0 bg-[#1E1F3D] rounded-b-[44px] shadow-md z-10">
         <img
           src="/assets/HomeImage.png"
           alt="Castle Tower"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/25" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/10 to-black/40" />
 
         {/* Top Header with Back button */}
-        <div className="absolute top-4 left-4 z-10">
+        <div className="absolute top-4 left-4 z-20">
           <button
             onClick={handleBackFromDetail}
             className="w-9 h-9 rounded-full bg-white/80 backdrop-blur-md text-[#1E1F3D] flex items-center justify-center hover:bg-white transition-all shadow-sm cursor-pointer"
@@ -423,71 +533,103 @@ export const RoutesCatalog: React.FC = () => {
       </div>
 
       {/* Main Full Page Card matching Figma Frame 07.3 */}
-      <div className="relative -mt-10 mx-3 bg-white rounded-[28px] p-5 shadow-xl border border-[#EBEFFE] flex-1 flex flex-col">
+      <div className="relative -mt-24 mx-3 bg-white rounded-[28px] p-5 shadow-xl border border-[#EBEFFE] flex-1 flex flex-col z-20">
         {/* Header Title & Badge */}
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-extrabold text-[#1E1F3D] leading-snug">
+          <h1 className="text-lg font-semibold text-[#1E1F3D] leading-snug">
             {activeRoute.title}
           </h1>
           <img src="/assets/RouteNameBadge.png" alt="Badge" className="w-7 h-7 object-contain shrink-0 ml-2" />
         </div>
 
         {/* Narrative Text */}
-        <p className="text-xs text-[#6E7BFF] font-medium mt-2.5 leading-relaxed">
+        <p className="text-sm text-[#6E7BFF] font-medium mt-2.5 leading-relaxed">
           {activeRoute.description ||
             "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."}
         </p>
 
-        {/* Map / Category Preview Snippet */}
-        <div className="mt-3.5 rounded-2xl overflow-hidden border border-[#EEF0FA] relative">
-          <img
-            src="/assets/RouteNameCategory.png"
-            alt="Map Preview"
-            className="w-full h-auto object-cover"
-          />
+        {/* Route Map Preview (styled vector map similar to Meet-up radar) */}
+        <div className="mt-3.5">
+          <RouteMapPreview title={activeRoute.title} checkpointsCount={6} />
         </div>
 
         {/* 4 Metrics Row matching Figma 07.3 */}
         <div className="grid grid-cols-4 gap-2 mt-3.5 text-center items-center py-2 border-y border-[#F2F4FD]">
           <div className="flex flex-col items-center">
-            <img src="/assets/RouteNameHour.png" alt="1 Hour" className="h-6 object-contain" />
-            <span className="text-[10px] font-bold text-[#585A7E] mt-1">1 Hour</span>
+            <img src="/assets/RouteNameHour.png" alt="Duration" className="h-6 object-contain" />
+            <span className="text-[10px] font-bold text-[#585A7E] mt-1">
+              {formatRouteDuration(activeRoute.durationMinutes)}
+            </span>
           </div>
           <div className="flex flex-col items-center">
-            <img src="/assets/RouteDificultyStars.png" alt="Difficulty" className="h-4 object-contain" />
-            <span className="text-[10px] font-bold text-[#585A7E] mt-2">Difficulty</span>
+            <div className="flex items-center justify-center gap-1 h-6">
+              {Array.from({ length: activeRoute.difficulty }).map((_, starIdx) => (
+                <img
+                  key={starIdx}
+                  src="/assets/StarSingle.png"
+                  alt="Star"
+                  className="w-4 h-4 object-contain"
+                />
+              ))}
+            </div>
+            <span className="text-[10px] font-bold text-[#585A7E] mt-1">
+              {DIFFICULTY_LABELS[activeRoute.difficulty]}
+            </span>
           </div>
           <div className="flex flex-col items-center">
-            <img src="/assets/RouteNameCulture.png" alt="Culture" className="h-6 object-contain" />
-            <span className="text-[10px] font-bold text-[#585A7E] mt-1">Culture</span>
+            <div className="flex items-center justify-center gap-1 h-6">
+              {Array.from({ length: activeRoute.culture }).map((_, cIdx) => (
+                <img
+                  key={cIdx}
+                  src="/assets/CultureSingle.png"
+                  alt="Culture"
+                  className="w-4 h-4 object-contain"
+                />
+              ))}
+            </div>
+            <span className="text-[10px] font-bold text-[#585A7E] mt-1">
+              Culture
+            </span>
           </div>
           <div className="flex flex-col items-center">
             <img src="/assets/RouteNamePrice.png" alt="Price" className="h-6 object-contain" />
-            <span className="text-[10px] font-bold text-[#585A7E] mt-1">30€</span>
+            <span className="text-[10px] font-bold text-[#585A7E] mt-1">
+              {activeRoute.price}€
+            </span>
           </div>
         </div>
 
         {/* Gifted Code Discount Box matching Figma */}
         <div className="mt-3.5 p-3.5 rounded-2xl border border-[#8E97FD]/40 bg-[#F7F8FE]">
-          <label className="flex items-center gap-2 cursor-pointer">
+          <label className="flex items-center gap-2.5 cursor-pointer select-none">
             <input
               type="checkbox"
               checked={isGiftChecked}
               onChange={(e) => setIsGiftChecked(e.target.checked)}
-              className="w-4 h-4 rounded text-[#8E97FD] accent-[#8E97FD] cursor-pointer"
+              className="sr-only"
             />
-            <span className="text-xs font-bold text-[#6E7BFF]">
+            <div
+              className={`w-5 h-5 rounded flex items-center justify-center shrink-0 transition-all border ${
+                isGiftChecked
+                  ? 'bg-[#8E97FD] border-[#8E97FD]'
+                  : 'bg-white border-[#A1A4B2]'
+              }`}
+            >
+              {isGiftChecked && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+            </div>
+            <span className="text-md font-medium text-[#6E7BFF]">
               Use your gifted code for a 100% Discount on this route
             </span>
           </label>
 
+
           {isGiftChecked && (
             <input
               type="text"
-              placeholder="ENTER PROMO CODE"
+              placeholder="Promo Code"
               value={giftCode}
               onChange={(e) => setGiftCode(e.target.value)}
-              className="w-full h-9 mt-2.5 px-3 rounded-xl border border-[#8E97FD]/30 text-xs font-bold text-[#1E1F3D] focus:outline-none uppercase bg-white"
+              className="w-full h-9 mt-2.5 px-3 rounded-xl border border-[#8E97FD]/30 text-xs font-bold text-[#1E1F3D] focus:outline-none bg-white"
             />
           )}
         </div>
@@ -495,7 +637,7 @@ export const RoutesCatalog: React.FC = () => {
         {/* Checkout Button matching Figma Frame 07.3 */}
         <button
           onClick={handleCheckout}
-          className="w-full h-12 mt-4 rounded-2xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-extrabold text-xs tracking-wider uppercase shadow-md shadow-indigo-300/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full h-12 mt-4 rounded-2xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-semibold text-md tracking-wide shadow-md shadow-indigo-300/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
           <span>Checkout</span>
           <ChevronRight size={16} />

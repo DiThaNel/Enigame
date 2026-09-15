@@ -1,5 +1,13 @@
 import type { Metadata, Viewport } from 'next';
+import { Poppins } from 'next/font/google';
 import './globals.css';
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-poppins',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Enigame — Mobile Adventure & Mystery Exploration',
@@ -24,8 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="antialiased min-h-screen flex items-center justify-center bg-[#0F1021] text-[#1E1F3D]">
+    <html lang="en" className={poppins.variable}>
+      <body className={`${poppins.className} font-sans antialiased min-h-screen flex items-center justify-center bg-[#0F1021] text-[#1E1F3D]`}>
         {children}
       </body>
     </html>

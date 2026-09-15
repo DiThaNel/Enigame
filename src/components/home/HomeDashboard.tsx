@@ -84,7 +84,7 @@ export const HomeDashboard: React.FC = () => {
             <input
               type="text"
               placeholder="What are you looking for?"
-              className="w-full h-10 pl-10 pr-3 rounded-xl border border-[#D5D8FC] text-xs font-semibold text-[#1E1F3D] placeholder-[#989EEC] focus:outline-none focus:border-[#8E97FD] bg-[#F7F8FE]"
+              className="w-full h-10 pl-10 pr-3 rounded-xl border border-[#D5D8FC] text-xs font-medium text-[#1E1F3D] placeholder-[#989EEC] focus:outline-none focus:border-[#8E97FD] bg-[#F7F8FE]"
             />
             <div className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center pointer-events-none">
               <img src="/assets/Search.png" alt="Search" className="w-3.5 h-3.5 object-contain" />
@@ -102,7 +102,7 @@ export const HomeDashboard: React.FC = () => {
               className="flex flex-col items-center gap-1 group active:scale-95 transition-transform cursor-pointer"
             >
               <div className="w-11 h-11 rounded-full bg-[#8E97FD] flex items-center justify-center text-white shadow-sm shadow-indigo-300/30 group-hover:bg-[#7C82ED] transition-colors">
-                <img src="/assets/RouteSearchbar.png" alt="" className="w-4.5 h-4.5 object-contain brightness-0 invert" />
+                <img src="/assets/HomeSearchbar.png" alt="" className="w-6 h-6 object-contain brightness-0 invert" />
               </div>
               <span className="text-[10px] font-bold text-[#8E97FD]">Map</span>
             </button>
@@ -116,7 +116,7 @@ export const HomeDashboard: React.FC = () => {
               className="flex flex-col items-center gap-1 group active:scale-95 transition-transform cursor-pointer"
             >
               <div className="w-11 h-11 rounded-full bg-[#8E97FD] flex items-center justify-center text-white shadow-sm shadow-indigo-300/30 group-hover:bg-[#7C82ED] transition-colors">
-                <img src="/assets/Routemenuicon.png" alt="" className="w-4.5 h-4.5 object-contain brightness-0 invert" />
+                <img src="/assets/RouteSearchbar.png" alt="" className="w-6 h-6 object-contain brightness-0 invert" />
               </div>
               <span className="text-[10px] font-bold text-[#8E97FD]">Routes</span>
             </button>
@@ -127,7 +127,7 @@ export const HomeDashboard: React.FC = () => {
               className="flex flex-col items-center gap-1 group active:scale-95 transition-transform cursor-pointer"
             >
               <div className="w-11 h-11 rounded-full bg-[#8E97FD] flex items-center justify-center text-white shadow-sm shadow-indigo-300/30 group-hover:bg-[#7C82ED] transition-colors">
-                <img src="/assets/QRCodeSearchBar.png" alt="" className="w-4.5 h-4.5 object-contain brightness-0 invert" />
+                <img src="/assets/QRCodeSearchBar.png" alt="" className="w-6 h-6 object-contain brightness-0 invert" />
               </div>
               <span className="text-[10px] font-bold text-[#8E97FD]">QR Code</span>
             </button>
@@ -141,7 +141,7 @@ export const HomeDashboard: React.FC = () => {
               className="flex flex-col items-center gap-1 group active:scale-95 transition-transform cursor-pointer"
             >
               <div className="w-11 h-11 rounded-full bg-[#8E97FD] flex items-center justify-center text-white shadow-sm shadow-indigo-300/30 group-hover:bg-[#7C82ED] transition-colors">
-                <img src="/assets/UserSearchBar.png" alt="" className="w-4.5 h-4.5 object-contain brightness-0 invert" />
+                <img src="/assets/UserSearchBar.png" alt="" className="w-6 h-6 object-contain brightness-0 invert" />
               </div>
               <span className="text-[10px] font-bold text-[#8E97FD]">Users</span>
             </button>
@@ -149,33 +149,8 @@ export const HomeDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Carousel Section: Compact spacing & Dots ON TOP of the card */}
-      <div className="w-full px-4 pt-2 pb-2 flex flex-col items-center justify-center">
-        {/* Pagination Dots placed ABOVE the card */}
-        <div className="flex items-center gap-2 mb-2 z-20">
-          {featuredRoutes.map((_, idx) => {
-            const isActive = activeIndex % count === idx;
-            return (
-              <button
-                key={idx}
-                onClick={() => {
-                  if (idx !== activeIndex % count) {
-                    setShuffleDirection(idx > activeIndex % count ? 'right' : 'left');
-                    setTimeout(() => {
-                      setActiveIndex(idx);
-                      setShuffleDirection(null);
-                    }, 280);
-                  }
-                }}
-                className={
-                  'h-2 rounded-full transition-all duration-300 cursor-pointer ' +
-                  (isActive ? 'w-6 bg-[#6979F8] shadow-sm' : 'w-2 bg-[#8E97FD]/40 hover:bg-[#8E97FD]/70')
-                }
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            );
-          })}
-        </div>
+      {/* Carousel Section: Compact spacing */}
+      <div className="w-full px-4 pt-1 pb-2 flex flex-col items-center justify-center">
 
         {/* 3D Card Shuffle Deck Container */}
         <div
@@ -201,7 +176,7 @@ export const HomeDashboard: React.FC = () => {
             let transform = '';
             let zIndex = 10;
             let opacity = 0.7;
-            let transition = isDragging && isFront ? 'none' : 'all 340ms cubic-bezier(0.34, 1.56, 0.64, 1)';
+            let transition = isDragging && isFront ? 'none' : 'all 380ms cubic-bezier(0.22, 1, 0.36, 1)';
 
             if (isFront) {
               zIndex = 30;
@@ -274,8 +249,35 @@ export const HomeDashboard: React.FC = () => {
                   </h2>
                 </div>
 
-                {/* Bottom Details: Route Title and Discover! Button */}
-                <div className="relative z-10 p-4 pb-5 flex flex-col items-center gap-2">
+                {/* Bottom Details: Pagination Dots, Route Title and Discover! Button */}
+                <div className="relative z-10 p-4 pb-5 flex flex-col items-center gap-2.5">
+                  {/* Pagination Dots placed INSIDE the card, ABOVE the route title and button */}
+                  <div className="flex items-center gap-2 mb-0.5 z-20">
+                    {featuredRoutes.map((_, dotIdx) => {
+                      const isActive = activeIndex % count === dotIdx;
+                      return (
+                        <button
+                          key={dotIdx}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (dotIdx !== activeIndex % count) {
+                              setShuffleDirection(dotIdx > activeIndex % count ? 'right' : 'left');
+                              setTimeout(() => {
+                                setActiveIndex(dotIdx);
+                                setShuffleDirection(null);
+                              }, 280);
+                            }
+                          }}
+                          className={
+                            'h-2 rounded-full transition-all duration-300 cursor-pointer ' +
+                            (isActive ? 'w-6 bg-[#8E97FD] shadow-sm' : 'w-2 bg-white/40 hover:bg-white/70')
+                          }
+                          aria-label={`Go to slide ${dotIdx + 1}`}
+                        />
+                      );
+                    })}
+                  </div>
+
                   {/* Route Title Badge */}
                   <div className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-[11px] font-semibold shadow-sm text-center max-w-[220px] truncate">
                     {r.title}
@@ -287,7 +289,7 @@ export const HomeDashboard: React.FC = () => {
                       e.stopPropagation();
                       handleDiscover();
                     }}
-                    className="w-full max-w-[220px] h-11 py-2.5 px-6 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-xs tracking-wider uppercase shadow-md shadow-indigo-400/30 transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center mt-0.5"
+                    className="w-full max-w-[220px] h-11 py-2.5 px-6 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-semibold text-sm tracking-wider shadow-md shadow-indigo-400/30 transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center mt-0.5"
                   >
                     Discover!
                   </button>

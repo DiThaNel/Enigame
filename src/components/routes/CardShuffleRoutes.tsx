@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { Route } from '@/types';
-import { Star, ChevronLeft, ChevronRight, Layers, Sparkles } from 'lucide-react';
+import { Route, DIFFICULTY_LABELS } from '@/types';
+import { Star, ChevronLeft, ChevronRight, Layers, Sparkles, Clock } from 'lucide-react';
 
 interface CardShuffleRoutesProps {
   routes: Route[];
@@ -249,19 +249,38 @@ export const CardShuffleRoutes: React.FC<CardShuffleRoutesProps> = ({
               <div className="relative z-10 p-5 pt-2 flex flex-col gap-3">
                 {/* Metric Indicators */}
                 <div className="flex items-center justify-between text-xs text-white/90">
-                  <div className="flex items-center gap-1">
-                    <span className="text-white/70 text-[11px] font-bold">DIFFICULTY:</span>
-                    <div className="flex items-center text-amber-400">
-                      <Star size={12} fill="currentColor" />
-                      <Star size={12} fill="currentColor" />
-                      <Star size={12} fill="currentColor" />
-                      {route.difficulty === 'Hard' && <Star size={12} fill="currentColor" />}
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-white/80 text-[11px] font-bold uppercase">
+                      {DIFFICULTY_LABELS[route.difficulty]}:
+                    </span>
+                    <div className="flex items-center gap-0.5">
+                      {Array.from({ length: route.difficulty }).map((_, sIdx) => (
+                        <img
+                          key={sIdx}
+                          src="/assets/StarSingle.png"
+                          alt="★"
+                          className="w-3 h-3 object-contain"
+                        />
+                      ))}
                     </div>
                   </div>
 
-                  <span className="text-xs font-bold text-white/95">
-                    {route.durationMinutes} min • {route.distanceKm} km
-                  </span>
+                  <div className="flex items-center gap-2 font-bold text-white/95 text-[11px]">
+                    <div className="flex items-center gap-0.5">
+                      {Array.from({ length: route.culture }).map((_, cIdx) => (
+                        <img
+                          key={cIdx}
+                          src="/assets/CultureSingle.png"
+                          alt="Culture"
+                          className="w-3 h-3 object-contain"
+                        />
+                      ))}
+                    </div>
+                    <span>•</span>
+                    <span>{route.price}€</span>
+                    <span>•</span>
+                    <span>{route.durationMinutes} min</span>
+                  </div>
                 </div>
 
                 {/* Primary Button */}

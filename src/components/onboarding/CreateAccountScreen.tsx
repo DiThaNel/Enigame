@@ -44,7 +44,7 @@ export const CreateAccountScreen: React.FC = () => {
         </button>
         <button
           onClick={() => setAppStage('guide')}
-          className="text-xs font-semibold px-3 py-1 rounded-full bg-white/50 hover:bg-white/80 text-[#3F414E] transition-all cursor-pointer"
+          className="text-xs font-semibold px-3 py-1 rounded-full bg-[#8E97FD] hover:bg-white/80 text-[#FFFFFF] hover:text-[#8E97FD] transition-all cursor-pointer"
         >
           Skip
         </button>
@@ -52,7 +52,7 @@ export const CreateAccountScreen: React.FC = () => {
 
       {/* Main Form Content matching Figma Frame 03 - Login */}
       <div className="w-full px-6 py-4 flex flex-col items-center z-10 max-w-sm mx-auto">
-        <h1 className="text-2xl sm:text-[28px] font-bold text-[#3F414E] text-center tracking-tight mb-6">
+        <h1 className="text-2xl sm:text-[32px] font-regular text-[#3F414E] text-center tracking-tight mb-6">
           Create your account
         </h1>
 
@@ -62,9 +62,9 @@ export const CreateAccountScreen: React.FC = () => {
           <button
             type="button"
             onClick={() => handleSubmit()}
-            className="w-full h-13 py-3.5 px-5 rounded-full bg-[#6979F8] hover:bg-[#5868EB] text-white flex items-center justify-center gap-3 font-bold text-xs tracking-wider uppercase shadow-sm transition-all active:scale-[0.99] cursor-pointer"
+            className="w-full h-14 py-3.5 px-5 rounded-full bg-[#6979F8] hover:bg-[#5868EB] text-white flex items-center justify-center gap-3 font-regular text-xs tracking-widest uppercase shadow-sm transition-all active:scale-[0.99] cursor-pointer"
           >
-            <span className="w-6 h-6 rounded-full bg-white text-[#6979F8] flex items-center justify-center text-sm font-black">
+            <span className="w-6 h-6 rounded-full bg-white text-[#6979F8] flex items-center justify-center text-sm font-black ">
               f
             </span>
             <span>CONTINUE WITH FACEBOOK</span>
@@ -74,7 +74,7 @@ export const CreateAccountScreen: React.FC = () => {
           <button
             type="button"
             onClick={() => handleSubmit()}
-            className="w-full h-13 py-3.5 px-5 rounded-full bg-white hover:bg-neutral-50 text-[#3F414E] border border-[#EBEAEC] flex items-center justify-center gap-3 font-bold text-xs tracking-wider uppercase shadow-sm transition-all active:scale-[0.99] cursor-pointer"
+            className="w-full h-14 py-3.5 px-5 rounded-full bg-white hover:bg-neutral-50 text-[#3F414E] border border-[#EBEAEC] flex items-center justify-center gap-3 font-regular text-xs tracking-widest uppercase shadow-sm transition-all active:scale-[0.99] cursor-pointer "
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -100,7 +100,7 @@ export const CreateAccountScreen: React.FC = () => {
 
         {/* Divider */}
         <div className="w-full my-5 flex items-center justify-center">
-          <span className="text-[#3F414E] text-[11px] font-bold tracking-widest uppercase">
+          <span className="text-[#3F414E] text-[14px] font-medium tracking-widest uppercase">
             OR LOG IN WITH EMAIL
           </span>
         </div>
@@ -162,23 +162,32 @@ export const CreateAccountScreen: React.FC = () => {
                 type="button"
                 className="text-[#6979F8] font-semibold hover:underline cursor-pointer"
               >
-                Privace Policy
+                Privacy Policy
               </button>
             </span>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={agreed}
-                onChange={(e) => setAgreed(e.target.checked)}
-                className="w-5 h-5 rounded border border-[#A1A4B2] text-[#8E97FD] focus:ring-[#8E97FD] accent-[#8E97FD] cursor-pointer"
-              />
-            </label>
+              <label className="flex items-center cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={agreed}
+                  onChange={(e) => setAgreed(e.target.checked)}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-5 h-5 rounded flex items-center justify-center transition-all border ${
+                    agreed
+                      ? 'bg-[#8E97FD] border-[#8E97FD]'
+                      : 'bg-white border-[#A1A4B2]'
+                  }`}
+                >
+                  {agreed && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+                </div>
+              </label>
           </div>
 
           {/* Submit Button: Figma Frame 03 "Get Started" */}
           <button
             type="submit"
-            className="w-full h-14 mt-4 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-sm tracking-wide shadow-[0_12px_24px_rgba(142,151,253,0.35)] transition-all active:scale-[0.99] flex items-center justify-center cursor-pointer"
+            className="w-full h-14 mt-4 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-semibold text-md tracking-wide shadow-[0_12px_24px_rgba(142,151,253,0.35)] transition-all active:scale-[0.99] flex items-center justify-center cursor-pointer"
           >
             Get Started
           </button>
@@ -186,11 +195,11 @@ export const CreateAccountScreen: React.FC = () => {
       </div>
 
       {/* Footer Link */}
-      <div className="pb-8 pt-2 font-bold text-center text-xs text-[#3F414E] z-10">
+      <div className="pb-8 pt-2 font-semibold text-center text-xs text-[#3F414E] z-10">
         ALREADY HAVE AN ACCOUNT?{' '}
         <button
           onClick={() => handleSubmit()}
-          className="text-[#6979F8] font-bold hover:underline ml-1 cursor-pointer"
+          className="text-[#6979F8] font-semibold hover:underline ml-1 cursor-pointer"
         >
           LOG IN
         </button>
