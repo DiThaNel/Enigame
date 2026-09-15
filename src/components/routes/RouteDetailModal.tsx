@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useEnigameStore } from '@/store/useEnigameStore';
 import { ChevronLeft, Star, Check } from 'lucide-react';
 import { DIFFICULTY_LABELS } from '@/types';
+import { RouteMapPreview } from './RouteMapPreview';
 
 export const RouteDetailModal: React.FC = () => {
   const { selectedRouteDetail, setSelectedRouteDetail, setActiveRouteId, setScannerOpen } = useEnigameStore();
@@ -56,13 +57,9 @@ export const RouteDetailModal: React.FC = () => {
             {selectedRouteDetail.description}
           </p>
 
-          {/* Map / Category Preview Snippet */}
-          <div className="mt-4 rounded-2xl overflow-hidden border border-[#EEF0FA] relative">
-            <img
-              src="/assets/RouteNameCategory.png"
-              alt="Map Preview"
-              className="w-full h-auto object-cover"
-            />
+          {/* Dynamic Vector Route Map Preview tailored to route */}
+          <div className="mt-4">
+            <RouteMapPreview route={selectedRouteDetail} />
           </div>
 
           {/* 4 Metric Icons Row matching Figma 07.3 */}

@@ -25,12 +25,18 @@ export const EditProfileModal: React.FC = () => {
 
   if (!isEditProfileOpen) return null;
 
-  const avatarOptions = [
-    currentUser.avatar,
-    'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=80',
-  ];
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setSelectedAvatar(event.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,8 +54,8 @@ export const EditProfileModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/65 backdrop-blur-sm animate-fadeIn">
-      <div className="w-full max-w-[430px] max-h-[92vh] bg-white rounded-t-[36px] sm:rounded-[36px] overflow-hidden flex flex-col shadow-2xl animate-slideUp">
+    <div className="absolute inset-0 z-50 flex items-end sm:items-center justify-center bg-black/75 backdrop-blur-sm animate-fadeIn">
+      <div className="w-full max-h-[95%] bg-white rounded-t-[36px] sm:rounded-[36px] overflow-hidden flex flex-col shadow-2xl animate-slideUp">
         {/* Header */}
         <div className="px-6 pt-5 pb-3 border-b border-[#EEF0FA] flex items-center justify-between">
           <button
@@ -61,7 +67,7 @@ export const EditProfileModal: React.FC = () => {
           <h2 className="text-base font-extrabold text-[#1E1F3D]">Edit Profile</h2>
           <button
             onClick={handleSave}
-            className="text-xs font-bold text-[#7C82ED] hover:text-[#6C5CE7] px-2 py-1"
+            className="text-xs font-bold text-[#7C82ED] hover:text-[#6C5CE7] px-2 py-1 cursor-pointer"
           >
             Done
           </button>
@@ -81,29 +87,18 @@ export const EditProfileModal: React.FC = () => {
               </div>
               <label 
                 className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#7C82ED] text-white flex items-center justify-center shadow-md cursor-pointer hover:bg-[#6C5CE7] transition-colors"
-                title="Change Avatar"
+                title="Upload Photo"
               >
                 <Camera size={15} />
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleImageUpload} 
+                  className="hidden" 
+                />
               </label>
             </div>
 
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-bold text-[#7A7C99]">Preset Avatars:</span>
-              <div className="flex items-center gap-1.5">
-                {avatarOptions.map((av, idx) => (
-                  <button
-                    type="button"
-                    key={idx}
-                    onClick={() => setSelectedAvatar(av)}
-                    className={`w-6 h-6 rounded-full overflow-hidden border ${
-                      selectedAvatar === av ? 'ring-2 ring-[#7C82ED] border-white' : 'border-[#DCE0F9]'
-                    }`}
-                  >
-                    <img src={av} alt="Option" className="w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            </div>
             <span className="text-[11px] font-bold text-[#6C5CE7] bg-[#EEF0FF] px-3 py-0.5 rounded-full mt-1">
               Level {currentUser.level} Adventurer Frame
             </span>

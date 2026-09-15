@@ -11,6 +11,10 @@ import { ProfileView } from '@/components/profile/ProfileView';
 import { PointsStoreView } from '@/components/store/PointsStoreView';
 import { QRScannerView } from '@/components/scanner/QRScannerView';
 import { EditProfileModal } from '@/components/profile/EditProfileModal';
+import { SettingsModal } from '@/components/profile/SettingsModal';
+import { ChangePasswordModal } from '@/components/profile/ChangePasswordModal';
+import { ChangeEmailModal } from '@/components/profile/ChangeEmailModal';
+import { PurchaseHistoryModal } from '@/components/profile/PurchaseHistoryModal';
 import { ExplorerProfileModal } from '@/components/meetup/ExplorerProfileModal';
 import { HostExpeditionModal } from '@/components/meetup/HostExpeditionModal';
 import { SplashScreen } from '@/components/onboarding/SplashScreen';
@@ -128,6 +132,10 @@ export const MobileAppShell: React.FC = () => {
             {/* Global Modals & Overlays */}
             <QRScannerView />
             <EditProfileModal />
+            <SettingsModal />
+            <ChangePasswordModal />
+            <ChangeEmailModal />
+            <PurchaseHistoryModal />
             <ExplorerProfileModal />
             <HostExpeditionModal />
           </>

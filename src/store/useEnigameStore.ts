@@ -13,6 +13,7 @@ export type RoutesViewStep = 'select-city' | 'city-routes' | 'route-detail';
 export interface UserAccountData {
   name: string;
   email: string;
+  password?: string;
   agreedToPolicy: boolean;
 }
 
@@ -64,6 +65,14 @@ interface EnigameState {
   setSelectedRouteDetail: (route: Route | null) => void;
   isEditProfileOpen: boolean;
   setEditProfileOpen: (open: boolean) => void;
+  isSettingsOpen: boolean;
+  setSettingsOpen: (open: boolean) => void;
+  isChangePasswordOpen: boolean;
+  setChangePasswordOpen: (open: boolean) => void;
+  isChangeEmailOpen: boolean;
+  setChangeEmailOpen: (open: boolean) => void;
+  isPurchaseHistoryOpen: boolean;
+  setPurchaseHistoryOpen: (open: boolean) => void;
   isHostExpeditionOpen: boolean;
   setHostExpeditionOpen: (open: boolean) => void;
   activeRiddleCheckpoint: Checkpoint | null;
@@ -193,6 +202,14 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
   setSelectedRouteDetail: (route) => set({ selectedRouteDetail: route, selectedRoute: route }),
   isEditProfileOpen: false,
   setEditProfileOpen: (open) => set({ isEditProfileOpen: open }),
+  isSettingsOpen: false,
+  setSettingsOpen: (open) => set({ isSettingsOpen: open }),
+  isChangePasswordOpen: false,
+  setChangePasswordOpen: (open) => set({ isChangePasswordOpen: open }),
+  isChangeEmailOpen: false,
+  setChangeEmailOpen: (open) => set({ isChangeEmailOpen: open }),
+  isPurchaseHistoryOpen: false,
+  setPurchaseHistoryOpen: (open) => set({ isPurchaseHistoryOpen: open }),
   isHostExpeditionOpen: false,
   setHostExpeditionOpen: (open) => set({ isHostExpeditionOpen: open }),
   activeRiddleCheckpoint: null,
