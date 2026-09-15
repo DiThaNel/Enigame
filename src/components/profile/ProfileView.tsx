@@ -19,10 +19,13 @@ import {
   X,
   Share2
 } from 'lucide-react';
+import { EditProfilePage } from './EditProfilePage';
 
 export const ProfileView: React.FC = () => {
   const { 
     currentUser, 
+    profileViewStep,
+    setProfileViewStep,
     setEditProfileOpen, 
     setSettingsOpen, 
     setChangePasswordOpen, 
@@ -69,6 +72,11 @@ export const ProfileView: React.FC = () => {
       caption: 'Portuguese azulejos garden courtyard'
     }
   ]);
+
+  // If user is editing profile, render the dedicated EditProfilePage (after all hooks)
+  if (profileViewStep === 'edit-profile') {
+    return <EditProfilePage onBack={() => setProfileViewStep('profile')} />;
+  }
 
   // Completed Trips matching Figma 06.3 - Meet-up (Profile/Trips) using user's flag assets
   const completedTrips = [
@@ -129,7 +137,7 @@ export const ProfileView: React.FC = () => {
 
           {/* Edit Profile Pill Button matching Figma 09.1 */}
           <button
-            onClick={() => setEditProfileOpen(true)}
+            onClick={() => setProfileViewStep('edit-profile')}
             className="h-9 px-4 rounded-full bg-white text-[#1E1F3D] font-bold text-xs shadow-md flex items-center gap-1.5 hover:bg-white/90 active:scale-95 transition-all cursor-pointer"
           >
             <Edit3 size={14} className="text-[#1E1F3D]" />
@@ -141,7 +149,7 @@ export const ProfileView: React.FC = () => {
       {/* Main Profile Floating Card matching Figma Group 7 / 09 - Personal Profile */}
       <div className="mx-5 mt-4 bg-white rounded-[32px] p-6 shadow-[0_12px_36px_rgba(142,151,253,0.18)] border border-[#EAEFFE] flex flex-col items-center text-center relative animate-card-fade-up z-10">
         {/* Profile Avatar Frame with Portugal flag badge */}
-        <div className="relative w-23 h-23 rounded-full p-1 bg-gradient-to-tr from-[#8E97FD] to-[#B2B9FF] shadow-md">
+        <div className="relative w-23 h-23 rounded-full">
           <img
             src={currentUser.avatar || '/assets/TianaAvatar.png'}
             alt={currentUser.name}
@@ -157,7 +165,7 @@ export const ProfileView: React.FC = () => {
         </div>
 
         {/* User Full Name */}
-        <h1 className="text-lg font-black text-[#1E1F3D] mt-3 tracking-tight">
+        <h1 className="text-lg font-black text-[#1E1F3D] mt-3 tracking-tight font-medium">
           {currentUser.name || 'Tiana Rosser'}
         </h1>
 
@@ -167,7 +175,7 @@ export const ProfileView: React.FC = () => {
         </p>
 
         {/* Thin Divider */}
-        <div className="w-full h-px bg-[#F0F2FA] my-4" />
+        <div className="w-full h-px bg-[#8e97fd] my-4" />
 
         {/* 3 Circular Attribute Badges matching Figma */}
         <div className="grid grid-cols-3 gap-2 w-full">
@@ -268,7 +276,7 @@ export const ProfileView: React.FC = () => {
         <div className="px-5 pt-4 flex flex-col gap-3.5 animate-fadeIn z-10">
           {/* Header Row: Photos title & View mode toggle */}
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black text-[#1E1F3D]">Photos</span>
+            <span className="text-xs font-black text-[#1E1F3D] font-semibold">Photos</span>
             <div className="flex items-center gap-1.5 text-[#7A7C99]">
               <button
                 onClick={() => setPhotoViewMode('list')}
@@ -357,7 +365,7 @@ export const ProfileView: React.FC = () => {
         <div className="px-6 pt-5 space-y-6 animate-fadeIn z-10">
           {/* Bio Section */}
           <div>
-            <h3 className="text-sm font-extrabold text-[#1E1F3D] mb-2">Bio</h3>
+            <h3 className="text-sm font-semibold text-[#1E1F3D] mb-2">Bio</h3>
             <p className="text-xs text-[#585A7E] leading-relaxed">
               Passionate cartographer and mystery enthusiast based in northern Portugal. Always hunting for forgotten medieval inscriptions, subterranean passages, and local legends hidden in plain sight.
             </p>
@@ -365,7 +373,7 @@ export const ProfileView: React.FC = () => {
 
           {/* Interests Pills matching Figma 06.2 */}
           <div>
-            <h3 className="text-sm font-extrabold text-[#1E1F3D] mb-3">Interests</h3>
+            <h3 className="text-sm font-semibold text-[#1E1F3D] mb-3">Interests</h3>
             <div className="flex flex-wrap gap-2">
               {['Adventure', 'Traveler', 'Ranker', 'Photography', 'Backpacking', 'Blogger', 'History', 'Castles'].map((tag) => (
                 <span
@@ -404,7 +412,7 @@ export const ProfileView: React.FC = () => {
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <Award size={18} className="text-[#FFB800]" />
-                <h3 className="text-xs font-black text-[#1E1F3D]">Achievements &amp; Badges</h3>
+                <h3 className="text-xs font-black text-[#1E1F3D] font-semibold">Achievements &amp; Badges</h3>
               </div>
               <span className="text-[10px] font-bold text-[#8E97FD]">4 Unlocked</span>
             </div>
@@ -422,24 +430,24 @@ export const ProfileView: React.FC = () => {
 
           {/* Recent Completed Expedition */}
           <div>
-            <span className="text-xs font-black text-[#1E1F3D] block mb-2">Latest Expedition Record</span>
+            <span className="text-xs font-black text-[#1E1F3D] block mb-2 font-semibold">Latest Expedition Record</span>
             <div className="p-3.5 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-[#EEF0FF] flex items-center justify-center text-[#8E97FD]">
                   <Compass size={20} />
                 </div>
                 <div>
-                  <p className="font-bold text-xs text-[#1E1F3D]">Bragança Medieval Mystery</p>
+                  <p className="font-semibold text-xs text-[#1E1F3D] ">Bragança Medieval Mystery</p>
                   <p className="text-[10px] text-[#A5A7C4]">Completed 2 days ago • 4 checkpoints</p>
                 </div>
               </div>
-              <span className="text-xs font-black text-[#8E97FD] bg-[#F2F4FD] px-2.5 py-1 rounded-full">+350 pts</span>
+              <span className="text-xs font-black text-[#8E97FD] bg-[#F2F4FD] px-2.5 py-1 rounded-full font-semibold">+350 pts</span>
             </div>
           </div>
 
           {/* Visited Cities Grid matching Figma 06.3 - Meet-up (Profile/Trips) with user's assets */}
           <div>
-            <span className="text-xs font-black text-[#1E1F3D] block mb-2.5">Visited European Destinations</span>
+            <span className="font-semibold text-xs font-black text-[#1E1F3D] block mb-2.5">Visited European Destinations</span>
             <div className="grid grid-cols-2 gap-3">
               {completedTrips.map((trip, idx) => (
                 <div
@@ -494,7 +502,7 @@ export const ProfileView: React.FC = () => {
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).src = '/assets/BragancaHome.png';
               }}
-              className="w-full h-80 object-cover" 
+              className="w-full h-150 object-cover" 
             />
             <div className="p-4 flex items-center justify-between">
               <span className="text-xs font-bold text-[#1E1F3D]">Enigame Verified Quest Photo</span>

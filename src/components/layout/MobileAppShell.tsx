@@ -131,11 +131,11 @@ export const MobileAppShell: React.FC = () => {
 
             {/* Global Modals & Overlays */}
             <QRScannerView />
-            <EditProfileModal />
             <SettingsModal />
+            <PurchaseHistoryModal />
+            <EditProfileModal />
             <ChangePasswordModal />
             <ChangeEmailModal />
-            <PurchaseHistoryModal />
             <ExplorerProfileModal />
             <HostExpeditionModal />
           </>

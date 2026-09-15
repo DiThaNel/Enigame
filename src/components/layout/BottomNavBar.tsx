@@ -4,7 +4,7 @@ import React from 'react';
 import { useEnigameStore, MainTab } from '@/store/useEnigameStore';
 
 export const BottomNavBar: React.FC = () => {
-  const { activeTab, setActiveTab, setRoutesViewStep } = useEnigameStore();
+  const { activeTab, setActiveTab, setRoutesViewStep, setProfileViewStep } = useEnigameStore();
 
   const tabs: { id: MainTab; label: string; iconSrc: string }[] = [
     { id: 'routes', label: 'Routes', iconSrc: '/assets/Routemenuicon.png' },
@@ -17,6 +17,9 @@ export const BottomNavBar: React.FC = () => {
   const handleTabClick = (tabId: MainTab) => {
     if (tabId === 'routes') {
       setRoutesViewStep('select-city');
+    }
+    if (tabId === 'profile') {
+      setProfileViewStep('profile');
     }
     setActiveTab(tabId);
   };

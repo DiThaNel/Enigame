@@ -103,7 +103,7 @@ export const PurchaseHistoryModal: React.FC = () => {
                   className={order.type === 'gift' ? 'text-[#3E8BFF] stroke-[3]' : 'text-[#00B894] stroke-[3]'}
                 />
                 <span
-                  className={`text-xs font-black tracking-wider uppercase ${
+                  className={`text-xs font-black tracking-wider uppercase font-semibold ${
                     order.type === 'gift' ? 'text-[#3E8BFF]' : 'text-[#00B894]'
                   }`}
                 >
@@ -117,7 +117,7 @@ export const PurchaseHistoryModal: React.FC = () => {
 
             {/* Order Number & Product Codes */}
             <div>
-              <h3 className="text-lg font-black text-[#1E1F3D] tracking-tight">
+              <h3 className="text-lg font-black text-[#1E1F3D] tracking-tight font-semibold">
                 Order {order.orderNumber}
               </h3>
               <div className="mt-1">
@@ -146,7 +146,7 @@ export const PurchaseHistoryModal: React.FC = () => {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#A5A7C4] block">
                   VALUE OF ITEMS
                 </span>
-                <span className="text-sm font-black text-[#4E75FF] mt-0.5 block">
+                <span className="text-sm font-black text-[#4E75FF] mt-0.5 block font-semibold">
                   {order.valueOfItems}
                 </span>
               </div>
@@ -155,7 +155,7 @@ export const PurchaseHistoryModal: React.FC = () => {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#A5A7C4] block">
                   QUANTITY
                 </span>
-                <span className="text-sm font-black text-[#4E75FF] mt-0.5 block">
+                <span className="text-sm font-black text-[#4E75FF] mt-0.5 block font-semibold">
                   {order.quantity}
                 </span>
               </div>
@@ -220,7 +220,7 @@ export const PurchaseHistoryModal: React.FC = () => {
 
               <div className="w-full h-px bg-[#EEF0FA]" />
 
-              <div className="flex justify-between text-sm font-extrabold text-[#1E1F3D]">
+              <div className="flex justify-between text-sm font-semibold text-[#1E1F3D]">
                 <span>Total Paid</span>
                 <span className="text-[#4E75FF]">{selectedOrder.valueOfItems}</span>
               </div>

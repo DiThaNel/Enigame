@@ -63,6 +63,8 @@ interface EnigameState {
   setScannerOpen: (open: boolean) => void;
   selectedRouteDetail: Route | null;
   setSelectedRouteDetail: (route: Route | null) => void;
+  profileViewStep: 'profile' | 'edit-profile';
+  setProfileViewStep: (step: 'profile' | 'edit-profile') => void;
   isEditProfileOpen: boolean;
   setEditProfileOpen: (open: boolean) => void;
   isSettingsOpen: boolean;
@@ -200,8 +202,10 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
   setScannerOpen: (open) => set({ isScannerOpen: open }),
   selectedRouteDetail: null,
   setSelectedRouteDetail: (route) => set({ selectedRouteDetail: route, selectedRoute: route }),
+  profileViewStep: 'profile',
+  setProfileViewStep: (step) => set({ profileViewStep: step, isEditProfileOpen: step === 'edit-profile' }),
   isEditProfileOpen: false,
-  setEditProfileOpen: (open) => set({ isEditProfileOpen: open }),
+  setEditProfileOpen: (open) => set({ isEditProfileOpen: open, profileViewStep: open ? 'edit-profile' : 'profile' }),
   isSettingsOpen: false,
   setSettingsOpen: (open) => set({ isSettingsOpen: open }),
   isChangePasswordOpen: false,

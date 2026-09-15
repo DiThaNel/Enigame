@@ -22,6 +22,8 @@ export const SettingsModal: React.FC = () => {
   const { 
     isSettingsOpen, 
     setSettingsOpen, 
+    setProfileViewStep,
+    setActiveTab,
     setEditProfileOpen, 
     setChangeEmailOpen, 
     setChangePasswordOpen, 
@@ -58,7 +60,9 @@ export const SettingsModal: React.FC = () => {
             {/* Edit Profile */}
             <button
               onClick={() => {
-                setEditProfileOpen(true);
+                setSettingsOpen(false);
+                setProfileViewStep('edit-profile');
+                setActiveTab('profile');
               }}
               className="py-3.5 flex items-center justify-between hover:bg-[#F9FAFE] -mx-2 px-2 rounded-xl transition-colors cursor-pointer text-left"
             >
@@ -199,7 +203,7 @@ export const SettingsModal: React.FC = () => {
         <div className="absolute inset-0 z-60 flex items-end justify-center bg-black/60 backdrop-blur-xs p-3 animate-fadeIn">
           <div className="w-full bg-white rounded-[32px] p-6 shadow-2xl flex flex-col gap-4 animate-slideUp max-h-[80%] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-[#EEF0FA] pb-3">
-              <h3 className="font-extrabold text-[#1E1F3D] text-sm capitalize">
+              <h3 className="font-semibold text-[#1E1F3D] text-sm capitalize">
                 {companyModal === 'about' && 'About Enigame'}
                 {companyModal === 'privacy' && 'Privacy Policy'}
                 {companyModal === 'terms' && 'Terms & Conditions'}
@@ -216,7 +220,7 @@ export const SettingsModal: React.FC = () => {
             <div className="text-xs text-[#585A7E] leading-relaxed space-y-3">
               {companyModal === 'about' && (
                 <>
-                  <p className="font-bold text-[#1E1F3D]">The Interactive Exploration Platform</p>
+                  <p className="font-semibold text-[#1E1F3D]">The Interactive Exploration Platform</p>
                   <p>
                     Enigame connects modern adventurers with the mystery, history, and secret culture of historic cities across Europe. By solving riddles, unlocking checkpoints, and exploring physical landmarks, every journey becomes an unforgettable quest.
                   </p>
@@ -226,7 +230,7 @@ export const SettingsModal: React.FC = () => {
 
               {companyModal === 'privacy' && (
                 <>
-                  <p className="font-bold text-[#1E1F3D]">Your Data Privacy Matters</p>
+                  <p className="font-semibold text-[#1E1F3D]">Your Data Privacy Matters</p>
                   <p>
                     We only use geolocation services to confirm your proximity to physical checkpoints and deliver contextually relevant route riddles. We never sell your personal data or tracking history to third parties.
                   </p>
@@ -236,7 +240,7 @@ export const SettingsModal: React.FC = () => {
 
               {companyModal === 'terms' && (
                 <>
-                  <p className="font-bold text-[#1E1F3D]">Safe Expedition Guidelines</p>
+                  <p className="font-semibold text-[#1E1F3D]">Safe Expedition Guidelines</p>
                   <p>
                     Explorers must respect all municipal guidelines, local monuments, and cultural heritage sites. Never trespass on private property while searching for clues or scanning QR codes.
                   </p>
@@ -245,7 +249,7 @@ export const SettingsModal: React.FC = () => {
 
               {companyModal === 'support' && (
                 <>
-                  <p className="font-bold text-[#1E1F3D]">Need Assistance?</p>
+                  <p className="font-semibold text-[#1E1F3D]">Need Assistance?</p>
                   <p>Our dedicated expedition team is available 24/7 to help resolve questions about passes, riddles, or account issues.</p>
                   <div className="p-3 bg-[#F4F6FB] rounded-xl flex items-center justify-between">
                     <span className="font-semibold text-[#1E1F3D]">support@enigame.pt</span>

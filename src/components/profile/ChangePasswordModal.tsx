@@ -55,7 +55,7 @@ export const ChangePasswordModal: React.FC = () => {
   };
 
   return (
-    <div className="absolute inset-0 z-50 flex items-end sm:items-center justify-center bg-black/75 backdrop-blur-sm animate-fadeIn">
+    <div className="px-5 py-5 absolute inset-0 z-50 flex items-end sm:items-center justify-center bg-black/75 backdrop-blur-sm animate-fadeIn">
       <div className="w-full bg-white rounded-t-[32px] sm:rounded-[32px] overflow-hidden flex flex-col shadow-2xl animate-slideUp">
         {/* Header */}
         <div className="px-6 pt-5 pb-3 border-b border-[#EEF0FA] flex items-center justify-between">
