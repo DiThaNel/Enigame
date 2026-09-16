@@ -53,10 +53,12 @@ export const MeetupHub: React.FC = () => {
         </div>
       </div>
 
-      {/* Render Active SubTab */}
-      {meetupSubTab === 'explorers' && <ExplorersTab />}
-      {meetupSubTab === 'traveling' && <TravelingTab />}
-      {meetupSubTab === 'map' && <MapRadarTab />}
+      {/* Render Active SubTab with smooth fade-slide transition */}
+      <div key={meetupSubTab} className="w-full animate-tab-enter">
+        {meetupSubTab === 'explorers' && <ExplorersTab />}
+        {meetupSubTab === 'traveling' && <TravelingTab />}
+        {meetupSubTab === 'map' && <MapRadarTab />}
+      </div>
     </div>
   );
 };

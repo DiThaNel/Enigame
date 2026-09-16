@@ -69,7 +69,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="w-full min-h-full bg-[#F4F6FB] flex flex-col animate-fadeIn relative select-none">
+    <div className="w-full min-h-full bg-[#F4F6FB] flex flex-col animate-modal-screen relative select-none">
       {/* Background Curved Wave Header matching Figma 09.2 / 09 */}
       <div className="relative w-full bg-[#8E97FD] rounded-b-[36px] pt-8 pb-5 px-6 flex items-center justify-between text-white shadow-xs shrink-0 z-20">
         <button
@@ -100,7 +100,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
       {/* Form Content - Scrollable Page Body */}
       <form onSubmit={handleSave} className="flex-1 overflow-y-auto px-5 py-5 space-y-4 no-scrollbar pb-10">
         {/* Avatar Section */}
-        <div className="bg-white rounded-[28px] p-5 shadow-sm border border-[#EAEFFE] flex flex-col items-center">
+        <div className="animate-card-stagger stagger-1 bg-white rounded-[28px] p-5 shadow-sm border border-[#EAEFFE] flex flex-col items-center">
           <div className="relative mb-2">
             <div className="w-24 h-24 rounded-full p-1">
               <img
@@ -132,7 +132,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
         </div>
 
         {/* Input Details Card */}
-        <div className="bg-white rounded-[28px] p-5 shadow-sm border border-[#EAEFFE] space-y-4">
+        <div className="animate-card-stagger stagger-2 bg-white rounded-[28px] p-5 shadow-sm border border-[#EAEFFE] space-y-4">
           {/* Explorer Nickname */}
           <div>
             <label className="text-xs font-bold text-[#1E1F3D] block mb-1">Explorer Nickname</label>
@@ -245,7 +245,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
         </div>
 
         {/* Action Button styled with Enigame signature look */}
-        <div className="pt-2 pb-8">
+        <div className="pt-2 pb-8 animate-card-stagger stagger-3">
           <button
             type="submit"
             className="w-full h-14 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-sm tracking-wide shadow-[0_12px_24px_rgba(142,151,253,0.35)] transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"

@@ -37,7 +37,7 @@ export const SettingsModal: React.FC = () => {
   if (!isSettingsOpen) return null;
 
   return (
-    <div className="absolute inset-0 z-50 bg-white flex flex-col animate-fadeIn overflow-hidden">
+    <div className="absolute inset-0 z-50 bg-white flex flex-col animate-modal-screen overflow-hidden">
       {/* Background Curved Wave Header matching Figma Frame 09.2 */}
       <div className="relative w-full bg-[#8E97FD] rounded-b-[36px] pt-8 pb-5 px-6 flex items-center justify-between text-white shadow-xs shrink-0">
         <button
@@ -54,7 +54,7 @@ export const SettingsModal: React.FC = () => {
       {/* Content Body matching Figma Frame 09.2 cleanly separated below header wave */}
       <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6 bg-white no-scrollbar">
         {/* Section 1: Profile Settings */}
-        <div>
+        <div className="animate-card-stagger stagger-1">
           <h2 className="text-sm font-extrabold text-[#8E97FD] mb-3">Profile Settings</h2>
           <div className="flex flex-col divide-y divide-[#EEF0FA] border-y border-[#EEF0FA]">
             {/* Edit Profile */}
@@ -139,7 +139,7 @@ export const SettingsModal: React.FC = () => {
         </div>
 
         {/* Section 2: Company */}
-        <div>
+        <div className="animate-card-stagger stagger-2">
           <h2 className="text-sm font-extrabold text-[#8E97FD] mb-3">Company</h2>
           <div className="flex flex-col divide-y divide-[#EEF0FA] border-y border-[#EEF0FA]">
             <button

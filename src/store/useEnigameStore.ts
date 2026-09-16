@@ -116,7 +116,7 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
   routesReturnTab: 'routes',
   viewRouteDetail: (route, fromTab = 'routes') => set({
     selectedRoute: route,
-    selectedRouteDetail: route,
+    selectedRouteDetail: null,
     routesReturnTab: fromTab,
     routesViewStep: 'route-detail',
     activeTab: 'routes',

@@ -78,7 +78,7 @@ export const HomeDashboard: React.FC = () => {
     >
       {/* Top Search & Actions Section - Compact Spacing */}
       <div className="w-full pt-3 px-4 pb-1 z-20">
-        <div className="bg-white/95 backdrop-blur-md rounded-[24px] p-3 shadow-[0_8px_25px_rgba(142,151,253,0.12)] border border-[#EAEFFE]">
+        <div className="bg-white/95 backdrop-blur-md rounded-[24px] p-3 shadow-[0_8px_25px_rgba(142,151,253,0.12)] border border-[#EAEFFE] animate-card-stagger">
           {/* Search Input Bar with Search.png from assets */}
           <div className="relative w-full">
             <input
@@ -154,7 +154,7 @@ export const HomeDashboard: React.FC = () => {
 
         {/* 3D Card Shuffle Deck Container */}
         <div
-          className="relative w-full max-w-[315px] h-[500px] mt-4 flex items-center justify-center cursor-grab active:cursor-grabbing"
+          className="relative w-full max-w-[315px] h-[500px] mt-4 flex items-center justify-center cursor-grab active:cursor-grabbing animate-card-stagger stagger-2"
           onMouseDown={handleTouchStart}
           onMouseMove={handleTouchMove}
           onMouseUp={handleTouchEnd}

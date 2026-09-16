@@ -12,7 +12,7 @@ export const TravelingTab: React.FC = () => {
       {/* Host CTA */}
       <button
         onClick={() => setHostExpeditionOpen(true)}
-        className="w-full h-12 rounded-2xl bg-gradient-to-r from-[#7C82ED] to-[#6C5CE7] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-indigo-300/30 hover:opacity-95 active:scale-[0.98] transition-all mb-4"
+        className="animate-card-stagger w-full h-12 rounded-2xl bg-gradient-to-r from-[#7C82ED] to-[#6C5CE7] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-indigo-300/30 hover:opacity-95 active:scale-[0.98] transition-all mb-4 cursor-pointer"
       >
         <Plus size={18} />
         <span>Host an Expedition</span>
@@ -20,13 +20,14 @@ export const TravelingTab: React.FC = () => {
 
       {/* Expeditions List */}
       <div className="flex flex-col gap-4">
-        {expeditions.map((exp) => {
+        {expeditions.map((exp, idx) => {
           const isJoined = exp.participants.some(p => p.id === currentUser.id);
 
           return (
             <div
               key={exp.id}
-              className="bg-white rounded-3xl overflow-hidden border border-[#EEF0FA] shadow-sm hover:shadow-md transition-all"
+              style={{ animationDelay: `${(idx + 1) * 70}ms` }}
+              className="animate-card-stagger bg-white rounded-3xl overflow-hidden border border-[#EEF0FA] shadow-sm hover:shadow-md transition-all"
             >
               <div className="relative h-44 w-full">
                 <img

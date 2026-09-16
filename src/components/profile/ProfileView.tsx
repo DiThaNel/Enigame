@@ -218,7 +218,7 @@ export const ProfileView: React.FC = () => {
       <div className="mx-5 mt-3.5 flex items-center justify-between gap-2 z-10">
         <button
           onClick={() => setChangePasswordOpen(true)}
-          className="flex-1 py-2 px-2.5 rounded-2xl bg-white border border-[#EAEFFE] hover:border-[#8E97FD]/50 shadow-xs flex items-center justify-center gap-1.5 text-[#1E1F3D] hover:text-[#8E97FD] transition-all cursor-pointer"
+          className="animate-card-stagger stagger-1 flex-1 py-2 px-2.5 rounded-2xl bg-white border border-[#EAEFFE] hover:border-[#8E97FD]/50 shadow-xs flex items-center justify-center gap-1.5 text-[#1E1F3D] hover:text-[#8E97FD] transition-all cursor-pointer"
         >
           <Key size={13} className="text-[#8E97FD]" />
           <span className="text-[11px] font-bold">Password</span>
@@ -226,7 +226,7 @@ export const ProfileView: React.FC = () => {
 
         <button
           onClick={() => setChangeEmailOpen(true)}
-          className="flex-1 py-2 px-2.5 rounded-2xl bg-white border border-[#EAEFFE] hover:border-[#8E97FD]/50 shadow-xs flex items-center justify-center gap-1.5 text-[#1E1F3D] hover:text-[#8E97FD] transition-all cursor-pointer"
+          className="animate-card-stagger stagger-2 flex-1 py-2 px-2.5 rounded-2xl bg-white border border-[#EAEFFE] hover:border-[#8E97FD]/50 shadow-xs flex items-center justify-center gap-1.5 text-[#1E1F3D] hover:text-[#8E97FD] transition-all cursor-pointer"
         >
           <Mail size={13} className="text-[#8E97FD]" />
           <span className="text-[11px] font-bold">Email</span>
@@ -234,7 +234,7 @@ export const ProfileView: React.FC = () => {
 
         <button
           onClick={() => setPurchaseHistoryOpen(true)}
-          className="flex-1 py-2 px-2.5 rounded-2xl bg-white border border-[#EAEFFE] hover:border-[#8E97FD]/50 shadow-xs flex items-center justify-center gap-1.5 text-[#1E1F3D] hover:text-[#8E97FD] transition-all cursor-pointer"
+          className="animate-card-stagger stagger-3 flex-1 py-2 px-2.5 rounded-2xl bg-white border border-[#EAEFFE] hover:border-[#8E97FD]/50 shadow-xs flex items-center justify-center gap-1.5 text-[#1E1F3D] hover:text-[#8E97FD] transition-all cursor-pointer"
         >
           <Receipt size={13} className="text-[#8E97FD]" />
           <span className="text-[11px] font-bold">Purchases</span>
@@ -242,7 +242,7 @@ export const ProfileView: React.FC = () => {
 
         <button
           onClick={() => setSettingsOpen(true)}
-          className="w-9 h-9 rounded-2xl bg-white border border-[#EAEFFE] hover:border-[#8E97FD]/50 shadow-xs flex items-center justify-center text-[#7A7C99] hover:text-[#8E97FD] transition-all cursor-pointer shrink-0"
+          className="animate-card-stagger stagger-4 w-9 h-9 rounded-2xl bg-white border border-[#EAEFFE] hover:border-[#8E97FD]/50 shadow-xs flex items-center justify-center text-[#7A7C99] hover:text-[#8E97FD] transition-all cursor-pointer shrink-0"
           title="All Settings"
         >
           <Settings size={15} />
@@ -271,217 +271,224 @@ export const ProfileView: React.FC = () => {
         </div>
       </div>
 
-      {/* Tab 1: Instagram Content Area matching Figma 09 - Personal Profile & 06.1 - Meet-up (Profile) */}
-      {activeTab === 'instagram' && (
-        <div className="px-5 pt-4 flex flex-col gap-3.5 animate-fadeIn z-10">
-          {/* Header Row: Photos title & View mode toggle */}
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-black text-[#1E1F3D] font-semibold">Photos</span>
-            <div className="flex items-center gap-1.5 text-[#7A7C99]">
-              <button
-                onClick={() => setPhotoViewMode('list')}
-                className={`p-1 rounded-md transition-colors cursor-pointer ${
-                  photoViewMode === 'list' ? 'text-[#8E97FD] bg-[#EEF0FF]' : 'hover:text-[#1E1F3D]'
-                }`}
-                title="List View"
-              >
-                <List size={17} />
-              </button>
-              <button
-                onClick={() => setPhotoViewMode('grid')}
-                className={`p-1 rounded-md transition-colors cursor-pointer ${
-                  photoViewMode === 'grid' ? 'text-[#8E97FD] bg-[#EEF0FF]' : 'hover:text-[#1E1F3D]'
-                }`}
-                title="Grid View"
-              >
-                <LayoutGrid size={17} />
-              </button>
-            </div>
-          </div>
-
-          {/* Photos Grid or List */}
-          {photoViewMode === 'grid' ? (
-            <div className="grid grid-cols-3 gap-2">
-              {galleryPhotos.map((photo) => (
-                <div
-                  key={photo.id}
-                  onClick={() => setLightboxImage(photo.url)}
-                  className="aspect-square rounded-2xl overflow-hidden shadow-xs hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer group relative bg-[#EEF0FA]"
+      {/* Active Profile Section Tab with smooth fade-scale enter animation */}
+      <div key={activeTab} className="w-full animate-tab-enter z-10">
+        {/* Tab 1: Instagram Content Area matching Figma 09 - Personal Profile & 06.1 - Meet-up (Profile) */}
+        {activeTab === 'instagram' && (
+          <div className="px-5 pt-4 flex flex-col gap-3.5">
+            {/* Header Row: Photos title & View mode toggle */}
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-black text-[#1E1F3D] font-semibold">Photos</span>
+              <div className="flex items-center gap-1.5 text-[#7A7C99]">
+                <button
+                  onClick={() => setPhotoViewMode('list')}
+                  className={`p-1 rounded-md transition-colors cursor-pointer ${
+                    photoViewMode === 'list' ? 'text-[#8E97FD] bg-[#EEF0FF]' : 'hover:text-[#1E1F3D]'
+                  }`}
+                  title="List View"
                 >
-                  <img 
-                    src={photo.url} 
-                    alt="Gallery" 
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = '/assets/BragancaHome.png';
-                    }}
-                    className="w-full h-full object-cover" 
-                  />
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
-                    <Camera size={18} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-2.5">
-              {galleryPhotos.map((photo) => (
-                <div
-                  key={photo.id}
-                  onClick={() => setLightboxImage(photo.url)}
-                  className="p-2.5 bg-white rounded-2xl border border-[#EEF0FA] flex items-center gap-3 shadow-xs cursor-pointer hover:border-[#8E97FD]/40 transition-all"
+                  <List size={17} />
+                </button>
+                <button
+                  onClick={() => setPhotoViewMode('grid')}
+                  className={`p-1 rounded-md transition-colors cursor-pointer ${
+                    photoViewMode === 'grid' ? 'text-[#8E97FD] bg-[#EEF0FF]' : 'hover:text-[#1E1F3D]'
+                  }`}
+                  title="Grid View"
                 >
-                  <img 
-                    src={photo.url} 
-                    alt="Thumbnail" 
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = '/assets/BragancaHome.png';
-                    }}
-                    className="w-14 h-14 rounded-xl object-cover shrink-0" 
-                  />
-                  <div className="flex-1">
-                    <p className="text-xs font-bold text-[#1E1F3D] line-clamp-1">{photo.caption}</p>
-                    <span className="text-[10px] text-[#8E97FD] font-semibold">Verified Expedition Photo</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Add a Photo Button matching Figma Frame 09 */}
-          <div className="flex justify-center mt-2">
-            <button
-              onClick={handleAddPhoto}
-              className="px-6 py-2.5 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-xs shadow-md shadow-indigo-200 flex items-center gap-2 active:scale-95 transition-all cursor-pointer"
-            >
-              <Camera size={15} />
-              <span>Add a photo</span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Tab 2: About matching Figma Frame 06.2 - Meet-up (Profile/about) */}
-      {activeTab === 'about' && (
-        <div className="px-6 pt-5 space-y-6 animate-fadeIn z-10">
-          {/* Bio Section */}
-          <div>
-            <h3 className="text-sm font-semibold text-[#1E1F3D] mb-2">Bio</h3>
-            <p className="text-xs text-[#585A7E] leading-relaxed">
-              Passionate cartographer and mystery enthusiast based in northern Portugal. Always hunting for forgotten medieval inscriptions, subterranean passages, and local legends hidden in plain sight.
-            </p>
-          </div>
-
-          {/* Interests Pills matching Figma 06.2 */}
-          <div>
-            <h3 className="text-sm font-semibold text-[#1E1F3D] mb-3">Interests</h3>
-            <div className="flex flex-wrap gap-2">
-              {['Adventure', 'Traveler', 'Ranker', 'Photography', 'Backpacking', 'Blogger', 'History', 'Castles'].map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3.5 py-1.5 rounded-full bg-[#EEF0FA] text-[#585A7E] font-bold text-xs transition-colors hover:bg-[#8E97FD] hover:text-white cursor-pointer"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Explorer Stats Summary */}
-          <div className="p-4 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs space-y-2 text-xs">
-            <div className="flex justify-between">
-              <span className="text-[#7A7C99]">Explorer Level</span>
-              <span className="font-bold text-[#8E97FD]">Level {currentUser.level || 18}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-[#7A7C99]">Total Expeditions</span>
-              <span className="font-bold text-[#1E1F3D]">24 Completed</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-[#7A7C99]">Points Score</span>
-              <span className="font-bold text-[#00B894]">1,000 Pts</span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Tab 3: Trips matching Figma 06.3 & 09.1 and user request */}
-      {activeTab === 'trips' && (
-        <div className="px-5 pt-4 space-y-4 animate-fadeIn z-10">
-          {/* Achievements & Badges Header */}
-          <div className="p-4 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Award size={18} className="text-[#FFB800]" />
-                <h3 className="text-xs font-black text-[#1E1F3D] font-semibold">Achievements &amp; Badges</h3>
+                  <LayoutGrid size={17} />
+                </button>
               </div>
-              <span className="text-[10px] font-bold text-[#8E97FD]">4 Unlocked</span>
             </div>
-            <div className="flex flex-wrap gap-1.5">
-              {currentUser.badges?.map((badge, idx) => (
-                <span
-                  key={idx}
-                  className="px-2.5 py-1 rounded-lg bg-[#FFF9E6] border border-[#FFE8A3] text-[#B78103] font-bold text-[10px] flex items-center gap-1"
-                >
-                  ⭐ {badge}
-                </span>
-              ))}
-            </div>
-          </div>
 
-          {/* Recent Completed Expedition */}
-          <div>
-            <span className="text-xs font-black text-[#1E1F3D] block mb-2 font-semibold">Latest Expedition Record</span>
-            <div className="p-3.5 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#EEF0FF] flex items-center justify-center text-[#8E97FD]">
-                  <Compass size={20} />
-                </div>
-                <div>
-                  <p className="font-semibold text-xs text-[#1E1F3D] ">Bragança Medieval Mystery</p>
-                  <p className="text-[10px] text-[#A5A7C4]">Completed 2 days ago • 4 checkpoints</p>
-                </div>
-              </div>
-              <span className="text-xs font-black text-[#8E97FD] bg-[#F2F4FD] px-2.5 py-1 rounded-full font-semibold">+350 pts</span>
-            </div>
-          </div>
-
-          {/* Visited Cities Grid matching Figma 06.3 - Meet-up (Profile/Trips) with user's assets */}
-          <div>
-            <span className="font-semibold text-xs font-black text-[#1E1F3D] block mb-2.5">Visited European Destinations</span>
-            <div className="grid grid-cols-2 gap-3">
-              {completedTrips.map((trip, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 bg-[#6C7BFF] hover:bg-[#5D6DFF] text-white rounded-[20px] shadow-sm flex items-center gap-2.5 transition-all active:scale-95 cursor-pointer"
-                >
-                  <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 shadow-xs border border-white/25">
+            {/* Photos Grid or List */}
+            {photoViewMode === 'grid' ? (
+              <div className="grid grid-cols-3 gap-2">
+                {galleryPhotos.map((photo, idx) => (
+                  <div
+                    key={photo.id}
+                    onClick={() => setLightboxImage(photo.url)}
+                    style={{ animationDelay: `${(idx % 6) * 40}ms` }}
+                    className="animate-card-stagger aspect-square rounded-2xl overflow-hidden shadow-xs hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer group relative bg-[#EEF0FA]"
+                  >
                     <img 
-                      src={trip.flagImg} 
-                      alt={trip.city} 
+                      src={photo.url} 
+                      alt="Gallery" 
                       onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = '/assets/PT.png';
+                        (e.currentTarget as HTMLImageElement).src = '/assets/BragancaHome.png';
                       }}
                       className="w-full h-full object-cover" 
                     />
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                      <Camera size={18} />
+                    </div>
                   </div>
-                  <span className="text-xs font-bold truncate tracking-wide">{trip.city}</span>
-                </div>
-              ))}
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                {galleryPhotos.map((photo, idx) => (
+                  <div
+                    key={photo.id}
+                    onClick={() => setLightboxImage(photo.url)}
+                    style={{ animationDelay: `${(idx % 6) * 40}ms` }}
+                    className="animate-card-stagger p-2.5 bg-white rounded-2xl border border-[#EEF0FA] flex items-center gap-3 shadow-xs cursor-pointer hover:border-[#8E97FD]/40 transition-all"
+                  >
+                    <img 
+                      src={photo.url} 
+                      alt="Thumbnail" 
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = '/assets/BragancaHome.png';
+                      }}
+                      className="w-14 h-14 rounded-xl object-cover shrink-0" 
+                    />
+                    <div className="flex-1">
+                      <p className="text-xs font-bold text-[#1E1F3D] line-clamp-1">{photo.caption}</p>
+                      <span className="text-[10px] text-[#8E97FD] font-semibold">Verified Expedition Photo</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Add a Photo Button matching Figma Frame 09 */}
+            <div className="flex justify-center mt-2 animate-card-stagger stagger-3">
+              <button
+                onClick={handleAddPhoto}
+                className="px-6 py-2.5 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-xs shadow-md shadow-indigo-200 flex items-center gap-2 active:scale-95 transition-all cursor-pointer"
+              >
+                <Camera size={15} />
+                <span>Add a photo</span>
+              </button>
             </div>
           </div>
+        )}
 
-          {/* Add a Trip button matching Figma Frame 09.1 - Trips */}
-          <div className="flex justify-center pt-2">
-            <button
-              onClick={() => setTripAddedAlert(true)}
-              className="px-7 py-2.5 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-xs shadow-md shadow-indigo-200 flex items-center gap-2 active:scale-95 transition-all cursor-pointer"
-            >
-              <Plus size={16} />
-              <span>Add a trip</span>
-            </button>
+        {/* Tab 2: About matching Figma Frame 06.2 - Meet-up (Profile/about) */}
+        {activeTab === 'about' && (
+          <div className="px-6 pt-5 space-y-6">
+            {/* Bio Section */}
+            <div className="animate-card-stagger stagger-1">
+              <h3 className="text-sm font-semibold text-[#1E1F3D] mb-2">Bio</h3>
+              <p className="text-xs text-[#585A7E] leading-relaxed">
+                Passionate cartographer and mystery enthusiast based in northern Portugal. Always hunting for forgotten medieval inscriptions, subterranean passages, and local legends hidden in plain sight.
+              </p>
+            </div>
+
+            {/* Interests Pills matching Figma 06.2 */}
+            <div className="animate-card-stagger stagger-2">
+              <h3 className="text-sm font-semibold text-[#1E1F3D] mb-3">Interests</h3>
+              <div className="flex flex-wrap gap-2">
+                {['Adventure', 'Traveler', 'Ranker', 'Photography', 'Backpacking', 'Blogger', 'History', 'Castles'].map((tag, tIdx) => (
+                  <span
+                    key={tag}
+                    style={{ animationDelay: `${tIdx * 25}ms` }}
+                    className="animate-card-stagger px-3.5 py-1.5 rounded-full bg-[#EEF0FA] text-[#585A7E] font-bold text-xs transition-all hover:bg-[#8E97FD] hover:text-white cursor-pointer active:scale-95"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Explorer Stats Summary */}
+            <div className="animate-card-stagger stagger-3 p-4 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs space-y-2 text-xs">
+              <div className="flex justify-between">
+                <span className="text-[#7A7C99]">Explorer Level</span>
+                <span className="font-bold text-[#8E97FD]">Level {currentUser.level || 18}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#7A7C99]">Total Expeditions</span>
+                <span className="font-bold text-[#1E1F3D]">24 Completed</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#7A7C99]">Points Score</span>
+                <span className="font-bold text-[#00B894]">1,000 Pts</span>
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Tab 3: Trips matching Figma 06.3 & 09.1 and user request */}
+        {activeTab === 'trips' && (
+          <div className="px-5 pt-4 space-y-4">
+            {/* Achievements & Badges Header */}
+            <div className="animate-card-stagger stagger-1 p-4 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <Award size={18} className="text-[#FFB800]" />
+                  <h3 className="text-xs font-black text-[#1E1F3D] font-semibold">Achievements &amp; Badges</h3>
+                </div>
+                <span className="text-[10px] font-bold text-[#8E97FD]">4 Unlocked</span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {currentUser.badges?.map((badge, idx) => (
+                  <span
+                    key={idx}
+                    className="px-2.5 py-1 rounded-lg bg-[#FFF9E6] border border-[#FFE8A3] text-[#B78103] font-bold text-[10px] flex items-center gap-1"
+                  >
+                    ⭐ {badge}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Recent Completed Expedition */}
+            <div className="animate-card-stagger stagger-2">
+              <span className="text-xs font-black text-[#1E1F3D] block mb-2 font-semibold">Latest Expedition Record</span>
+              <div className="p-3.5 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#EEF0FF] flex items-center justify-center text-[#8E97FD]">
+                    <Compass size={20} />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-xs text-[#1E1F3D] ">Bragança Medieval Mystery</p>
+                    <p className="text-[10px] text-[#A5A7C4]">Completed 2 days ago • 4 checkpoints</p>
+                  </div>
+                </div>
+                <span className="text-xs font-black text-[#8E97FD] bg-[#F2F4FD] px-2.5 py-1 rounded-full font-semibold">+350 pts</span>
+              </div>
+            </div>
+
+            {/* Visited Cities Grid matching Figma 06.3 - Meet-up (Profile/Trips) with user's assets */}
+            <div className="animate-card-stagger stagger-3">
+              <span className="font-semibold text-xs font-black text-[#1E1F3D] block mb-2.5">Visited European Destinations</span>
+              <div className="grid grid-cols-2 gap-3">
+                {completedTrips.map((trip, idx) => (
+                  <div
+                    key={idx}
+                    style={{ animationDelay: `${(idx % 6) * 45 + 100}ms` }}
+                    className="animate-card-stagger p-3 bg-[#6C7BFF] hover:bg-[#5D6DFF] text-white rounded-[20px] shadow-sm flex items-center gap-2.5 transition-all active:scale-95 cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 shadow-xs border border-white/25">
+                      <img 
+                        src={trip.flagImg} 
+                        alt={trip.city} 
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = '/assets/PT.png';
+                        }}
+                        className="w-full h-full object-cover" 
+                      />
+                    </div>
+                    <span className="text-xs font-bold truncate tracking-wide">{trip.city}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Add a Trip button matching Figma Frame 09.1 - Trips */}
+            <div className="flex justify-center pt-2 animate-card-stagger stagger-4">
+              <button
+                onClick={() => setTripAddedAlert(true)}
+                className="px-7 py-2.5 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-xs shadow-md shadow-indigo-200 flex items-center gap-2 active:scale-95 transition-all cursor-pointer"
+              >
+                <Plus size={16} />
+                <span>Add a trip</span>
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Lightbox for Photos */}
       {lightboxImage && (

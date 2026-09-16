@@ -74,7 +74,7 @@ export const PointsStoreView: React.FC = () => {
         {/* Leaderboard Card */}
         <div
           onClick={() => setActiveModal('leaderboard')}
-          className="bg-white rounded-[28px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#EAEFFE] flex flex-col items-center justify-center gap-3 cursor-pointer group active:scale-95 transition-transform hover:shadow-md"
+          className="animate-card-stagger stagger-1 bg-white rounded-[28px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#EAEFFE] flex flex-col items-center justify-center gap-3 cursor-pointer group active:scale-95 transition-all hover:shadow-md"
         >
           <div className="w-16 h-16 flex items-center justify-center">
             <img
@@ -89,7 +89,7 @@ export const PointsStoreView: React.FC = () => {
         {/* Activity Card */}
         <div
           onClick={() => setActiveModal('activity')}
-          className="bg-white rounded-[28px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#EAEFFE] flex flex-col items-center justify-center gap-3 cursor-pointer group active:scale-95 transition-transform hover:shadow-md"
+          className="animate-card-stagger stagger-2 bg-white rounded-[28px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#EAEFFE] flex flex-col items-center justify-center gap-3 cursor-pointer group active:scale-95 transition-all hover:shadow-md"
         >
           <div className="w-16 h-16 flex items-center justify-center">
             <img
@@ -104,7 +104,7 @@ export const PointsStoreView: React.FC = () => {
         {/* Store Card */}
         <div
           onClick={() => setActiveModal('store')}
-          className="bg-white rounded-[28px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#EAEFFE] flex flex-col items-center justify-center gap-3 cursor-pointer group active:scale-95 transition-transform hover:shadow-md"
+          className="animate-card-stagger stagger-3 bg-white rounded-[28px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#EAEFFE] flex flex-col items-center justify-center gap-3 cursor-pointer group active:scale-95 transition-all hover:shadow-md"
         >
           <div className="w-16 h-16 flex items-center justify-center">
             <img
@@ -119,7 +119,7 @@ export const PointsStoreView: React.FC = () => {
         {/* Coupons Card */}
         <div
           onClick={() => setActiveModal('coupons')}
-          className="bg-white rounded-[28px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#EAEFFE] flex flex-col items-center justify-center gap-3 cursor-pointer group active:scale-95 transition-transform hover:shadow-md"
+          className="animate-card-stagger stagger-4 bg-white rounded-[28px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#EAEFFE] flex flex-col items-center justify-center gap-3 cursor-pointer group active:scale-95 transition-all hover:shadow-md"
         >
           <div className="w-16 h-16 flex items-center justify-center">
             <img
@@ -135,7 +135,7 @@ export const PointsStoreView: React.FC = () => {
       {/* Interactive Feature Modal */}
       {activeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fadeIn">
-          <div className="bg-white rounded-3xl p-6 w-full max-w-[340px] shadow-2xl text-center">
+          <div className="bg-white rounded-3xl p-6 w-full max-w-[340px] shadow-2xl text-center animate-scaleUp">
             <h3 className="text-base font-extrabold capitalize text-[#1E1F3D]">
               {activeModal}
             </h3>

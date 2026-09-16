@@ -26,7 +26,7 @@ export const RouteDetailModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div className="w-full max-w-[390px] h-[95vh] max-h-[820px] bg-[#EEF0FA] rounded-[36px] overflow-hidden flex flex-col shadow-2xl relative">
+      <div className="w-full max-w-[390px] h-[95vh] max-h-[820px] bg-[#EEF0FA] rounded-[36px] overflow-hidden flex flex-col shadow-2xl relative animate-slideUp">
         {/* Castle Tower Top Background */}
         <div className="relative h-60 w-full overflow-hidden shrink-0">
           <img

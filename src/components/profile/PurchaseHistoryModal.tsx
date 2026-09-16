@@ -74,7 +74,7 @@ export const PurchaseHistoryModal: React.FC = () => {
   const allOrders = [...redeemedOrders, ...defaultOrders];
 
   return (
-    <div className="absolute inset-0 z-50 bg-[#F4F6FC] flex flex-col animate-fadeIn overflow-hidden">
+    <div className="absolute inset-0 z-50 bg-[#F4F6FC] flex flex-col animate-modal-screen overflow-hidden">
       {/* Top Curved Wave Header matching Figma 07.8 */}
       <div className="relative w-full bg-[#8E97FD] rounded-b-[36px] pt-8 pb-5 px-6 flex items-center justify-between text-white shadow-xs shrink-0">
         <button
@@ -90,10 +90,11 @@ export const PurchaseHistoryModal: React.FC = () => {
 
       {/* Orders List matching Figma Frame 07.8 - Purchase History */}
       <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4 no-scrollbar">
-        {allOrders.map((order) => (
+        {allOrders.map((order, idx) => (
           <div
             key={order.id}
-            className="bg-white rounded-[24px] p-5 shadow-[0_8px_25px_rgba(142,151,253,0.12)] border border-[#EAEFFE] flex flex-col gap-3 transition-all hover:shadow-md"
+            style={{ animationDelay: `${(idx % 6) * 60}ms` }}
+            className="animate-card-stagger bg-white rounded-[24px] p-5 shadow-[0_8px_25px_rgba(142,151,253,0.12)] border border-[#EAEFFE] flex flex-col gap-3 transition-all hover:shadow-md"
           >
             {/* Status and Date */}
             <div className="flex items-center justify-between">
@@ -176,7 +177,7 @@ export const PurchaseHistoryModal: React.FC = () => {
       {/* Order Details Modal Drawer */}
       {selectedOrder && (
         <div className="absolute inset-0 z-60 flex items-end justify-center bg-black/60 backdrop-blur-xs p-3 animate-fadeIn">
-          <div className="w-full bg-white rounded-[32px] p-6 shadow-2xl flex flex-col gap-4 animate-scaleUp">
+          <div className="w-full bg-white rounded-[32px] p-6 shadow-2xl flex flex-col gap-4 animate-slideUp">
             <div className="flex items-center justify-between border-b border-[#EEF0FA] pb-3">
               <div className="flex items-center gap-2">
                 <Receipt className="text-[#8E97FD]" size={20} />

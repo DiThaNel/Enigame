@@ -14,7 +14,7 @@ export const EditProfileModal: React.FC = () => {
   if (!isEditProfileOpen) return null;
 
   return (
-    <div className="absolute inset-0 z-[60] bg-[#F4F6FB] flex flex-col animate-fadeIn overflow-hidden">
+    <div className="absolute inset-0 z-[60] bg-[#F4F6FB] flex flex-col animate-modal-screen overflow-hidden">
       <EditProfilePage onBack={() => setEditProfileOpen(false)} />
     </div>
   );

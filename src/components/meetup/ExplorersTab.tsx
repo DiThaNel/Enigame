@@ -37,7 +37,8 @@ export const ExplorersTab: React.FC = () => {
           <div
             key={exp.id}
             onClick={() => setSelectedExplorer(exp)}
-            className={"flex flex-col items-center cursor-pointer group active:scale-95 transition-transform " + (
+            style={{ animationDelay: `${(idx % 6) * 50}ms` }}
+            className={"animate-card-stagger flex flex-col items-center cursor-pointer group active:scale-95 transition-transform " + (
               idx % 2 === 1 ? "translate-y-6" : ""
             )}
           >
