@@ -31,7 +31,9 @@ export const ProfileView: React.FC = () => {
     setChangePasswordOpen, 
     setChangeEmailOpen, 
     setPurchaseHistoryOpen,
-    setActiveTab: setNavActiveTab
+    setActiveTab: setNavActiveTab,
+    points,
+    activities
   } = useEnigameStore();
 
   const [activeTab, setActiveTab] = useState<'instagram' | 'about' | 'trips'>('instagram');
@@ -151,11 +153,8 @@ export const ProfileView: React.FC = () => {
         {/* Profile Avatar Frame with Portugal flag badge */}
         <div className="relative w-23 h-23 rounded-full">
           <img
-            src={currentUser.avatar || '/assets/TianaAvatar.png'}
+            src="/assets/TianaAvatar.png"
             alt={currentUser.name}
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).src = '/assets/TianaAvatar.png';
-            }}
             className="w-full h-full rounded-full object-cover bg-white"
           />
           {/* National flag badge matching Figma (Portugal) */}
@@ -371,7 +370,7 @@ export const ProfileView: React.FC = () => {
             <div className="animate-card-stagger stagger-1">
               <h3 className="text-sm font-semibold text-[#1E1F3D] mb-2">Bio</h3>
               <p className="text-xs text-[#585A7E] leading-relaxed">
-                Passionate cartographer and mystery enthusiast based in northern Portugal. Always hunting for forgotten medieval inscriptions, subterranean passages, and local legends hidden in plain sight.
+                {currentUser.bio || 'Passionate cartographer and mystery enthusiast based in northern Portugal. Always hunting for forgotten medieval inscriptions, subterranean passages, and local legends hidden in plain sight.'}
               </p>
             </div>
 
@@ -383,7 +382,7 @@ export const ProfileView: React.FC = () => {
                   <span
                     key={tag}
                     style={{ animationDelay: `${tIdx * 25}ms` }}
-                    className="animate-card-stagger px-3.5 py-1.5 rounded-full bg-[#EEF0FA] text-[#585A7E] font-bold text-xs transition-all hover:bg-[#8E97FD] hover:text-white cursor-pointer active:scale-95"
+                    className="animate-card-stagger px-3.5 py-1.5 rounded-full bg-[#EEF0FA] text-[#585A7E] font-bold text-xs transition-all hover:bg-[#8E97FD] hover:text-white cursor-pointer active:scale-95 hover:scale-105"
                   >
                     {tag}
                   </span>
@@ -399,11 +398,13 @@ export const ProfileView: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-[#7A7C99]">Total Expeditions</span>
-                <span className="font-bold text-[#1E1F3D]">24 Completed</span>
+                <span className="font-bold text-[#1E1F3D]">
+                  {20 + activities.filter(a => a.type === 'route_complete').length} Completed
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[#7A7C99]">Points Score</span>
-                <span className="font-bold text-[#00B894]">1,000 Pts</span>
+                <span className="font-bold text-[#00B894]">{points.toLocaleString()} Pts</span>
               </div>
             </div>
           </div>

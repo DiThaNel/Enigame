@@ -38,41 +38,43 @@ export const RoutesCatalog: React.FC = () => {
     setActiveRouteId,
     setScannerOpen,
     routes,
+    routesSearchQuery,
+    setRoutesSearchQuery,
   } = useEnigameStore();
 
-  // Cities List for the Frame 07 Carousel
-  const cities = [
+  // Cities List for the Frame 07 Carousel with dynamic routeCount
+  const baseCities = [
     {
       name: 'Bragança, Portugal',
       cityKey: 'Bragança',
       image: '/assets/RoutesImageCarousel.png',
-      routeCount: 4,
     },
     {
       name: 'Porto, Portugal',
       cityKey: 'Porto',
       image: '/assets/HomeImage.png',
-      routeCount: 3,
     },
     {
       name: 'Lisboa, Portugal',
       cityKey: 'Lisboa',
       image: '/assets/ExperiencesCarousel.png',
-      routeCount: 5,
     },
     {
       name: 'Coimbra, Portugal',
       cityKey: 'Coimbra',
       image: '/assets/BragancaHome.png',
-      routeCount: 3,
     },
     {
       name: 'Sintra, Portugal',
       cityKey: 'Sintra',
       image: '/assets/HomeImage.png',
-      routeCount: 4,
     },
   ];
+
+  const cities = baseCities.map(c => ({
+    ...c,
+    routeCount: routes.filter(r => r.city.toLowerCase().includes(c.cityKey.toLowerCase())).length || 1,
+  }));
 
   // City Carousel State (Same card shuffle physics as Home)
   const [activeCityIndex, setActiveCityIndex] = useState(0);
@@ -322,10 +324,18 @@ export const RoutesCatalog: React.FC = () => {
   // Top image with circular bottom curve & category tabs removed
   // ==========================================
   if (routesViewStep === 'city-routes') {
-    const cityRoutes = routes.filter((rt) =>
-      rt.city.toLowerCase().includes(selectedCity.toLowerCase()) ||
-      selectedCity.toLowerCase().includes(rt.city.toLowerCase())
-    );
+    const cityRoutes = routes.filter((rt) => {
+      const matchesCity =
+        rt.city.toLowerCase().includes(selectedCity.toLowerCase()) ||
+        selectedCity.toLowerCase().includes(rt.city.toLowerCase());
+      if (!matchesCity) return false;
+      if (!routesSearchQuery.trim()) return true;
+      const q = routesSearchQuery.toLowerCase().trim();
+      return (
+        rt.title.toLowerCase().includes(q) ||
+        (rt.description && rt.description.toLowerCase().includes(q))
+      );
+    });
     const baseRoutes = cityRoutes.length > 0 ? cityRoutes : routes;
 
     const filteredRoutes = baseRoutes.filter((rt) => {
@@ -354,7 +364,7 @@ export const RoutesCatalog: React.FC = () => {
           <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
             <button
               onClick={() => setRoutesViewStep('select-city')}
-              className="w-9 h-9 rounded-full bg-white/80 backdrop-blur-md text-[#1E1F3D] flex items-center justify-center hover:bg-white transition-all shadow-sm cursor-pointer"
+              className="w-9 h-9 rounded-full bg-white/80 backdrop-blur-md text-[#1E1F3D] flex items-center justify-center hover:bg-white transition-all shadow-sm cursor-pointer active:scale-95"
               aria-label="Back to Select City"
             >
               <ChevronLeft size={22} />
@@ -383,6 +393,14 @@ export const RoutesCatalog: React.FC = () => {
             <h3 className="text-xs font-bold text-[#1E1F3D] uppercase tracking-wider">
               Available Routes ({filteredRoutes.length})
             </h3>
+            {routesSearchQuery && (
+              <button
+                onClick={() => setRoutesSearchQuery('')}
+                className="text-[11px] font-bold text-[#6979F8] hover:underline cursor-pointer flex items-center gap-1 active:scale-95"
+              >
+                Clear search &quot;{routesSearchQuery}&quot;
+              </button>
+            )}
           </div>
 
           {/* Difficulty Filter Chips with smooth horizontal scroll and mouse/touch/wheel drag */}
@@ -412,7 +430,7 @@ export const RoutesCatalog: React.FC = () => {
                   className={
                     'px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center gap-1.5 shrink-0 active:scale-95 ' +
                     (isSelected
-                      ? 'bg-[#6979F8] text-white shadow-md shadow-indigo-300/40 scale-105 font-bold'
+                      ? 'bg-[#6979F8] text-white shadow-md shadow-indigo-300/40 scale-105 font-bold animate-pill-pop ring-2 ring-indigo-200/50'
                       : 'bg-white text-[#6F728F] border border-[#E4E7F4] hover:border-[#6979F8]/40 hover:text-[#1E1F3D]')
                   }
                 >

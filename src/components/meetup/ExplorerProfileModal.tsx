@@ -37,7 +37,7 @@ export const ExplorerProfileModal: React.FC = () => {
         <div className="px-6 pb-6 pt-0 relative flex flex-col items-center text-center">
           <div className="relative -mt-14 mb-3">
             <img
-              src={selectedExplorer.avatar}
+              src="/assets/TianaAvatar.png"
               alt={selectedExplorer.name}
               className="w-24 h-24 rounded-full object-cover ring-4 ring-white shadow-xl bg-white"
             />

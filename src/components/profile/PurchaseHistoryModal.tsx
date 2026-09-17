@@ -181,7 +181,7 @@ export const PurchaseHistoryModal: React.FC = () => {
             <div className="flex items-center justify-between border-b border-[#EEF0FA] pb-3">
               <div className="flex items-center gap-2">
                 <Receipt className="text-[#8E97FD]" size={20} />
-                <h3 className="font-extrabold text-[#1E1F3D] text-sm">Receipt {selectedOrder.orderNumber}</h3>
+                <h3 className="font-semibold text-[#1E1F3D] text-sm">Receipt {selectedOrder.orderNumber}</h3>
               </div>
               <button
                 onClick={() => setSelectedOrder(null)}

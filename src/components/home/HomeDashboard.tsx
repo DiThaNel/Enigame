@@ -4,13 +4,30 @@ import React, { useState, useRef } from 'react';
 import { useEnigameStore } from '@/store/useEnigameStore';
 
 export const HomeDashboard: React.FC = () => {
-  const { setActiveTab, setMeetupSubTab, setScannerOpen, routes, viewRouteDetail, setRoutesViewStep } = useEnigameStore();
+  const {
+    setActiveTab,
+    setMeetupSubTab,
+    setScannerOpen,
+    routes,
+    viewRouteDetail,
+    setRoutesViewStep,
+    setRoutesSearchQuery,
+  } = useEnigameStore();
 
+  const [homeSearch, setHomeSearch] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
   const [shuffleDirection, setShuffleDirection] = useState<'left' | 'right' | null>(null);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const startXRef = useRef(0);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!homeSearch.trim()) return;
+    setRoutesSearchQuery(homeSearch.trim());
+    setRoutesViewStep('select-city');
+    setActiveTab('routes');
+  };
 
   const featuredRoutes = routes.slice(0, 4);
   const count = featuredRoutes.length || 1;
@@ -80,16 +97,22 @@ export const HomeDashboard: React.FC = () => {
       <div className="w-full pt-3 px-4 pb-1 z-20">
         <div className="bg-white/95 backdrop-blur-md rounded-[24px] p-3 shadow-[0_8px_25px_rgba(142,151,253,0.12)] border border-[#EAEFFE] animate-card-stagger">
           {/* Search Input Bar with Search.png from assets */}
-          <div className="relative w-full">
+          <form onSubmit={handleSearchSubmit} className="relative w-full">
             <input
               type="text"
+              value={homeSearch}
+              onChange={(e) => setHomeSearch(e.target.value)}
               placeholder="What are you looking for?"
-              className="w-full h-10 pl-10 pr-3 rounded-xl border border-[#D5D8FC] text-xs font-medium text-[#1E1F3D] placeholder-[#989EEC] focus:outline-none focus:border-[#8E97FD] bg-[#F7F8FE]"
+              className="w-full h-10 pl-10 pr-3 rounded-xl border border-[#D5D8FC] text-xs font-medium text-[#1E1F3D] placeholder-[#989EEC] focus:outline-none focus:border-[#8E97FD] bg-[#F7F8FE] transition-colors"
             />
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center pointer-events-none">
+            <button
+              type="submit"
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center cursor-pointer"
+              aria-label="Search"
+            >
               <img src="/assets/Search.png" alt="Search" className="w-3.5 h-3.5 object-contain" />
-            </div>
-          </div>
+            </button>
+          </form>
 
           {/* 4 Circular Action Buttons: Map, Routes, QR Code, Users */}
           <div className="grid grid-cols-4 gap-2 mt-2.5 text-center">

@@ -66,6 +66,7 @@ export const BottomNavBar: React.FC = () => {
         return (
           <button
             key={tab.id}
+            id={`tab-btn-${tab.id}`}
             onClick={() => handleTabClick(tab.id)}
             className="flex flex-col items-center py-1 px-2.5 transition-all duration-200 active:scale-95 cursor-pointer group"
             aria-label={tab.label}

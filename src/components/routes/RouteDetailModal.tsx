@@ -7,11 +7,19 @@ import { DIFFICULTY_LABELS } from '@/types';
 import { RouteMapPreview } from './RouteMapPreview';
 
 export const RouteDetailModal: React.FC = () => {
-  const { selectedRouteDetail, setSelectedRouteDetail, setActiveRouteId, setScannerOpen } = useEnigameStore();
+  const {
+    selectedRouteDetail,
+    setSelectedRouteDetail,
+    setActiveRouteId,
+    setScannerOpen,
+    unlockedRouteIds,
+  } = useEnigameStore();
   const [giftCode, setGiftCode] = useState('');
   const [isGiftChecked, setIsGiftChecked] = useState(true);
 
   if (!selectedRouteDetail) return null;
+
+  const isUnlocked = unlockedRouteIds.includes(selectedRouteDetail.id);
 
   const formatDuration = (mins: number) => {
     if (mins === 60) return '1 Hour';
@@ -108,50 +116,66 @@ export const RouteDetailModal: React.FC = () => {
             </div>
           </div>
 
-          {/* Gifted Code Box */}
-          <div className="mt-5 p-4 rounded-2xl border border-[#8E97FD]/50 bg-[#F7F8FE]">
-            <label className="flex items-center gap-2.5 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={isGiftChecked}
-                onChange={(e) => setIsGiftChecked(e.target.checked)}
-                className="sr-only"
-              />
-              <div
-                className={`w-5 h-5 rounded flex items-center justify-center shrink-0 transition-all border ${
-                  isGiftChecked
-                    ? 'bg-[#8E97FD] border-[#8E97FD]'
-                    : 'bg-white border-[#A1A4B2]'
-                }`}
-              >
-                {isGiftChecked && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+          {/* Unlocked Route Banner OR Gifted Code Box */}
+          {isUnlocked ? (
+            <div className="mt-5 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between animate-fadeIn">
+              <div className="flex items-center gap-2 text-emerald-700 font-bold text-xs">
+                <Check className="w-4 h-4 text-emerald-600 stroke-[3]" />
+                <span>Unlocked &amp; Ready to Explore</span>
               </div>
-              <span className="text-xs font-bold text-[#6E7BFF]">
-                Use your gifted code for a 100% Discount on this route
+              <span className="text-[10px] bg-emerald-200/70 text-emerald-800 font-black px-2.5 py-0.5 rounded-full uppercase">
+                Free Access
               </span>
-            </label>
+            </div>
+          ) : (
+            <div className="mt-5 p-4 rounded-2xl border border-[#8E97FD]/50 bg-[#F7F8FE]">
+              <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={isGiftChecked}
+                  onChange={(e) => setIsGiftChecked(e.target.checked)}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-5 h-5 rounded flex items-center justify-center shrink-0 transition-all border ${
+                    isGiftChecked
+                      ? 'bg-[#8E97FD] border-[#8E97FD]'
+                      : 'bg-white border-[#A1A4B2]'
+                  }`}
+                >
+                  {isGiftChecked && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+                </div>
+                <span className="text-xs font-bold text-[#6E7BFF]">
+                  Use your gifted code for a 100% Discount on this route
+                </span>
+              </label>
 
-            {isGiftChecked && (
-              <input
-                type="text"
-                placeholder="ENTER PROMO CODE"
-                value={giftCode}
-                onChange={(e) => setGiftCode(e.target.value)}
-                className="w-full h-10 mt-3 px-3 rounded-xl border border-[#8E97FD]/40 text-xs font-bold text-[#1E1F3D] focus:outline-none uppercase bg-white"
-              />
-            )}
-          </div>
+              {isGiftChecked && (
+                <input
+                  type="text"
+                  placeholder="ENTER PROMO CODE"
+                  value={giftCode}
+                  onChange={(e) => setGiftCode(e.target.value)}
+                  className="w-full h-10 mt-3 px-3 rounded-xl border border-[#8E97FD]/40 text-xs font-bold text-[#1E1F3D] focus:outline-none uppercase bg-white"
+                />
+              )}
+            </div>
+          )}
 
-          {/* Checkout CTA */}
+          {/* Checkout / Start CTA */}
           <button
             onClick={() => {
               setActiveRouteId(selectedRouteDetail.id);
               setSelectedRouteDetail(null);
               setScannerOpen(true);
             }}
-            className="w-full h-12 rounded-2xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-extrabold text-xs mt-4 shadow-lg shadow-indigo-300/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className={`w-full h-12 rounded-2xl text-white font-extrabold text-xs mt-4 shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer ${
+              isUnlocked
+                ? 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200'
+                : 'bg-[#8E97FD] hover:bg-[#7C82ED] shadow-indigo-300/40'
+            }`}
           >
-            <span>Start Route with QR Checkpoints</span>
+            <span>{isUnlocked ? 'Start Expedition Now' : 'Start Route with QR Checkpoints'}</span>
           </button>
         </div>
       </div>

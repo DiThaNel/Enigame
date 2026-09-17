@@ -17,16 +17,20 @@ interface EditProfilePageProps {
 }
 
 export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
-  const { currentUser, updateProfile, setProfileViewStep, setEditProfileOpen } = useEnigameStore();
+  const { currentUser, updateProfile, setProfileViewStep, setEditProfileOpen, showToast } = useEnigameStore();
 
-  const [nickname, setNickname] = useState(currentUser.nickname || currentUser.name || 'Tiana Rosser');
-  const [bio, setBio] = useState(currentUser.bio || 'Must go faster. Must go faster... go, go, go, go! I was part of something special.');
+  const [name, setName] = useState(currentUser.name || 'Tiana Rosser');
+  const [nickname, setNickname] = useState(currentUser.nickname || 'Tiana Rosser');
   const [city, setCity] = useState(currentUser.city || 'Bragança, Portugal');
   const [gender, setGender] = useState(currentUser.gender || 'Female');
   const [ageGroup, setAgeGroup] = useState(currentUser.ageGroup || '20s');
   const [rankTitle, setRankTitle] = useState(currentUser.rankTitle || 'Master Cartographer');
-  const [selectedAvatar, setSelectedAvatar] = useState(currentUser.avatar || '/assets/TianaAvatar.png');
-  const [showSavedToast, setShowSavedToast] = useState(false);
+  const [bio, setBio] = useState(currentUser.bio || '');
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Keep avatar consistently as Tianna
+    showToast('Explorer Avatar set to Tianna!', 'info');
+  };
 
   const handleBack = () => {
     if (onBack) {
@@ -37,35 +41,21 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
     }
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          setSelectedAvatar(event.target.result as string);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleSave = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     updateProfile({
+      name,
       nickname,
-      name: nickname,
-      bio,
       city,
       gender,
       ageGroup,
       rankTitle,
-      avatar: selectedAvatar,
+      avatar: '/assets/TianaAvatar.png',
     });
-    setShowSavedToast(true);
+    showToast('Profile updated successfully!', 'success');
     setTimeout(() => {
       handleBack();
-    }, 600);
+    }, 500);
   };
 
   return (
@@ -89,14 +79,6 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
         </button>
       </div>
 
-      {/* Success Toast */}
-      {showSavedToast && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-[#1E1F3D] text-white px-4 py-2.5 rounded-full shadow-xl flex items-center gap-2 text-xs font-bold animate-fadeIn">
-          <CheckCircle2 size={16} className="text-emerald-400" />
-          <span>Profile updated successfully!</span>
-        </div>
-      )}
-
       {/* Form Content - Scrollable Page Body */}
       <form onSubmit={handleSave} className="flex-1 overflow-y-auto px-5 py-5 space-y-4 no-scrollbar pb-10">
         {/* Avatar Section */}
@@ -104,11 +86,8 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
           <div className="relative mb-2">
             <div className="w-24 h-24 rounded-full p-1">
               <img
-                src={selectedAvatar || '/assets/TianaAvatar.png'}
+                src="/assets/TianaAvatar.png"
                 alt={nickname}
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).src = '/assets/TianaAvatar.png';
-                }}
                 className="w-full h-full rounded-full object-cover bg-white"
               />
             </div>

@@ -21,10 +21,10 @@ import { SplashScreen } from '@/components/onboarding/SplashScreen';
 import { SelectLanguageScreen } from '@/components/onboarding/SelectLanguageScreen';
 import { CreateAccountScreen } from '@/components/onboarding/CreateAccountScreen';
 import { UserGuideScreen } from '@/components/onboarding/UserGuideScreen';
-import { Smartphone, Monitor, RotateCcw } from 'lucide-react';
+import { Smartphone, Monitor, RotateCcw, CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
 
 export const MobileAppShell: React.FC = () => {
-  const { appStage, setAppStage, activeTab } = useEnigameStore();
+  const { appStage, setAppStage, activeTab, toast, hideToast } = useEnigameStore();
   const [deviceFrame, setDeviceFrame] = useState(true);
 
   const stages: { id: AppStage; label: string }[] = [
@@ -139,6 +139,37 @@ export const MobileAppShell: React.FC = () => {
             <ExplorerProfileModal />
             <HostExpeditionModal />
           </>
+        )}
+
+        {/* Global Pinned Toast Notification - Fixed right beneath status bar */}
+        {toast && (
+          <div className="absolute top-12 sm:top-14 left-0 right-0 z-[9999] px-3.5 pointer-events-none flex justify-center animate-slideDown">
+            <div className={`pointer-events-auto w-full max-w-[390px] px-4 py-3 rounded-2xl shadow-2xl flex items-center justify-between gap-3 text-xs font-bold text-white border backdrop-blur-md transition-all ${
+              toast.type === 'success'
+                ? 'bg-[#1E1F3D]/95 border-emerald-400/80 shadow-emerald-950/50'
+                : toast.type === 'error'
+                ? 'bg-[#D9383A]/95 border-red-300 shadow-red-950/50'
+                : 'bg-[#1E1F3D]/95 border-indigo-400/80 shadow-indigo-950/50'
+            }`}>
+              <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                {toast.type === 'success' ? (
+                  <CheckCircle2 size={18} className="text-emerald-400 shrink-0" />
+                ) : toast.type === 'error' ? (
+                  <AlertCircle size={18} className="text-white shrink-0" />
+                ) : (
+                  <Info size={18} className="text-indigo-400 shrink-0" />
+                )}
+                <span className="leading-snug text-left truncate-2-lines">{toast.text}</span>
+              </div>
+              <button
+                onClick={hideToast}
+                className="w-6 h-6 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center shrink-0 cursor-pointer active:scale-95"
+                aria-label="Close notification"
+              >
+                <X size={13} />
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>

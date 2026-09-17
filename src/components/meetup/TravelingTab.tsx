@@ -5,7 +5,7 @@ import { useEnigameStore } from '@/store/useEnigameStore';
 import { Plus, Calendar, Clock, Navigation, Trophy, Users, Check } from 'lucide-react';
 
 export const TravelingTab: React.FC = () => {
-  const { expeditions, joinExpedition, setHostExpeditionOpen, currentUser } = useEnigameStore();
+  const { expeditions, joinExpedition, setHostExpeditionOpen, currentUser, showToast } = useEnigameStore();
 
   return (
     <div className="w-full px-5 pt-3 pb-24 animate-fadeIn">
@@ -61,7 +61,7 @@ export const TravelingTab: React.FC = () => {
                     {exp.participants.slice(0, 4).map((p, i) => (
                       <img
                         key={i}
-                        src={p.avatar}
+                        src="/assets/TianaAvatar.png"
                         alt={p.name}
                         className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
                       />
@@ -73,7 +73,10 @@ export const TravelingTab: React.FC = () => {
                 </div>
 
                 <button
-                  onClick={() => joinExpedition(exp.id)}
+                  onClick={() => {
+                    joinExpedition(exp.id);
+                    showToast(`Joined expedition "${exp.title}"!`, 'success');
+                  }}
                   disabled={isJoined}
                   className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                     isJoined

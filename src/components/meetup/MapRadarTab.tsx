@@ -101,7 +101,7 @@ export const MapRadarTab: React.FC = () => {
         </div>
         <div className="relative">
           <img
-            src={explorers[1].avatar}
+            src="/assets/TianaAvatar.png"
             alt="Sara"
             className="w-10 h-10 rounded-full object-cover ring-3 ring-[#7C82ED] shadow-md group-hover:scale-110 transition-transform"
           />
@@ -120,7 +120,7 @@ export const MapRadarTab: React.FC = () => {
         </div>
         <div className="relative">
           <img
-            src={explorers[0].avatar}
+            src="/assets/TianaAvatar.png"
             alt="Lucas"
             className="w-10 h-10 rounded-full object-cover ring-3 ring-[#7C82ED] shadow-md group-hover:scale-110 transition-transform"
           />
@@ -163,7 +163,7 @@ export const MapRadarTab: React.FC = () => {
               {explorers.slice(0, 3).map((e, idx) => (
                 <img
                   key={idx}
-                  src={e.avatar}
+                  src="/assets/TianaAvatar.png"
                   alt={e.name}
                   className="w-7 h-7 rounded-full ring-2 ring-white object-cover"
                 />

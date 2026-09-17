@@ -1,14 +1,15 @@
 'use client';
 
 import { create } from 'zustand';
-import { Route, Explorer, Expedition, StoreItem, ActivityRecord, Checkpoint } from '@/types';
-import { CURRENT_USER, MOCK_EXPLORERS, MOCK_ROUTES, MOCK_EXPEDITIONS, MOCK_STORE_ITEMS, MOCK_ACTIVITIES } from '@/data/mockData';
+import { Route, Explorer, Expedition, StoreItem, ActivityRecord, Checkpoint, Coupon } from '@/types';
+import { CURRENT_USER, MOCK_EXPLORERS, MOCK_ROUTES, MOCK_EXPEDITIONS, MOCK_STORE_ITEMS, MOCK_ACTIVITIES, MOCK_COUPONS } from '@/data/mockData';
 
 export type AppStage = 'splash' | 'language' | 'auth' | 'guide' | 'main';
 export type AppLanguage = 'pt' | 'en';
 export type MainTab = 'routes' | 'meetup' | 'home' | 'points' | 'profile';
 export type MeetupSubTab = 'explorers' | 'traveling' | 'map';
 export type RoutesViewStep = 'select-city' | 'city-routes' | 'route-detail';
+export type PointsSubView = 'hub' | 'leaderboard' | 'activity' | 'store' | 'coupons';
 
 export interface UserAccountData {
   name: string;
@@ -39,6 +40,8 @@ interface EnigameState {
   selectedRoute: Route | null;
   routesReturnTab: 'home' | 'routes';
   viewRouteDetail: (route: Route, fromTab?: 'home' | 'routes') => void;
+  routesSearchQuery: string;
+  setRoutesSearchQuery: (query: string) => void;
 
   currentUser: Explorer;
   points: number;
@@ -84,6 +87,24 @@ interface EnigameState {
   activities: ActivityRecord[];
   redeemedItemIds: string[];
   redeemStoreItem: (item: StoreItem) => boolean;
+
+  pointsSubView: PointsSubView;
+  setPointsSubView: (view: PointsSubView) => void;
+  coupons: Coupon[];
+  redeemPromoCode: (code: string) => { success: boolean; message: string; coupon?: Coupon };
+  useCoupon: (couponId: string) => boolean;
+  unlockedRouteIds: string[];
+  buyRouteWithPoints: (routeId: string, costPoints: number) => boolean;
+
+  toast: ToastNotification | null;
+  showToast: (text: string, type?: 'success' | 'error' | 'info', durationMs?: number) => void;
+  hideToast: () => void;
+}
+
+export interface ToastNotification {
+  id: string;
+  type: 'success' | 'error' | 'info';
+  text: string;
 }
 
 export const useEnigameStore = create<EnigameState>((set, get) => ({
@@ -121,6 +142,8 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
     routesViewStep: 'route-detail',
     activeTab: 'routes',
   }),
+  routesSearchQuery: '',
+  setRoutesSearchQuery: (query) => set({ routesSearchQuery: query }),
 
   currentUser: CURRENT_USER,
   points: 1000,
@@ -241,5 +264,193 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
       ]
     });
     return true;
-  }
+  },
+
+  pointsSubView: 'hub',
+  setPointsSubView: (view) => set({ pointsSubView: view }),
+
+  coupons: MOCK_COUPONS,
+  redeemPromoCode: (code: string) => {
+    const trimmed = code.trim().toUpperCase();
+    const state = get();
+
+    if (!trimmed) {
+      return { success: false, message: 'Please enter a valid promo code.' };
+    }
+
+    if (state.coupons.some(c => c.code.toUpperCase() === trimmed)) {
+      return { success: false, message: 'This coupon is already in your wallet!' };
+    }
+
+    // Predefined coupon definitions
+    if (trimmed === 'ENIGAME2026') {
+      const newCoupon: Coupon = {
+        id: 'cpn-' + Date.now(),
+        code: 'ENIGAME2026',
+        title: '100% Free Mystery Route Unlock',
+        description: 'Voucher valid to unlock any premium European adventure route of your choice.',
+        discountBadge: 'FREE ROUTE',
+        partnerName: 'Enigame Official Store',
+        category: 'route',
+        expiryDate: '31 Dec 2026',
+        isUsed: false,
+        qrCodeValue: 'ENIGAME-COUPON-ENIGAME2026',
+        terms: 'Applicable in the Route Explorer Store.'
+      };
+      set(s => ({
+        coupons: [newCoupon, ...s.coupons],
+        points: s.points + 250,
+        activities: [
+          {
+            id: 'act-' + Date.now(),
+            title: 'Redeemed code ENIGAME2026 (+250 Pts & Free Route)',
+            timestamp: 'Just now',
+            pointsDelta: 250,
+            type: 'bonus',
+          },
+          ...s.activities
+        ]
+      }));
+      return { success: true, message: 'Code applied! +250 Pts and Free Route unlocked!', coupon: newCoupon };
+    }
+
+    if (trimmed === 'BRAGANCA50') {
+      const newCoupon: Coupon = {
+        id: 'cpn-' + Date.now(),
+        code: 'BRAGANCA50',
+        title: '50% OFF Citadel Museum Tickets',
+        description: 'Special half-price admission to the Bragança Military & Historic Keep Museum.',
+        discountBadge: '50% OFF',
+        partnerName: 'Citadel Heritage Foundation',
+        category: 'museum',
+        expiryDate: '31 Dec 2026',
+        isUsed: false,
+        qrCodeValue: 'ENIGAME-COUPON-BRAGANCA50',
+      };
+      set(s => ({ coupons: [newCoupon, ...s.coupons] }));
+      return { success: true, message: '50% OFF Museum coupon unlocked!', coupon: newCoupon };
+    }
+
+    if (trimmed === 'EXPLORER10') {
+      const newCoupon: Coupon = {
+        id: 'cpn-' + Date.now(),
+        code: 'EXPLORER10',
+        title: 'Free Artisan Pastel & Bica Coffee',
+        description: 'Complimentary traditional Bragança pastry and espresso at Café do Castelo.',
+        discountBadge: 'FREE GIFT',
+        partnerName: 'Café do Castelo Bragança',
+        category: 'restaurant',
+        expiryDate: '28 Feb 2027',
+        isUsed: false,
+        qrCodeValue: 'ENIGAME-COUPON-EXPLORER10',
+      };
+      set(s => ({ coupons: [newCoupon, ...s.coupons] }));
+      return { success: true, message: 'Free Gift coupon added to your wallet!', coupon: newCoupon };
+    }
+
+    if (trimmed === 'CASTLE15') {
+      const newCoupon: Coupon = {
+        id: 'cpn-' + Date.now(),
+        code: 'CASTLE15',
+        title: '15% OFF Regional Castelo Souvenirs',
+        description: 'Exclusive 15% discount on heritage crafts and souvenirs at the Citadel gift shop.',
+        discountBadge: '15% OFF',
+        partnerName: 'Citadel Souvenirs & Crafts',
+        category: 'restaurant',
+        expiryDate: '30 Apr 2027',
+        isUsed: false,
+        qrCodeValue: 'ENIGAME-COUPON-CASTLE15',
+      };
+      set(s => ({ coupons: [newCoupon, ...s.coupons] }));
+      return { success: true, message: '15% OFF Souvenir coupon added!', coupon: newCoupon };
+    }
+
+    // Generic valid promo bonus
+    const genericCoupon: Coupon = {
+      id: 'cpn-' + Date.now(),
+      code: trimmed,
+      title: `Special Reward: ${trimmed}`,
+      description: 'Explorer promo code redeemed successfully. Enjoy your exclusive benefits.',
+      discountBadge: '10% OFF',
+      partnerName: 'Enigame Partner Network',
+      category: 'bonus',
+      expiryDate: '31 Dec 2026',
+      isUsed: false,
+      qrCodeValue: `ENIGAME-PROMO-${trimmed}`,
+    };
+    set(s => ({
+      coupons: [genericCoupon, ...s.coupons],
+      points: s.points + 100,
+      activities: [
+        {
+          id: 'act-' + Date.now(),
+          title: `Redeemed promo code ${trimmed} (+100 Pts)`,
+          timestamp: 'Just now',
+          pointsDelta: 100,
+          type: 'bonus',
+        },
+        ...s.activities
+      ]
+    }));
+    return { success: true, message: `Code ${trimmed} redeemed! +100 Points added!`, coupon: genericCoupon };
+  },
+
+  useCoupon: (couponId: string) => {
+    const state = get();
+    const cpn = state.coupons.find(c => c.id === couponId);
+    if (!cpn || cpn.isUsed) return false;
+
+    set(s => ({
+      coupons: s.coupons.map(c => c.id === couponId ? { ...c, isUsed: true } : c),
+      activities: [
+        {
+          id: 'act-' + Date.now(),
+          title: `Used coupon: ${cpn.title}`,
+          timestamp: 'Just now',
+          pointsDelta: 0,
+          type: 'redeem',
+        },
+        ...s.activities
+      ]
+    }));
+    return true;
+  },
+
+  unlockedRouteIds: ['route-braganca-medieval'],
+  buyRouteWithPoints: (routeId: string, costPoints: number) => {
+    const state = get();
+    if (state.unlockedRouteIds.includes(routeId)) return true;
+    if (state.points < costPoints) return false;
+
+    const route = state.routes.find(r => r.id === routeId);
+    const title = route ? route.title : 'Mystery Route';
+
+    set(s => ({
+      points: s.points - costPoints,
+      unlockedRouteIds: [...s.unlockedRouteIds, routeId],
+      activities: [
+        {
+          id: 'act-' + Date.now(),
+          title: `Unlocked with Points: ${title}`,
+          timestamp: 'Just now',
+          pointsDelta: -costPoints,
+          type: 'redeem',
+        },
+        ...s.activities
+      ]
+    }));
+    return true;
+  },
+
+  toast: null,
+  showToast: (text: string, type: 'success' | 'error' | 'info' = 'success', durationMs = 3500) => {
+    const id = Date.now().toString() + Math.random().toString(36).substring(2, 6);
+    set({ toast: { id, type, text } });
+    setTimeout(() => {
+      if (get().toast?.id === id) {
+        set({ toast: null });
+      }
+    }, durationMs);
+  },
+  hideToast: () => set({ toast: null }),
 }));

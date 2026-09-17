@@ -90,3 +90,32 @@ export interface ActivityRecord {
   pointsDelta: number;
   type: 'route_complete' | 'qr_scan' | 'bonus' | 'redeem';
 }
+
+export interface Coupon {
+  id: string;
+  code: string;
+  title: string;
+  description: string;
+  discountBadge: string;
+  partnerName: string;
+  category: 'restaurant' | 'museum' | 'route' | 'bonus';
+  expiryDate: string;
+  isUsed: boolean;
+  qrCodeValue: string;
+  terms?: string;
+}
+
+export interface LeaderboardUser {
+  rank: number;
+  id: string;
+  name: string;
+  title: string;
+  city: string;
+  avatar: string;
+  points: number;
+  level: number;
+  country: string;
+  flagUrl: string;
+  badgeUrl?: string;
+  isCurrentUser?: boolean;
+}
