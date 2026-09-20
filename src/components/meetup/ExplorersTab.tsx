@@ -21,47 +21,64 @@ export const ExplorersTab: React.FC = () => {
     badges: ['Top Explorer', 'Citadel Legend'],
   }));
 
-  return (
-    <div className="w-full min-h-screen pb-24 bg-[#EEF0FA] relative overflow-hidden px-4 pt-4">
-      {/* Background Dashed Path Lines matching Figma */}
-      <div className="absolute inset-0 pointer-events-none opacity-40">
-        <svg className="w-full h-full" viewBox="0 0 375 800" fill="none">
-          <path d="M40 50 Q180 180 80 320 T280 500" stroke="#8E97FD" strokeWidth="2" strokeDasharray="6 6" />
-          <path d="M300 100 Q150 250 220 400 T80 650" stroke="#8E97FD" strokeWidth="2" strokeDasharray="6 6" />
-        </svg>
+  // Split into 3 columns for staggered masonry layout
+  const col1 = explorerList.filter((_, idx) => idx % 3 === 0);
+  const col2 = explorerList.filter((_, idx) => idx % 3 === 1);
+  const col3 = explorerList.filter((_, idx) => idx % 3 === 2);
+
+  const renderExplorerCard = (exp: (typeof explorerList)[0], originalIndex: number) => (
+    <div
+      key={exp.id}
+      onClick={() => setSelectedExplorer(exp)}
+      style={{ animationDelay: `${(originalIndex % 6) * 50}ms` }}
+      className="animate-card-stagger flex flex-col items-center cursor-pointer group active:scale-95 transition-transform"
+    >
+      {/* Explorer Avatar Frame - Circle matches explorer image */}
+      <div className="relative w-23 h-23 group-hover:scale-105 transition-transform">
+        <img
+          src={exp.avatar}
+          alt={exp.name}
+          className="w-full h-full rounded-full object-cover"
+        />
+
+        {/* Star Medal Badge top-right */}
+        <div className="absolute -top-1 -right-1 w-6 h-6 flex items-center justify-center pointer-events-none">
+          <img src="/assets/TopPointsMedal.png" alt="Medal" className="w-5 h-5 object-contain drop-shadow" />
+        </div>
+
+        {/* Country Badge bottom-right */}
+        <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full overflow-hidden border-2 border-white shadow-sm flex items-center justify-center bg-white pointer-events-none">
+          <img src="/assets/PortugalMiniIcon.png" alt="PT" className="w-full h-full object-cover" />
+        </div>
       </div>
+    </div>
+  );
 
-      {/* Grid of character avatars matching Figma 06 - Meet-up */}
-      <div className="relative z-10 grid grid-cols-2 gap-y-6 gap-x-4">
-        {explorerList.map((exp, idx) => (
-          <div
-            key={exp.id}
-            onClick={() => setSelectedExplorer(exp)}
-            style={{ animationDelay: `${(idx % 6) * 50}ms` }}
-            className={"animate-card-stagger flex flex-col items-center cursor-pointer group active:scale-95 transition-transform " + (
-              idx % 2 === 1 ? "translate-y-6" : ""
-            )}
-          >
-            {/* Explorer Avatar Frame */}
-            <div className="relative w-22 h-22 rounded-full p-1 bg-white shadow-[0_8px_25px_rgba(142,151,253,0.22)] group-hover:shadow-[0_12px_30px_rgba(142,151,253,0.35)] transition-shadow">
-              <img
-                src={exp.avatar}
-                alt={exp.name}
-                className="w-full h-full rounded-full object-cover"
-              />
+  return (
+    <div
+      className="w-full flex-1 min-h-full pb-8 relative overflow-hidden px-3 pt-5 bg-no-repeat"
+      style={{
+        backgroundImage: 'url(/assets/Lenguaje.png)',
+        backgroundSize: '100% 100%',
+        backgroundPosition: 'top center',
+      }}
+    >
+      {/* 3-Column Staggered Masonry Layout matching Figma 06 - Meet-up */}
+      <div className="relative z-10 grid grid-cols-3 gap-x-2">
+        {/* Column 1 */}
+        <div className="flex flex-col items-center gap-y-7">
+          {col1.map((exp, idx) => renderExplorerCard(exp, idx * 3))}
+        </div>
 
-              {/* Star Medal Badge top-right */}
-              <div className="absolute top-0 right-0 w-6 h-6 flex items-center justify-center">
-                <img src="/assets/TopPointsMedal.png" alt="Medal" className="w-5 h-5 object-contain drop-shadow" />
-              </div>
+        {/* Column 2 (staggered downward for masonry effect) */}
+        <div className="flex flex-col items-center gap-y-7 pt-10">
+          {col2.map((exp, idx) => renderExplorerCard(exp, idx * 3 + 1))}
+        </div>
 
-              {/* Country Badge bottom-right */}
-              <div className="absolute bottom-0 right-0 w-6 h-6 rounded-full overflow-hidden border-2 border-white shadow-sm flex items-center justify-center bg-white">
-                <img src="/assets/PortugalMiniIcon.png" alt="PT" className="w-full h-full object-cover" />
-              </div>
-            </div>
-          </div>
-        ))}
+        {/* Column 3 */}
+        <div className="flex flex-col items-center gap-y-7">
+          {col3.map((exp, idx) => renderExplorerCard(exp, idx * 3 + 2))}
+        </div>
       </div>
     </div>
   );

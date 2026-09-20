@@ -5,7 +5,7 @@ import { useEnigameStore, MeetupSubTab } from '@/store/useEnigameStore';
 import { ExplorersTab } from './ExplorersTab';
 import { TravelingTab } from './TravelingTab';
 import { MapRadarTab } from './MapRadarTab';
-import { Compass } from 'lucide-react';
+import { Compass, Users, Plane } from 'lucide-react';
 
 export const MeetupHub: React.FC = () => {
   const { meetupSubTab, setMeetupSubTab } = useEnigameStore();
@@ -14,12 +14,12 @@ export const MeetupHub: React.FC = () => {
     { 
       id: 'explorers', 
       label: 'Explorers', 
-      icon: <img src="/assets/MeetupExplorerIcon.png" alt="Explorers" className="w-4 h-4 object-contain" /> 
+      icon: <Users size={16} /> 
     },
     { 
       id: 'traveling', 
       label: 'Traveling', 
-      icon: <img src="/assets/MeetupTravelerIcon.png" alt="Traveling" className="w-4 h-4 object-contain" /> 
+      icon: <Plane size={16} /> 
     },
     { 
       id: 'map', 
@@ -29,9 +29,9 @@ export const MeetupHub: React.FC = () => {
   ];
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex-1 flex flex-col min-h-full">
       {/* Top Header Segment Control */}
-      <div className="px-5 pt-3 pb-2 bg-white border-b border-[#EEF0FA]">
+      <div className="px-5 pt-3 pb-2 bg-white border-b border-[#EEF0FA] shrink-0">
         <div className="flex items-center justify-center p-1 bg-[#F4F6FB] rounded-2xl">
           {tabs.map((tab) => {
             const isActive = meetupSubTab === tab.id;
@@ -54,7 +54,7 @@ export const MeetupHub: React.FC = () => {
       </div>
 
       {/* Render Active SubTab with smooth fade-slide transition */}
-      <div key={meetupSubTab} className="w-full animate-tab-enter">
+      <div key={meetupSubTab} className="w-full flex-1 flex flex-col animate-tab-enter">
         {meetupSubTab === 'explorers' && <ExplorersTab />}
         {meetupSubTab === 'traveling' && <TravelingTab />}
         {meetupSubTab === 'map' && <MapRadarTab />}

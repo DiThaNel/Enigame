@@ -24,8 +24,22 @@ import { UserGuideScreen } from '@/components/onboarding/UserGuideScreen';
 import { Smartphone, Monitor, RotateCcw, CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
 
 export const MobileAppShell: React.FC = () => {
-  const { appStage, setAppStage, activeTab, toast, hideToast } = useEnigameStore();
+  const { appStage, setAppStage, activeTab, setActiveTab, setPointsSubView, toast, hideToast } = useEnigameStore();
   const [deviceFrame, setDeviceFrame] = useState(true);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const stage = params.get('stage');
+    const tab = params.get('tab');
+    const sub = params.get('sub');
+    const frame = params.get('frame');
+
+    if (stage) setAppStage(stage as any);
+    if (tab) setActiveTab(tab as any);
+    if (sub) setPointsSubView(sub as any);
+    if (frame === 'false') setDeviceFrame(false);
+  }, [setAppStage, setActiveTab, setPointsSubView]);
 
   const stages: { id: AppStage; label: string }[] = [
     { id: 'splash', label: '1. Splash' },

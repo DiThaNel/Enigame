@@ -39,7 +39,7 @@ export const ExplorerProfileModal: React.FC = () => {
             <img
               src="/assets/TianaAvatar.png"
               alt={selectedExplorer.name}
-              className="w-24 h-24 rounded-full object-cover ring-4 ring-white shadow-xl bg-white"
+              className="w-24 h-24 rounded-full object-cover shadow-xl"
             />
             <span className="absolute bottom-1 right-1 bg-[#FFB800] text-[#1E1F3D] text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">
               Lvl {selectedExplorer.level}
