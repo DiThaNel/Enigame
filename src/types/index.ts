@@ -48,6 +48,8 @@ export interface Explorer {
   level: number;
   rankTitle: string;
   bio: string;
+  about?: string;
+  interests?: string[];
   city: string;
   gender: string;
   ageGroup: string;

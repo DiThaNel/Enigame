@@ -96,6 +96,8 @@ interface EnigameState {
   unlockedRouteIds: string[];
   buyRouteWithPoints: (routeId: string, costPoints: number) => boolean;
 
+  lightboxPhoto: string | null;
+  setLightboxPhoto: (url: string | null) => void;
   toast: ToastNotification | null;
   showToast: (text: string, type?: 'success' | 'error' | 'info', durationMs?: number) => void;
   hideToast: () => void;
@@ -442,6 +444,8 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
     return true;
   },
 
+  lightboxPhoto: null,
+  setLightboxPhoto: (url) => set({ lightboxPhoto: url }),
   toast: null,
   showToast: (text: string, type: 'success' | 'error' | 'info' = 'success', durationMs = 3500) => {
     const id = Date.now().toString() + Math.random().toString(36).substring(2, 6);

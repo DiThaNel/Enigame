@@ -3,12 +3,22 @@
 import React from 'react';
 import { useEnigameStore, MeetupSubTab } from '@/store/useEnigameStore';
 import { ExplorersTab } from './ExplorersTab';
+import { ExplorerProfileView } from './ExplorerProfileView';
 import { TravelingTab } from './TravelingTab';
 import { MapRadarTab } from './MapRadarTab';
 import { Compass, Users, Plane } from 'lucide-react';
 
 export const MeetupHub: React.FC = () => {
-  const { meetupSubTab, setMeetupSubTab } = useEnigameStore();
+  const { meetupSubTab, setMeetupSubTab, selectedExplorer, setSelectedExplorer } = useEnigameStore();
+
+  if (selectedExplorer) {
+    return (
+      <ExplorerProfileView
+        explorer={selectedExplorer}
+        onBack={() => setSelectedExplorer(null)}
+      />
+    );
+  }
 
   const tabs: { id: MeetupSubTab; label: string; icon: React.ReactNode }[] = [
     { 

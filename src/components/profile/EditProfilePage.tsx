@@ -2,15 +2,22 @@
 
 import React, { useState } from 'react';
 import { useEnigameStore } from '@/store/useEnigameStore';
-import { ChevronLeft, Camera, MapPin, Quote, Award, Check, CheckCircle2 } from 'lucide-react';
+import { ChevronLeft, Camera, MapPin, Quote, Award, Check, Plus } from 'lucide-react';
 
-const InstagramIcon = ({ size = 18, className = "" }: { size?: number; className?: string }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <rect width={20} height={20} x="2" y="2" rx="5" ry="5"/>
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
-  </svg>
-);
+const AVAILABLE_INTEREST_OPTIONS = [
+  'Castles', 
+  'Cartography', 
+  'Puzzles', 
+  'Local Wine', 
+  'Nature Trails', 
+  'Photography', 
+  'Backpacking', 
+  'History',
+  'Archaeology',
+  'Urban Legends',
+  'Gastronomy',
+  'Climbing'
+];
 
 interface EditProfilePageProps {
   onBack?: () => void;
@@ -26,9 +33,33 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
   const [ageGroup, setAgeGroup] = useState(currentUser.ageGroup || '20s');
   const [rankTitle, setRankTitle] = useState(currentUser.rankTitle || 'Master Cartographer');
   const [bio, setBio] = useState(currentUser.bio || '');
+  const [about, setAbout] = useState(currentUser.about || 'Passionate cartographer and mystery enthusiast based in northern Portugal. Always hunting for forgotten medieval inscriptions, subterranean passages, and local legends hidden in plain sight.');
+  const [interests, setInterests] = useState<string[]>(
+    currentUser.interests && currentUser.interests.length > 0
+      ? currentUser.interests
+      : ['Castles', 'Cartography', 'Puzzles', 'Local Wine', 'Nature Trails', 'Photography', 'Backpacking', 'History']
+  );
+  const [customInterest, setCustomInterest] = useState('');
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Keep avatar consistently as Tianna
+  const toggleInterest = (tag: string) => {
+    if (interests.includes(tag)) {
+      setInterests(interests.filter(t => t !== tag));
+    } else {
+      setInterests([...interests, tag]);
+    }
+  };
+
+  const handleAddCustomInterest = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = customInterest.trim();
+    if (!trimmed) return;
+    if (!interests.includes(trimmed)) {
+      setInterests([...interests, trimmed]);
+    }
+    setCustomInterest('');
+  };
+
+  const handleImageUpload = () => {
     showToast('Explorer Avatar set to Tianna!', 'info');
   };
 
@@ -46,6 +77,9 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
     updateProfile({
       name,
       nickname,
+      bio,
+      about,
+      interests,
       city,
       gender,
       ageGroup,
@@ -55,7 +89,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
     showToast('Profile updated successfully!', 'success');
     setTimeout(() => {
       handleBack();
-    }, 500);
+    }, 400);
   };
 
   return (
@@ -73,16 +107,16 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
         <h1 className="text-base font-bold tracking-wide">Edit Profile</h1>
         <button
           onClick={() => handleSave()}
-          className="text-xs font-extrabold text-white bg-white/20 hover:bg-white/30 px-3.5 py-1.5 rounded-full transition-all cursor-pointer active:scale-95"
+          className="h-9 px-4 rounded-full bg-white text-[#1E1F3D] font-bold text-xs shadow-md flex items-center gap-1.5 hover:bg-white/90 active:scale-95 transition-all cursor-pointer"
         >
-          Done
+          <Check size={14} className="text-[#8E97FD]" />
+          <span>Save</span>
         </button>
       </div>
 
-      {/* Form Content - Scrollable Page Body */}
-      <form onSubmit={handleSave} className="flex-1 overflow-y-auto px-5 py-5 space-y-4 no-scrollbar pb-10">
-        {/* Avatar Section */}
-        <div className="animate-card-stagger stagger-1 bg-white rounded-[28px] p-5 shadow-sm border border-[#EAEFFE] flex flex-col items-center">
+      <form onSubmit={handleSave} className="flex-1 overflow-y-auto px-5 pt-5 pb-8 space-y-5 no-scrollbar">
+        {/* Avatar Frame Preview matching Figma */}
+        <div className="animate-card-stagger stagger-1 flex flex-col items-center">
           <div className="relative mb-2">
             <div className="w-24 h-24 rounded-full p-1">
               <img
@@ -106,7 +140,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
           </div>
 
           <span className="text-[11px] font-bold text-[#8E97FD] bg-[#EEF0FF] px-3.5 py-1 rounded-full mt-1">
-            Level {currentUser.level || 12} Adventurer Frame
+            Level {currentUser.level || 18} Adventurer Frame
           </span>
         </div>
 
@@ -114,29 +148,88 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
         <div className="animate-card-stagger stagger-2 bg-white rounded-[28px] p-5 shadow-sm border border-[#EAEFFE] space-y-4">
           {/* Explorer Nickname */}
           <div>
-            <label className="text-xs font-bold text-[#1E1F3D] block mb-1">Explorer Nickname</label>
+            <label className="text-xs font-bold text-[#1E1F3D] block mb-1">Explorer Name</label>
             <input
               type="text"
               required
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+                setNickname(e.target.value);
+              }}
               placeholder="e.g. Tiana Rosser"
               className="w-full h-11 px-4 rounded-2xl bg-[#F4F6FB] border border-[#EEF0FA] text-xs font-semibold text-[#1E1F3D] focus:outline-none focus:ring-2 focus:ring-[#8E97FD]/40 transition-all"
             />
           </div>
 
-          {/* Adventure Bio */}
+          {/* Adventure Bio / Motto */}
           <div>
-            <label className="text-xs font-bold text-[#1E1F3D] block mb-1">Adventure Bio / Motto</label>
+            <label className="text-xs font-bold text-[#1E1F3D] block mb-1">Adventure Bio / Motto (Quote)</label>
             <div className="relative">
               <textarea
-                rows={3}
+                rows={2}
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
                 placeholder="Share your explorer quote or motto..."
                 className="w-full p-3.5 pr-8 rounded-2xl bg-[#F4F6FB] border border-[#EEF0FA] text-xs font-medium text-[#585A7E] focus:outline-none focus:ring-2 focus:ring-[#8E97FD]/40 resize-none leading-relaxed transition-all"
               />
               <Quote className="absolute right-3 top-3 text-[#8E97FD]/40" size={16} />
+            </div>
+          </div>
+
+          {/* About Me (Extended Bio for About Tab) */}
+          <div>
+            <label className="text-xs font-bold text-[#1E1F3D] block mb-1">About Me (Extended Bio)</label>
+            <textarea
+              rows={3}
+              value={about}
+              onChange={(e) => setAbout(e.target.value)}
+              placeholder="Tell fellow explorers about your adventure background..."
+              className="w-full p-3.5 rounded-2xl bg-[#F4F6FB] border border-[#EEF0FA] text-xs font-medium text-[#585A7E] focus:outline-none focus:ring-2 focus:ring-[#8E97FD]/40 resize-none leading-relaxed transition-all"
+            />
+          </div>
+
+          {/* Interests & Specializations (without icons) */}
+          <div>
+            <label className="text-xs font-bold text-[#1E1F3D] block mb-2">Interests &amp; Specializations</label>
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {AVAILABLE_INTEREST_OPTIONS.map((opt) => {
+                const isSelected = interests.includes(opt);
+                return (
+                  <button
+                    key={opt}
+                    type="button"
+                    onClick={() => toggleInterest(opt)}
+                    className={`px-3 py-1.5 rounded-full text-[11px] font-semibold transition-all cursor-pointer active:scale-95 ${
+                      isSelected
+                        ? 'bg-[#8E97FD] text-white shadow-xs'
+                        : 'bg-[#F4F6FB] text-[#585A7E] hover:bg-[#EEF0FA] border border-[#E0E2EE]'
+                    }`}
+                  >
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Custom Interest Input */}
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={customInterest}
+                onChange={(e) => setCustomInterest(e.target.value)}
+                placeholder="Add custom interest..."
+                className="flex-1 h-9 px-3.5 rounded-xl bg-[#F4F6FB] border border-[#EEF0FA] text-xs text-[#1E1F3D] focus:outline-none focus:ring-2 focus:ring-[#8E97FD]/40"
+              />
+              <button
+                type="button"
+                onClick={handleAddCustomInterest}
+                disabled={!customInterest.trim()}
+                className="h-9 px-3 rounded-xl bg-[#8E97FD] text-white text-xs font-bold disabled:opacity-50 flex items-center gap-1 cursor-pointer"
+              >
+                <Plus size={14} />
+                <span>Add</span>
+              </button>
             </div>
           </div>
 
@@ -200,25 +293,6 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
                 <option value="Citadel Legend">Citadel Legend</option>
               </select>
               <Award className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#FFB800]" size={16} />
-            </div>
-          </div>
-
-          {/* Social Links */}
-          <div>
-            <label className="text-xs font-bold text-[#1E1F3D] block mb-1">Social Connection</label>
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#F4F6FB] border border-[#EEF0FA]">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#FF5757] via-[#C13584] to-[#833AB4] text-white flex items-center justify-center shadow-xs">
-                  <InstagramIcon size={17} />
-                </div>
-                <div>
-                  <span className="text-xs font-bold text-[#1E1F3D] block">Instagram</span>
-                  <span className="text-[10px] text-[#7A7C99]">@tiana_adventures</span>
-                </div>
-              </div>
-              <span className="px-2.5 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-lg flex items-center gap-1">
-                <Check size={12} /> Connected
-              </span>
             </div>
           </div>
         </div>
