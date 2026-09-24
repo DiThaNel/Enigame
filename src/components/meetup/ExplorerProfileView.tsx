@@ -19,9 +19,10 @@ import {
 interface ExplorerProfileViewProps {
   explorer: Explorer;
   onBack: () => void;
+  onOpenChat?: (initialWave?: boolean) => void;
 }
 
-export const ExplorerProfileView: React.FC<ExplorerProfileViewProps> = ({ explorer, onBack }) => {
+export const ExplorerProfileView: React.FC<ExplorerProfileViewProps> = ({ explorer, onBack, onOpenChat }) => {
   const { showToast, setLightboxPhoto } = useEnigameStore();
 
   const [activeTab, setActiveTab] = useState<'instagram' | 'about' | 'trips'>('instagram');
@@ -80,7 +81,11 @@ export const ExplorerProfileView: React.FC<ExplorerProfileViewProps> = ({ explor
 
   const handleWave = () => {
     setHasWaved(true);
-    showToast(`👋 You waved at ${explorer.name}!`, 'success');
+    if (onOpenChat) {
+      onOpenChat(true);
+    } else {
+      showToast(`👋 You waved at ${explorer.name}!`, 'success');
+    }
   };
 
   const handleSendMessage = (e?: React.FormEvent) => {
@@ -129,7 +134,7 @@ export const ExplorerProfileView: React.FC<ExplorerProfileViewProps> = ({ explor
         <div className="flex items-center gap-2">
           {/* Message Pill Button */}
           <button
-            onClick={() => setIsMessageOpen(true)}
+            onClick={() => onOpenChat ? onOpenChat(false) : setIsMessageOpen(true)}
             className="h-9 px-4 rounded-full bg-white text-[#1E1F3D] font-bold text-xs shadow-md flex items-center gap-1.5 hover:bg-white/90 active:scale-95 transition-all cursor-pointer"
           >
             <MessageSquare size={14} className="text-[#8E97FD]" />
@@ -224,7 +229,7 @@ export const ExplorerProfileView: React.FC<ExplorerProfileViewProps> = ({ explor
       {/* Quick Action Shortcuts Bar: Send Message, Wave, Share */}
       <div className="mx-5 mt-3.5 flex items-center justify-between gap-2.5 z-10">
         <button
-          onClick={() => setIsMessageOpen(true)}
+          onClick={() => onOpenChat ? onOpenChat(false) : setIsMessageOpen(true)}
           className="animate-card-stagger stagger-1 flex-1 py-2.5 px-3 rounded-2xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white shadow-md shadow-indigo-200 flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer"
         >
           <MessageSquare size={15} />

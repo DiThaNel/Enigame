@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import { Route, Explorer, Expedition, StoreItem, ActivityRecord, Checkpoint, Coupon } from '@/types';
+import { Route, Explorer, Expedition, StoreItem, ActivityRecord, Checkpoint, Coupon, ChatMessage } from '@/types';
 import { CURRENT_USER, MOCK_EXPLORERS, MOCK_ROUTES, MOCK_EXPEDITIONS, MOCK_STORE_ITEMS, MOCK_ACTIVITIES, MOCK_COUPONS } from '@/data/mockData';
 
 export type AppStage = 'splash' | 'language' | 'auth' | 'guide' | 'main';
@@ -61,6 +61,13 @@ interface EnigameState {
   explorers: Explorer[];
   selectedExplorer: Explorer | null;
   setSelectedExplorer: (explorer: Explorer | null) => void;
+  activeChatExplorer: Explorer | null;
+  setActiveChatExplorer: (explorer: Explorer | null) => void;
+  chatAutoWave: boolean;
+  setChatAutoWave: (auto: boolean) => void;
+  explorerChats: Record<string, ChatMessage[]>;
+  sendChatMessage: (explorerId: string, text: string, isWave?: boolean) => void;
+  receiveChatMessage: (explorerId: string, text: string) => void;
 
   isScannerOpen: boolean;
   setScannerOpen: (open: boolean) => void;
@@ -222,6 +229,48 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
   explorers: MOCK_EXPLORERS,
   selectedExplorer: null,
   setSelectedExplorer: (explorer) => set({ selectedExplorer: explorer }),
+  activeChatExplorer: null,
+  setActiveChatExplorer: (explorer) => set({ activeChatExplorer: explorer }),
+  chatAutoWave: false,
+  setChatAutoWave: (auto) => set({ chatAutoWave: auto }),
+  explorerChats: {},
+  sendChatMessage: (explorerId, text, isWave = false) => {
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const newMsg: ChatMessage = {
+      id: 'msg-' + Date.now(),
+      sender: 'user',
+      text,
+      timestamp: timeStr,
+      isWave,
+    };
+    set(state => {
+      const prev = state.explorerChats[explorerId] || [];
+      return {
+        explorerChats: {
+          ...state.explorerChats,
+          [explorerId]: [...prev, newMsg],
+        }
+      };
+    });
+  },
+  receiveChatMessage: (explorerId, text) => {
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const newMsg: ChatMessage = {
+      id: 'msg-' + Date.now(),
+      sender: 'explorer',
+      text,
+      timestamp: timeStr,
+    };
+    set(state => {
+      const prev = state.explorerChats[explorerId] || [];
+      return {
+        explorerChats: {
+          ...state.explorerChats,
+          [explorerId]: [...prev, newMsg],
+        }
+      };
+    });
+  },
 
   isScannerOpen: false,
   setScannerOpen: (open) => set({ isScannerOpen: open }),

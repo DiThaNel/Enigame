@@ -34,6 +34,9 @@ export const TravelingTab: React.FC = () => {
                   src={exp.coverImage}
                   alt={exp.title}
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = '/assets/BragancaHome.png';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 

@@ -121,3 +121,11 @@ export interface LeaderboardUser {
   badgeUrl?: string;
   isCurrentUser?: boolean;
 }
+
+export interface ChatMessage {
+  id: string;
+  sender: 'user' | 'explorer';
+  text: string;
+  timestamp: string;
+  isWave?: boolean;
+}

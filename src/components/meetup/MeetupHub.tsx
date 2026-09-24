@@ -4,18 +4,36 @@ import React from 'react';
 import { useEnigameStore, MeetupSubTab } from '@/store/useEnigameStore';
 import { ExplorersTab } from './ExplorersTab';
 import { ExplorerProfileView } from './ExplorerProfileView';
+import { ExplorerChatView } from './ExplorerChatView';
 import { TravelingTab } from './TravelingTab';
 import { MapRadarTab } from './MapRadarTab';
 import { Compass, Users, Plane } from 'lucide-react';
 
 export const MeetupHub: React.FC = () => {
-  const { meetupSubTab, setMeetupSubTab, selectedExplorer, setSelectedExplorer } = useEnigameStore();
+  const { meetupSubTab, setMeetupSubTab, selectedExplorer, setSelectedExplorer, activeChatExplorer, setActiveChatExplorer, chatAutoWave, setChatAutoWave } = useEnigameStore();
+
+  if (activeChatExplorer) {
+    return (
+      <ExplorerChatView
+        explorer={activeChatExplorer}
+        autoWave={chatAutoWave}
+        onBack={() => {
+          setActiveChatExplorer(null);
+          setChatAutoWave(false);
+        }}
+      />
+    );
+  }
 
   if (selectedExplorer) {
     return (
       <ExplorerProfileView
         explorer={selectedExplorer}
         onBack={() => setSelectedExplorer(null)}
+        onOpenChat={(wave) => {
+          setChatAutoWave(!!wave);
+          setActiveChatExplorer(selectedExplorer);
+        }}
       />
     );
   }
