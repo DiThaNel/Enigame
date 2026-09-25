@@ -165,7 +165,7 @@ export const PurchaseHistoryModal: React.FC = () => {
             {/* Action Button: Details > matching Figma */}
             <button
               onClick={() => setSelectedOrder(order)}
-              className="w-full h-11 rounded-2xl bg-[#8E97FD] hover:bg-[#7B85F8] text-white text-xs font-extrabold flex items-center justify-between px-5 shadow-sm active:scale-[0.98] transition-all cursor-pointer mt-1"
+              className="w-full h-11 rounded-2xl bg-[#8E97FD] hover:bg-[#7B85F8] text-white text-xs font-bold flex items-center justify-between px-5 shadow-sm active:scale-[0.98] transition-all cursor-pointer mt-1"
             >
               <span className="mx-auto pl-4">Details</span>
               <ChevronRight size={16} />

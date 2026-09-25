@@ -55,7 +55,7 @@ export const SettingsModal: React.FC = () => {
       <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6 bg-white no-scrollbar">
         {/* Section 1: Profile Settings */}
         <div className="animate-card-stagger stagger-1">
-          <h2 className="text-sm font-extrabold text-[#8E97FD] mb-3">Profile Settings</h2>
+          <h2 className="text-sm font-bold text-[#8E97FD] mb-3">Profile Settings</h2>
           <div className="flex flex-col divide-y divide-[#EEF0FA] border-y border-[#EEF0FA]">
             {/* Edit Profile */}
             <button
@@ -140,7 +140,7 @@ export const SettingsModal: React.FC = () => {
 
         {/* Section 2: Company */}
         <div className="animate-card-stagger stagger-2">
-          <h2 className="text-sm font-extrabold text-[#8E97FD] mb-3">Company</h2>
+          <h2 className="text-sm font-bold text-[#8E97FD] mb-3">Company</h2>
           <div className="flex flex-col divide-y divide-[#EEF0FA] border-y border-[#EEF0FA]">
             <button
               onClick={() => setCompanyModal('about')}

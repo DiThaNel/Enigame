@@ -141,3 +141,13 @@ export interface ChatMessage {
     url?: string;
   };
 }
+
+export interface ConversationSummary {
+  id: string;
+  explorer: Explorer;
+  lastMessage: string;
+  lastTimestamp: string;
+  unread: boolean;
+  hasAudio?: boolean;
+  hasAttachment?: boolean;
+}

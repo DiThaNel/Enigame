@@ -7,7 +7,7 @@ import { CURRENT_USER, MOCK_EXPLORERS, MOCK_ROUTES, MOCK_EXPEDITIONS, MOCK_STORE
 export type AppStage = 'splash' | 'language' | 'auth' | 'guide' | 'main';
 export type AppLanguage = 'pt' | 'en';
 export type MainTab = 'routes' | 'meetup' | 'home' | 'points' | 'profile';
-export type MeetupSubTab = 'explorers' | 'traveling' | 'map';
+export type MeetupSubTab = 'explorers' | 'traveling' | 'map' | 'conversations';
 export type RoutesViewStep = 'select-city' | 'city-routes' | 'route-detail';
 export type PointsSubView = 'hub' | 'leaderboard' | 'activity' | 'store' | 'coupons';
 
@@ -65,6 +65,10 @@ interface EnigameState {
   setActiveChatExplorer: (explorer: Explorer | null) => void;
   profileOpenedFromChatExplorer: Explorer | null;
   setProfileOpenedFromChatExplorer: (explorer: Explorer | null) => void;
+  chatReturnToConversations: boolean;
+  setChatReturnToConversations: (returnTo: boolean) => void;
+  readConversationIds: string[];
+  markConversationAsRead: (id: string) => void;
   chatAutoWave: boolean;
   setChatAutoWave: (auto: boolean) => void;
   explorerChats: Record<string, ChatMessage[]>;
@@ -235,6 +239,14 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
   setActiveChatExplorer: (explorer) => set({ activeChatExplorer: explorer }),
   profileOpenedFromChatExplorer: null,
   setProfileOpenedFromChatExplorer: (explorer) => set({ profileOpenedFromChatExplorer: explorer }),
+  chatReturnToConversations: false,
+  setChatReturnToConversations: (returnTo) => set({ chatReturnToConversations: returnTo }),
+  readConversationIds: [],
+  markConversationAsRead: (id) => set(state => ({
+    readConversationIds: state.readConversationIds.includes(id)
+      ? state.readConversationIds
+      : [...state.readConversationIds, id]
+  })),
   chatAutoWave: false,
   setChatAutoWave: (auto) => set({ chatAutoWave: auto }),
   explorerChats: {},

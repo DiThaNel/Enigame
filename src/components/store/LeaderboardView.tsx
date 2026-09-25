@@ -45,7 +45,7 @@ export const LeaderboardView: React.FC = () => {
           </button>
           <div className="flex items-center gap-2">
             <Trophy size={18} className="text-[#FFB800]" />
-            <h1 className="text-base font-extrabold tracking-wide">Explorer Leaderboard</h1>
+            <h1 className="text-base font-bold tracking-wide">Explorer Leaderboard</h1>
           </div>
           <div className="w-9" />
         </div>
@@ -78,7 +78,7 @@ export const LeaderboardView: React.FC = () => {
       <div className="px-5 pt-5 flex-1 flex flex-col gap-4">
         {/* Section Header */}
         <div className="flex items-center justify-between px-1">
-          <span className="text-xs font-extrabold uppercase tracking-wider text-[#7A7C99]">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#7A7C99]">
             Rankings ({MOCK_LEADERBOARD.length} Explorers)
           </span>
           <span className="text-[11px] font-semibold text-[#8E97FD] flex items-center gap-1">
@@ -149,11 +149,11 @@ export const LeaderboardView: React.FC = () => {
                   {/* Name and Subtitle */}
                   <div>
                     <div className="flex items-center gap-1.5">
-                      <h4 className={`text-xs font-extrabold ${isFirst ? 'text-[#B45309]' : 'text-[#1E1F3D]'}`}>
+                      <h4 className={`text-xs font-bold ${isFirst ? 'text-[#B45309]' : 'text-[#1E1F3D]'}`}>
                         {isUser ? currentUser.name : user.name}
                       </h4>
                       {isUser && (
-                        <span className="text-[9px] bg-[#8E97FD] text-white px-1.5 py-0.2 rounded-full font-extrabold">
+                        <span className="text-[9px] bg-[#8E97FD] text-white px-1.5 py-0.2 rounded-full font-bold">
                           YOU
                         </span>
                       )}
@@ -210,7 +210,7 @@ export const LeaderboardView: React.FC = () => {
               #{currentUserRank}
             </span>
             <div>
-              <span className="text-xs font-extrabold block">{currentUser.name}</span>
+              <span className="text-xs font-bold block">{currentUser.name}</span>
               <span className="text-[10px] text-white/70">
                 {prevUser
                   ? `${pointsToNextRank.toLocaleString()} pts to reach Rank #${prevUser.rank} (${prevUser.name.split(' ')[0]})`

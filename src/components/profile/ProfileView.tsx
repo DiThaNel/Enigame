@@ -516,7 +516,7 @@ export const ProfileView: React.FC = () => {
             <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center">
               <CheckCircle2 size={28} />
             </div>
-            <h4 className="font-extrabold text-[#1E1F3D] text-sm">New Trip Logged!</h4>
+            <h4 className="font-bold text-[#1E1F3D] text-sm">New Trip Logged!</h4>
             <p className="text-xs text-[#585A7E]">
               Browse the Routes catalog to start an expedition and log a new European city.
             </p>

@@ -65,7 +65,7 @@ export const ChangePasswordModal: React.FC = () => {
           >
             <X size={18} />
           </button>
-          <h2 className="text-base font-extrabold text-[#1E1F3D]">Change Password</h2>
+          <h2 className="text-base font-semibold text-[#1E1F3D]">Change Password</h2>
           <div className="w-9" />
         </div>
 

@@ -65,7 +65,7 @@ export const RiddleSolveModal: React.FC = () => {
 
             <div className="flex items-center gap-2 mt-5 px-5 py-2.5 bg-[#FFF8E7] text-[#B45309] rounded-2xl border border-[#FDE68A]">
               <Trophy size={18} className="text-[#FFB800]" />
-              <span className="text-sm font-extrabold">+100 Adventure Points</span>
+              <span className="text-sm font-bold">+100 Adventure Points</span>
             </div>
 
             <button

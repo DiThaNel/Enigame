@@ -72,7 +72,7 @@ export const MapRadarTab: React.FC = () => {
       {/* Interactive Map Pins */}
       {/* Checkpoint 1: Golden Flag */}
       <div className="absolute top-[85px] left-[270px] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group">
-        <div className="px-2 py-0.5 bg-[#FFB800] text-[#1E1F3D] font-extrabold text-[9px] rounded-md shadow-sm mb-1">
+        <div className="px-2 py-0.5 bg-[#FFB800] text-[#1E1F3D] font-bold text-[9px] rounded-md shadow-sm mb-1">
           Castle 2/6
         </div>
         <div className="w-8 h-8 rounded-full bg-[#FFB800] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform ring-4 ring-white">
@@ -151,7 +151,7 @@ export const MapRadarTab: React.FC = () => {
           
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-extrabold text-[#1E1F3D] leading-tight">
+              <h3 className="text-sm font-bold text-[#1E1F3D] leading-tight">
                 {activeRoute.title}
               </h3>
               <span className="text-[11px] font-medium text-[#7A7C99]">

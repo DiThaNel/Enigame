@@ -96,7 +96,7 @@ export const QRScannerView: React.FC = () => {
       {/* Bottom Floating Glass Card */}
       <div className="relative z-20 px-6 pb-10">
         <div className="bg-black/60 backdrop-blur-xl border border-white/15 rounded-3xl p-5 shadow-2xl">
-          <h3 className="text-base font-extrabold text-white">Scan Clue Marker</h3>
+          <h3 className="text-base font-bold text-white">Scan Clue Marker</h3>
           <p className="text-xs text-white/80 mt-1 leading-relaxed">
             Align the Enigame QR code plaque on this monument to unlock the next riddle.
           </p>

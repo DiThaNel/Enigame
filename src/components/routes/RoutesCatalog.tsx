@@ -685,7 +685,7 @@ export const RoutesCatalog: React.FC = () => {
             >
               {isGiftChecked && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
             </div>
-            <span className="text-md font-medium text-[#6E7BFF]">
+            <span className="text-sm font-medium text-[#6E7BFF]">
               Use your gifted code for a 100% Discount on this route
             </span>
           </label>
@@ -706,7 +706,7 @@ export const RoutesCatalog: React.FC = () => {
         <button
           onClick={handleCheckout}
           style={{ animationDelay: '300ms' }}
-          className="w-full h-12 mt-4 rounded-2xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-semibold text-md tracking-wide shadow-md shadow-indigo-300/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer animate-card-stagger"
+          className="w-full h-12 mt-4 rounded-2xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-semibold text-sm tracking-wide shadow-md shadow-indigo-300/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer animate-card-stagger"
         >
           <span>Checkout</span>
           <ChevronRight size={16} />

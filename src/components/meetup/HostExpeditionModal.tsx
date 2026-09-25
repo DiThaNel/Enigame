@@ -38,7 +38,7 @@ export const HostExpeditionModal: React.FC = () => {
       <div className="w-full max-w-[430px] bg-white rounded-t-[36px] sm:rounded-[36px] p-6 shadow-2xl animate-slideUp">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-extrabold text-[#1E1F3D]">Host an Expedition</h3>
+            <h3 className="text-lg font-bold text-[#1E1F3D]">Host an Expedition</h3>
             <p className="text-xs text-[#7A7C99]">Plan an outdoor mystery route for adventurers</p>
           </div>
           <button

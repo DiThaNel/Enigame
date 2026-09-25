@@ -59,7 +59,7 @@ export const RouteStoreView: React.FC = () => {
           </button>
           <div className="flex items-center gap-2">
             <ShoppingBag size={18} className="text-[#FFB800]" />
-            <h1 className="text-base font-extrabold tracking-wide">Route Explorer Store</h1>
+            <h1 className="text-base font-bold tracking-wide">Route Explorer Store</h1>
           </div>
           <div className="w-9" />
         </div>
@@ -79,7 +79,7 @@ export const RouteStoreView: React.FC = () => {
       {/* Main Content Area */}
       <div className="px-5 pt-5 flex-1 flex flex-col gap-4">
         <div className="flex items-center justify-between px-1">
-          <span className="text-xs font-extrabold uppercase tracking-wider text-[#7A7C99]">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#7A7C99]">
             Available Routes ({routes.length})
           </span>
           <button
@@ -140,7 +140,7 @@ export const RouteStoreView: React.FC = () => {
                       <span className="text-[10px] font-bold uppercase tracking-wider text-[#FFD269]">
                         {route.city} • {route.category}
                       </span>
-                      <h3 className="text-sm font-extrabold line-clamp-1">{route.title}</h3>
+                      <h3 className="text-sm font-bold line-clamp-1">{route.title}</h3>
                     </div>
                   </div>
                 </div>
@@ -169,7 +169,7 @@ export const RouteStoreView: React.FC = () => {
                   ) : (
                     <button
                       onClick={() => handleUnlock(route)}
-                      className={`px-4 py-2 rounded-xl text-xs font-extrabold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 ${
+                      className={`px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 ${
                         canAfford
                           ? 'bg-[#8E97FD] hover:bg-[#7C82ED] text-white shadow-indigo-200'
                           : 'bg-[#EEF0FA] text-[#7A7C99] hover:bg-[#E2E6F5]'
@@ -189,7 +189,7 @@ export const RouteStoreView: React.FC = () => {
         <div className="mt-4 mb-6">
           <button
             onClick={() => setActiveTab('routes')}
-            className="w-full h-13 rounded-2xl bg-[#1E1F3D] hover:bg-[#2B2D54] text-white font-extrabold text-xs shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-all"
+            className="w-full h-13 rounded-2xl bg-[#1E1F3D] hover:bg-[#2B2D54] text-white font-bold text-xs shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-all"
           >
             <span>Explore All European Routes in Catalog</span>
             <ArrowRight size={16} />

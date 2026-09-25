@@ -53,7 +53,7 @@ export const PointsStoreView: React.FC = () => {
 
       {/* Top Header Title */}
       <div className="relative z-10 px-6 pt-5 pb-1 flex items-center justify-center text-white">
-        <h1 className="text-base font-extrabold tracking-wide drop-shadow-xs">Points & Rewards</h1>
+        <h1 className="text-base font-bold tracking-wide drop-shadow-xs">Points & Rewards</h1>
       </div>
 
       {/* Main Points Floating White Card matching Profile tab design */}
@@ -97,7 +97,7 @@ export const PointsStoreView: React.FC = () => {
               <div className="flex flex-col items-start">
                 <span className="text-[9px] text-[#7A7C99] font-bold uppercase tracking-wider">Explorer Points</span>
                 <span className="text-sm font-black text-[#6C7BFF] tracking-wide leading-tight flex items-baseline gap-1">
-                  {points.toLocaleString()} <span className="text-[10px] font-bold text-[#1E1F3D]">Pts</span>
+                  {points.toLocaleString()} <span className="text-[10px] font-bold text-[#6C7BFF]">Pts</span>
                 </span>
               </div>
             </div>

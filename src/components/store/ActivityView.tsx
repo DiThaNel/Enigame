@@ -33,7 +33,7 @@ export const ActivityView: React.FC = () => {
           </button>
           <div className="flex items-center gap-2">
             <History size={18} className="text-[#FFB800]" />
-            <h1 className="text-base font-extrabold tracking-wide">Points/Expeditions Activity</h1>
+            <h1 className="text-base font-bold tracking-wide">Points/Expeditions Activity</h1>
           </div>
           <div className="w-9" />
         </div>
@@ -93,7 +93,7 @@ export const ActivityView: React.FC = () => {
 
         {/* Section Header */}
         <div className="flex items-center justify-between px-1">
-          <span className="text-xs font-extrabold uppercase tracking-wider text-[#7A7C99]">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#7A7C99]">
             Latest Records ({filteredActivities.length})
           </span>
           <span className="text-[11px] font-semibold text-emerald-600 flex items-center gap-1">

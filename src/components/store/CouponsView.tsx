@@ -58,7 +58,7 @@ export const CouponsView: React.FC = () => {
           </button>
           <div className="flex items-center gap-2">
             <Ticket size={18} className="text-[#FFB800]" />
-            <h1 className="text-base font-extrabold tracking-wide">Coupons & Passes</h1>
+            <h1 className="text-base font-bold tracking-wide">Coupons & Passes</h1>
           </div>
           <div className="w-9" />
         </div>
@@ -76,7 +76,7 @@ export const CouponsView: React.FC = () => {
             <div className="w-7 h-7 rounded-full bg-[#EEF0FF] text-[#8E97FD] flex items-center justify-center">
               <Gift size={16} />
             </div>
-            <h3 className="text-xs font-extrabold text-[#1E1F3D]">Redeem Promo Code</h3>
+            <h3 className="text-xs font-bold text-[#1E1F3D]">Redeem Promo Code</h3>
           </div>
 
           <form onSubmit={handleRedeem} className="flex items-center gap-2">
@@ -90,7 +90,7 @@ export const CouponsView: React.FC = () => {
             <button
               type="submit"
               disabled={!inputCode.trim()}
-              className="h-11 px-5 rounded-xl bg-[#8E97FD] hover:bg-[#7C82ED] disabled:opacity-50 text-white font-extrabold text-xs shadow-md shadow-indigo-200 transition-all cursor-pointer active:scale-95 shrink-0"
+              className="h-11 px-5 rounded-xl bg-[#8E97FD] hover:bg-[#7C82ED] disabled:opacity-50 text-white font-bold text-xs shadow-md shadow-indigo-200 transition-all cursor-pointer active:scale-95 shrink-0"
             >
               Apply
             </button>
@@ -114,7 +114,7 @@ export const CouponsView: React.FC = () => {
 
         {/* Section Header */}
         <div className="flex items-center justify-between px-1">
-          <span className="text-xs font-extrabold uppercase tracking-wider text-[#7A7C99]">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#7A7C99]">
             Active Vouchers ({activeCoupons.length})
           </span>
           <span className="text-[11px] font-semibold text-[#8E97FD] flex items-center gap-1">
@@ -146,7 +146,7 @@ export const CouponsView: React.FC = () => {
                     <span className="text-[10px] font-bold text-[#8E97FD] uppercase tracking-wider">
                       {cpn.partnerName}
                     </span>
-                    <h3 className="text-sm font-extrabold text-[#1E1F3D] mt-0.5">
+                    <h3 className="text-sm font-bold text-[#1E1F3D] mt-0.5">
                       {cpn.title}
                     </h3>
                     <p className="text-[11px] text-[#585A7E] mt-1 leading-relaxed">
@@ -228,7 +228,7 @@ export const CouponsView: React.FC = () => {
               {selectedVoucher.discountBadge}
             </span>
 
-            <h3 className="text-base font-extrabold text-[#1E1F3D]">
+            <h3 className="text-base font-bold text-[#1E1F3D]">
               {selectedVoucher.title}
             </h3>
             <p className="text-xs text-[#7A7C99]">
@@ -284,7 +284,7 @@ export const CouponsView: React.FC = () => {
             {/* Action button */}
             <button
               onClick={() => handleMarkUsed(selectedVoucher.id)}
-              className="w-full h-11 rounded-xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-extrabold text-xs shadow-md mt-2 cursor-pointer active:scale-95 transition-all"
+              className="w-full h-11 rounded-xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-xs shadow-md mt-2 cursor-pointer active:scale-95 transition-all"
             >
               Mark as Used
             </button>

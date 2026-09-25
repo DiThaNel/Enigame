@@ -1,4 +1,4 @@
-import { Route, Explorer, Expedition, StoreItem, ActivityRecord, Coupon, LeaderboardUser } from '@/types';
+import { Route, Explorer, Expedition, StoreItem, ActivityRecord, Coupon, LeaderboardUser, ConversationSummary } from '@/types';
 
 export const CURRENT_USER: Explorer = {
   id: 'usr-current',
@@ -166,7 +166,7 @@ export const DYNAMIC_EXPLORERS: Explorer[] = [
     city: 'Berlin, Germany',
     country: 'Germany',
     countryFlag: '/assets/GER.png',
-    rankMedal: '/assets/PointsMedal.png',
+    rankMedal: '/assets/StarSingle.png',
     gender: 'Male',
     ageGroup: '30s',
     instagram: '@hans_explores',
@@ -189,7 +189,7 @@ export const DYNAMIC_EXPLORERS: Explorer[] = [
     city: 'London, UK',
     country: 'United Kingdom',
     countryFlag: '/assets/UK.png',
-    rankMedal: '/assets/PointsMedal.png',
+    rankMedal: '/assets/StarSingle.png',
     gender: 'Male',
     ageGroup: '20s',
     instagram: '@arthur_quests',
@@ -212,7 +212,7 @@ export const DYNAMIC_EXPLORERS: Explorer[] = [
     city: 'Rome, Italy',
     country: 'Italy',
     countryFlag: '/assets/IT.png',
-    rankMedal: '/assets/PointsMedal.png',
+    rankMedal: '/assets/StarSingle.png',
     gender: 'Male',
     ageGroup: '20s',
     instagram: '@matteo_archeo',
@@ -841,5 +841,58 @@ export const MOCK_LEADERBOARD: LeaderboardUser[] = [
     level: 11,
     country: 'Italy',
     flagUrl: '/assets/IT.png',
+  },
+];
+
+export const MOCK_CONVERSATIONS: ConversationSummary[] = [
+  {
+    id: 'conv-1',
+    explorer: DYNAMIC_EXPLORERS[0], // Marco Polo
+    lastMessage: 'Ehy! The house is part of the Residence Parc California, and ...',
+    lastTimestamp: 'April 10, 2019 5:08 PM',
+    unread: true,
+  },
+  {
+    id: 'conv-2',
+    explorer: DYNAMIC_EXPLORERS[1], // Sofia Ramos
+    lastMessage: 'Well I thought you could have the opportunity to come visit us...',
+    lastTimestamp: 'June 24, 2018 5:46 AM',
+    unread: true,
+  },
+  {
+    id: 'conv-3',
+    explorer: DYNAMIC_EXPLORERS[2], // Camille Dubois
+    lastMessage: 'Yeehhhh! Just great bro!',
+    lastTimestamp: 'July 14, 2014 1:05 PM',
+    unread: false,
+  },
+  {
+    id: 'conv-4',
+    explorer: DYNAMIC_EXPLORERS[3], // Hans Gruber
+    lastMessage: 'I just sent you a picture.',
+    lastTimestamp: 'June 23, 2018 8:21 PM',
+    unread: false,
+    hasAttachment: true,
+  },
+  {
+    id: 'conv-5',
+    explorer: DYNAMIC_EXPLORERS[4], // Arthur Pendelton
+    lastMessage: 'You can use the swimming pool and during the hours normally...',
+    lastTimestamp: 'June 19, 2015 9:49 AM',
+    unread: false,
+  },
+  {
+    id: 'conv-6',
+    explorer: DYNAMIC_EXPLORERS[5], // Matteo Rossi
+    lastMessage: 'You will get a notification when somebody reply.',
+    lastTimestamp: 'August 24, 2018 5:46 AM',
+    unread: false,
+  },
+  {
+    id: 'conv-7',
+    explorer: DYNAMIC_EXPLORERS[6], // Lucas Silva
+    lastMessage: 'Agree with Daniel. I think you should add padding!',
+    lastTimestamp: 'December 9, 2018 4:35 PM',
+    unread: false,
   },
 ];

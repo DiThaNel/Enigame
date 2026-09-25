@@ -111,7 +111,7 @@ export const CardShuffleRoutes: React.FC<CardShuffleRoutesProps> = ({
                 setSelectedCategory(cat.id);
                 setActiveIndex(0);
               }}
-              className={"text-xs font-extrabold transition-all relative pb-1 cursor-pointer " + (
+              className={"text-xs font-bold transition-all relative pb-1 cursor-pointer " + (
                 selectedCategory === cat.id
                   ? "text-[#6979F8] border-b-2 border-[#6979F8]"
                   : "text-[#A5A7C4] hover:text-[#585A7E]"

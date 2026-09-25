@@ -54,7 +54,7 @@ export const RouteDetailModal: React.FC = () => {
         <div className="relative -mt-20 mx-4 bg-white rounded-[32px] p-5 shadow-lg border border-[#EBEFFE] overflow-y-auto max-h-[calc(95vh-14rem)]">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-extrabold text-[#1E1F3D]">
+            <h2 className="text-lg font-bold text-[#1E1F3D]">
               {selectedRouteDetail.title}
             </h2>
             <img src="/assets/RouteNameBadge.png" alt="Badge" className="w-6 h-6 object-contain shrink-0 ml-2" />
@@ -169,7 +169,7 @@ export const RouteDetailModal: React.FC = () => {
               setSelectedRouteDetail(null);
               setScannerOpen(true);
             }}
-            className={`w-full h-12 rounded-2xl text-white font-extrabold text-xs mt-4 shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer ${
+            className={`w-full h-12 rounded-2xl text-white font-bold text-xs mt-4 shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer ${
               isUnlocked
                 ? 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200'
                 : 'bg-[#8E97FD] hover:bg-[#7C82ED] shadow-indigo-300/40'

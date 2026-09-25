@@ -385,7 +385,7 @@ export const RouteMapPreview: React.FC<RouteMapPreviewProps> = ({
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
         </span>
-        <span className="text-[9px] font-extrabold text-[#1E1F3D] tracking-wide">
+        <span className="text-[9px] font-bold text-[#1E1F3D] tracking-wide">
           {city} • {distance} • {waypoints.length} Checkpoints
         </span>
       </div>
