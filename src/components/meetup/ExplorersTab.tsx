@@ -2,36 +2,26 @@
 
 import React from 'react';
 import { useEnigameStore } from '@/store/useEnigameStore';
+import { DYNAMIC_EXPLORERS } from '@/data/mockData';
+import { Explorer } from '@/types';
 
 export const ExplorersTab: React.FC = () => {
   const { setSelectedExplorer } = useEnigameStore();
 
-  // 12 explorers matching the Figma grid pattern
-  const explorerList = Array.from({ length: 12 }).map((_, i) => ({
-    id: 'exp-' + i,
-    name: i % 2 === 0 ? 'Tiana Rosser' : 'Lucas Silva',
-    nickname: 'Explorer ' + (i + 1),
-    avatar: '/assets/TianaAvatar.png',
-    level: 18 - (i % 5),
-    rankTitle: 'Pathfinder',
-    bio: 'Must go faster. Must go faster... go, go, go!',
-    city: 'Bragança, Portugal',
-    gender: 'Female',
-    ageGroup: '20s',
-    badges: ['Top Explorer', 'Citadel Legend'],
-  }));
+  const explorerList = DYNAMIC_EXPLORERS;
 
-  // Split into 3 columns for staggered masonry layout
+  // Split into 3 columns for staggered masonry layout matching Figma 06 - Meet-up
   const col1 = explorerList.filter((_, idx) => idx % 3 === 0);
   const col2 = explorerList.filter((_, idx) => idx % 3 === 1);
   const col3 = explorerList.filter((_, idx) => idx % 3 === 2);
 
-  const renderExplorerCard = (exp: (typeof explorerList)[0], originalIndex: number) => (
+  const renderExplorerCard = (exp: Explorer, originalIndex: number) => (
     <div
       key={exp.id}
       onClick={() => setSelectedExplorer(exp)}
       style={{ animationDelay: `${(originalIndex % 6) * 50}ms` }}
       className="animate-card-stagger flex flex-col items-center cursor-pointer group active:scale-95 transition-transform"
+      title={`${exp.name} (Rank #${exp.rank}) - ${exp.city}`}
     >
       {/* Explorer Avatar Frame - Circle matches explorer image */}
       <div className="relative w-23 h-23 group-hover:scale-105 transition-transform">
@@ -41,14 +31,22 @@ export const ExplorersTab: React.FC = () => {
           className="w-full h-full rounded-full object-cover"
         />
 
-        {/* Star Medal Badge top-right */}
-        <div className="absolute -top-1 -right-1 w-6 h-6 flex items-center justify-center pointer-events-none">
-          <img src="/assets/TopPointsMedal.png" alt="Medal" className="w-5 h-5 object-contain drop-shadow" />
+        {/* Dynamic Ranking Medal Badge top-right */}
+        <div className="absolute -top-1 -right-1 w-6 h-6 flex items-center justify-center pointer-events-none drop-shadow">
+          <img
+            src={exp.rankMedal || '/assets/TopPointsMedal.png'}
+            alt={`Rank #${exp.rank} Medal`}
+            className="w-5 h-5 object-contain"
+          />
         </div>
 
-        {/* Country Badge bottom-right */}
+        {/* Dynamic National Flag Badge bottom-right */}
         <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full overflow-hidden border-2 border-white shadow-sm flex items-center justify-center bg-white pointer-events-none">
-          <img src="/assets/PortugalMiniIcon.png" alt="PT" className="w-full h-full object-cover" />
+          <img
+            src={exp.countryFlag || '/assets/PT.png'}
+            alt={exp.country || 'Flag'}
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
     </div>

@@ -10,7 +10,18 @@ import { MapRadarTab } from './MapRadarTab';
 import { Compass, Users, Plane } from 'lucide-react';
 
 export const MeetupHub: React.FC = () => {
-  const { meetupSubTab, setMeetupSubTab, selectedExplorer, setSelectedExplorer, activeChatExplorer, setActiveChatExplorer, chatAutoWave, setChatAutoWave } = useEnigameStore();
+  const { 
+    meetupSubTab, 
+    setMeetupSubTab, 
+    selectedExplorer, 
+    setSelectedExplorer, 
+    activeChatExplorer, 
+    setActiveChatExplorer, 
+    chatAutoWave, 
+    setChatAutoWave,
+    profileOpenedFromChatExplorer,
+    setProfileOpenedFromChatExplorer
+  } = useEnigameStore();
 
   if (activeChatExplorer) {
     return (
@@ -20,6 +31,12 @@ export const MeetupHub: React.FC = () => {
         onBack={() => {
           setActiveChatExplorer(null);
           setChatAutoWave(false);
+          setProfileOpenedFromChatExplorer(null);
+        }}
+        onOpenProfile={() => {
+          setProfileOpenedFromChatExplorer(activeChatExplorer);
+          setSelectedExplorer(activeChatExplorer);
+          setActiveChatExplorer(null);
         }}
       />
     );
@@ -29,10 +46,20 @@ export const MeetupHub: React.FC = () => {
     return (
       <ExplorerProfileView
         explorer={selectedExplorer}
-        onBack={() => setSelectedExplorer(null)}
+        onBack={() => {
+          if (profileOpenedFromChatExplorer) {
+            setActiveChatExplorer(profileOpenedFromChatExplorer);
+            setSelectedExplorer(null);
+            setProfileOpenedFromChatExplorer(null);
+          } else {
+            setSelectedExplorer(null);
+          }
+        }}
         onOpenChat={(wave) => {
           setChatAutoWave(!!wave);
           setActiveChatExplorer(selectedExplorer);
+          setSelectedExplorer(null);
+          setProfileOpenedFromChatExplorer(null);
         }}
       />
     );

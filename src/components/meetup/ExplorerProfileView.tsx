@@ -158,16 +158,28 @@ export const ExplorerProfileView: React.FC<ExplorerProfileViewProps> = ({ explor
 
       {/* Main Profile Floating Card matching Figma Group 7 / 09 / 06.1 */}
       <div className="mx-5 mt-4 bg-white rounded-[32px] p-6 shadow-[0_12px_36px_rgba(142,151,253,0.18)] border border-[#EAEFFE] flex flex-col items-center text-center relative animate-card-fade-up z-10">
-        {/* Profile Avatar Frame with Portugal flag badge */}
+        {/* Profile Avatar Frame with dynamic flag badge and rank medal */}
         <div className="relative w-23 h-23 rounded-full">
           <img
             src={explorer.avatar}
             alt={explorer.name}
             className="w-full h-full rounded-full object-cover bg-white"
           />
-          {/* National flag badge matching Figma (Portugal) */}
-          <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full overflow-hidden border-2 border-white shadow-sm flex items-center justify-center bg-white">
-            <img src="/assets/PT.png" alt="Portugal" className="w-full h-full object-cover" />
+          {/* Dynamic Medal Badge top-right */}
+          <div className="absolute -top-1.5 -right-1.5 w-7 h-7 flex items-center justify-center pointer-events-none drop-shadow">
+            <img
+              src={explorer.rankMedal || '/assets/TopPointsMedal.png'}
+              alt={`Rank #${explorer.rank || 1} Medal`}
+              className="w-6 h-6 object-contain"
+            />
+          </div>
+          {/* Dynamic National Flag badge bottom-right */}
+          <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full overflow-hidden border-2 border-white shadow-sm flex items-center justify-center bg-white pointer-events-none">
+            <img
+              src={explorer.countryFlag || '/assets/PT.png'}
+              alt={explorer.country || 'Flag'}
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
 
@@ -176,10 +188,20 @@ export const ExplorerProfileView: React.FC<ExplorerProfileViewProps> = ({ explor
           {explorer.name}
         </h1>
 
-        {/* Explorer Rank Title */}
-        <span className="text-xs font-bold text-[#8E97FD] mt-0.5">
-          {explorer.rankTitle || 'Pathfinder'}
-        </span>
+        {/* Explorer Rank Title & Ranking Info */}
+        <div className="flex items-center gap-1.5 mt-0.5">
+          <span className="text-xs font-bold text-[#8E97FD]">
+            {explorer.rankTitle || 'Pathfinder'}
+          </span>
+          <span className="text-[11px] text-[#A5A7C4]">•</span>
+          <span className="text-[11px] font-semibold text-[#7A7C99]">
+            Rank #{explorer.rank || 1}
+          </span>
+          <span className="text-[11px] text-[#A5A7C4]">•</span>
+          <span className="text-[11px] font-semibold text-[#7A7C99]">
+            {explorer.city?.split(',')[0] || 'Bragança'}
+          </span>
+        </div>
 
         {/* User Bio Quote in Signature Periwinkle Blue Font */}
         <p className="text-xs text-[#5D6BFF] italic font-semibold mt-2 px-3 max-w-[280px] leading-relaxed">

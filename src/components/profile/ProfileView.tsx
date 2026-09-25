@@ -151,16 +151,24 @@ export const ProfileView: React.FC = () => {
 
       {/* Main Profile Floating Card matching Figma Group 7 / 09 - Personal Profile */}
       <div className="mx-5 mt-4 bg-white rounded-[32px] p-6 shadow-[0_12px_36px_rgba(142,151,253,0.18)] border border-[#EAEFFE] flex flex-col items-center text-center relative animate-card-fade-up z-10">
-        {/* Profile Avatar Frame with Portugal flag badge */}
+        {/* Profile Avatar Frame with Portugal flag badge and equipped medal */}
         <div className="relative w-23 h-23 rounded-full">
           <img
-            src="/assets/TianaAvatar.png"
+            src={currentUser.avatar || "/assets/TianaAvatar.png"}
             alt={currentUser.name}
             className="w-full h-full rounded-full object-cover bg-white"
           />
+          {/* Dynamic Equipped Medal top-right */}
+          <div className="absolute -top-1.5 -right-1.5 w-7 h-7 flex items-center justify-center pointer-events-none drop-shadow">
+            <img
+              src={currentUser.rankMedal || "/assets/StarSingle.png"}
+              alt="Medal"
+              className="w-6 h-6 object-contain"
+            />
+          </div>
           {/* National flag badge matching Figma (Portugal) */}
-          <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full overflow-hidden border-2 border-white shadow-sm flex items-center justify-center bg-white">
-            <img src="/assets/PT.png" alt="Portugal" className="w-full h-full object-cover" />
+          <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full overflow-hidden border-2 border-white shadow-sm flex items-center justify-center bg-white pointer-events-none">
+            <img src={currentUser.countryFlag || "/assets/PT.png"} alt="Portugal" className="w-full h-full object-cover" />
           </div>
         </div>
 
@@ -168,6 +176,13 @@ export const ProfileView: React.FC = () => {
         <h1 className="text-lg font-black text-[#1E1F3D] mt-3 tracking-tight font-medium">
           {currentUser.name || 'Tiana Rosser'}
         </h1>
+
+        {/* Equipped Rank Title */}
+        <div className="flex items-center gap-1.5 mt-0.5">
+          <span className="text-xs font-bold text-[#8E97FD]">
+            {currentUser.rankTitle || 'Master Cartographer'}
+          </span>
+        </div>
 
         {/* User Bio Quote in Signature Periwinkle Blue Font */}
         <p className="text-xs text-[#5D6BFF] italic font-semibold mt-2 px-3 max-w-[280px] leading-relaxed">

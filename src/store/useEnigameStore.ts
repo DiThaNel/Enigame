@@ -63,11 +63,13 @@ interface EnigameState {
   setSelectedExplorer: (explorer: Explorer | null) => void;
   activeChatExplorer: Explorer | null;
   setActiveChatExplorer: (explorer: Explorer | null) => void;
+  profileOpenedFromChatExplorer: Explorer | null;
+  setProfileOpenedFromChatExplorer: (explorer: Explorer | null) => void;
   chatAutoWave: boolean;
   setChatAutoWave: (auto: boolean) => void;
   explorerChats: Record<string, ChatMessage[]>;
-  sendChatMessage: (explorerId: string, text: string, isWave?: boolean) => void;
-  receiveChatMessage: (explorerId: string, text: string) => void;
+  sendChatMessage: (explorerId: string, text: string, isWave?: boolean, extras?: Partial<ChatMessage>) => void;
+  receiveChatMessage: (explorerId: string, text: string, extras?: Partial<ChatMessage>) => void;
 
   isScannerOpen: boolean;
   setScannerOpen: (open: boolean) => void;
@@ -231,10 +233,12 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
   setSelectedExplorer: (explorer) => set({ selectedExplorer: explorer }),
   activeChatExplorer: null,
   setActiveChatExplorer: (explorer) => set({ activeChatExplorer: explorer }),
+  profileOpenedFromChatExplorer: null,
+  setProfileOpenedFromChatExplorer: (explorer) => set({ profileOpenedFromChatExplorer: explorer }),
   chatAutoWave: false,
   setChatAutoWave: (auto) => set({ chatAutoWave: auto }),
   explorerChats: {},
-  sendChatMessage: (explorerId, text, isWave = false) => {
+  sendChatMessage: (explorerId, text, isWave = false, extras = {}) => {
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const newMsg: ChatMessage = {
       id: 'msg-' + Date.now(),
@@ -242,6 +246,7 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
       text,
       timestamp: timeStr,
       isWave,
+      ...extras,
     };
     set(state => {
       const prev = state.explorerChats[explorerId] || [];
@@ -253,13 +258,14 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
       };
     });
   },
-  receiveChatMessage: (explorerId, text) => {
+  receiveChatMessage: (explorerId, text, extras = {}) => {
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const newMsg: ChatMessage = {
       id: 'msg-' + Date.now(),
       sender: 'explorer',
       text,
       timestamp: timeStr,
+      ...extras,
     };
     set(state => {
       const prev = state.explorerChats[explorerId] || [];

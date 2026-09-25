@@ -57,6 +57,11 @@ export interface Explorer {
   distanceMeters?: number;
   isOnline?: boolean;
   badges: string[];
+  rank?: number;
+  country?: string;
+  countryFlag?: string;
+  rankMedal?: string;
+  points?: number;
 }
 
 export interface Expedition {
@@ -128,4 +133,11 @@ export interface ChatMessage {
   text: string;
   timestamp: string;
   isWave?: boolean;
+  audioDuration?: string;
+  fileAttachment?: {
+    name: string;
+    size: string;
+    type: 'image' | 'file';
+    url?: string;
+  };
 }

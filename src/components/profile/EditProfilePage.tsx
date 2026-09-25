@@ -2,7 +2,15 @@
 
 import React, { useState } from 'react';
 import { useEnigameStore } from '@/store/useEnigameStore';
-import { ChevronLeft, Camera, MapPin, Quote, Award, Check, Plus } from 'lucide-react';
+import { 
+  ChevronLeft, 
+  ChevronDown,
+  Camera, 
+  MapPin, 
+  Quote, 
+  Check, 
+  Plus 
+} from 'lucide-react';
 
 const AVAILABLE_INTEREST_OPTIONS = [
   'Castles', 
@@ -19,6 +27,87 @@ const AVAILABLE_INTEREST_OPTIONS = [
   'Climbing'
 ];
 
+export interface RankTitleOption {
+  id: string;
+  title: string;
+  rankBadge: string;
+  medalIcon: string;
+  description: string;
+}
+
+export const RANK_TITLE_OPTIONS: RankTitleOption[] = [
+  {
+    id: 'rt-1',
+    title: 'Grand Alchemist',
+    rankBadge: 'Rank #1',
+    medalIcon: '/assets/TopPointsMedal.png',
+    description: 'Master of citadel secrets & ancient manuscripts',
+  },
+  {
+    id: 'rt-2',
+    title: 'Citadel Master',
+    rankBadge: 'Rank #2',
+    medalIcon: '/assets/SilverPointsMedal.png',
+    description: 'Cryptographer & fortress conqueror',
+  },
+  {
+    id: 'rt-3',
+    title: 'Shadow Chaser',
+    rankBadge: 'Rank #3',
+    medalIcon: '/assets/BronzePointsMedal.png',
+    description: 'Explorer of underground vaults & keeps',
+  },
+  {
+    id: 'rt-4',
+    title: 'Fortress Scout',
+    rankBadge: 'Rank #4',
+    medalIcon: '/assets/PointsMedal.png',
+    description: 'Precision navigator of city perimeters',
+  },
+  {
+    id: 'rt-5',
+    title: 'Tower Sentinel',
+    rankBadge: 'Rank #5',
+    medalIcon: '/assets/PointsMedal.png',
+    description: 'Guardian of royal keeps & medieval gates',
+  },
+  {
+    id: 'rt-6',
+    title: 'Riddle Scholar',
+    rankBadge: 'Rank #6',
+    medalIcon: '/assets/PointsMedal.png',
+    description: 'Translator of ancient Romanesque stones',
+  },
+  {
+    id: 'rt-7',
+    title: 'Master Cartographer',
+    rankBadge: 'Rank #8',
+    medalIcon: '/assets/StarSingle.png',
+    description: 'Creator of route guides & mystery trails',
+  },
+  {
+    id: 'rt-8',
+    title: 'Senior Enigmatist',
+    rankBadge: 'Specialist',
+    medalIcon: '/assets/StarSingle.png',
+    description: 'Expert solver of hidden checkpoint riddles',
+  },
+  {
+    id: 'rt-9',
+    title: 'Pathfinder',
+    rankBadge: 'Explorer',
+    medalIcon: '/assets/StarSingle.png',
+    description: 'First to chart unexplored medieval alleys',
+  },
+  {
+    id: 'rt-10',
+    title: 'Citadel Legend',
+    rankBadge: 'Legend',
+    medalIcon: '/assets/StarSingle.png',
+    description: 'Conquered every route checkpoint in Bragança',
+  },
+];
+
 interface EditProfilePageProps {
   onBack?: () => void;
 }
@@ -32,6 +121,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
   const [gender, setGender] = useState(currentUser.gender || 'Female');
   const [ageGroup, setAgeGroup] = useState(currentUser.ageGroup || '20s');
   const [rankTitle, setRankTitle] = useState(currentUser.rankTitle || 'Master Cartographer');
+  const [isRankDropdownOpen, setIsRankDropdownOpen] = useState(false);
   const [bio, setBio] = useState(currentUser.bio || '');
   const [about, setAbout] = useState(currentUser.about || 'Passionate cartographer and mystery enthusiast based in northern Portugal. Always hunting for forgotten medieval inscriptions, subterranean passages, and local legends hidden in plain sight.');
   const [interests, setInterests] = useState<string[]>(
@@ -40,6 +130,8 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
       : ['Castles', 'Cartography', 'Puzzles', 'Local Wine', 'Nature Trails', 'Photography', 'Backpacking', 'History']
   );
   const [customInterest, setCustomInterest] = useState('');
+
+  const selectedOption = RANK_TITLE_OPTIONS.find(o => o.title === rankTitle) || RANK_TITLE_OPTIONS[6];
 
   const toggleInterest = (tag: string) => {
     if (interests.includes(tag)) {
@@ -74,6 +166,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
 
   const handleSave = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    const matched = RANK_TITLE_OPTIONS.find(o => o.title === rankTitle);
     updateProfile({
       name,
       nickname,
@@ -84,6 +177,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
       gender,
       ageGroup,
       rankTitle,
+      rankMedal: matched ? matched.medalIcon : currentUser.rankMedal,
       avatar: '/assets/TianaAvatar.png',
     });
     showToast('Profile updated successfully!', 'success');
@@ -118,12 +212,20 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
         {/* Avatar Frame Preview matching Figma */}
         <div className="animate-card-stagger stagger-1 flex flex-col items-center">
           <div className="relative mb-2">
-            <div className="w-24 h-24 rounded-full p-1">
+            <div className="w-24 h-24 rounded-full p-1 relative">
               <img
                 src="/assets/TianaAvatar.png"
                 alt={nickname}
                 className="w-full h-full rounded-full object-cover bg-white"
               />
+              {/* Dynamic Medal Badge Preview based on chosen title */}
+              <div className="absolute -top-1 -right-1 w-7 h-7 flex items-center justify-center pointer-events-none drop-shadow">
+                <img
+                  src={selectedOption.medalIcon}
+                  alt={selectedOption.title}
+                  className="w-6 h-6 object-contain"
+                />
+              </div>
             </div>
             <label 
               className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#8E97FD] text-white flex items-center justify-center shadow-md cursor-pointer hover:bg-[#7B85F8] transition-all ring-2 ring-white active:scale-95"
@@ -138,13 +240,10 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
               />
             </label>
           </div>
-
-          <span className="text-[11px] font-bold text-[#8E97FD] bg-[#EEF0FF] px-3.5 py-1 rounded-full mt-1">
-            Level {currentUser.level || 18} Adventurer Frame
-          </span>
+          <span className="text-[11px] font-bold text-[#8E97FD]">Tap camera to change photo</span>
         </div>
 
-        {/* Input Details Card */}
+        {/* Input Fields Card */}
         <div className="animate-card-stagger stagger-2 bg-white rounded-[28px] p-5 shadow-sm border border-[#EAEFFE] space-y-4">
           {/* Explorer Nickname */}
           <div>
@@ -189,7 +288,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
             />
           </div>
 
-          {/* Interests & Specializations (without icons) */}
+          {/* Interests & Specializations */}
           <div>
             <label className="text-xs font-bold text-[#1E1F3D] block mb-2">Interests &amp; Specializations</label>
             <div className="flex flex-wrap gap-1.5 mb-3">
@@ -278,22 +377,111 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
             </div>
           </div>
 
-          {/* Equipped Badge */}
-          <div>
-            <label className="text-xs font-bold text-[#1E1F3D] block mb-1">Equipped Rank Title</label>
-            <div className="relative">
-              <select
-                value={rankTitle}
-                onChange={(e) => setRankTitle(e.target.value)}
-                className="w-full h-11 pl-10 pr-4 rounded-2xl bg-[#F4F6FB] border border-[#EEF0FA] text-xs font-semibold text-[#1E1F3D] focus:outline-none focus:ring-2 focus:ring-[#8E97FD]/40 cursor-pointer"
-              >
-                <option value="Master Cartographer">Master Cartographer</option>
-                <option value="Senior Enigmatist">Senior Enigmatist</option>
-                <option value="Pathfinder">Pathfinder</option>
-                <option value="Citadel Legend">Citadel Legend</option>
-              </select>
-              <Award className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#FFB800]" size={16} />
-            </div>
+          {/* Equipped Rank Title with Medals next to options */}
+          <div className="relative">
+            <label className="text-xs font-bold text-[#1E1F3D] block mb-1">
+              Equipped Rank Title
+            </label>
+
+            {/* Dropdown Trigger showing current title and its medal */}
+            <button
+              type="button"
+              onClick={() => setIsRankDropdownOpen(!isRankDropdownOpen)}
+              className={`w-full h-12 px-3.5 rounded-2xl bg-[#F4F6FB] border transition-all flex items-center justify-between cursor-pointer active:scale-[0.99] ${
+                isRankDropdownOpen
+                  ? 'border-[#8E97FD] ring-2 ring-[#8E97FD]/30 bg-white'
+                  : 'border-[#EEF0FA] hover:border-[#8E97FD]/40'
+              }`}
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                  <img
+                    src={selectedOption.medalIcon}
+                    alt={selectedOption.title}
+                    className="w-5 h-5 object-contain drop-shadow-xs"
+                  />
+                </div>
+                <div className="flex flex-col text-left min-w-0">
+                  <span className="text-xs font-bold text-[#1E1F3D] truncate">
+                    {selectedOption.title}
+                  </span>
+                  <span className="text-[10px] text-[#8E97FD] font-semibold leading-none">
+                    {selectedOption.rankBadge}
+                  </span>
+                </div>
+              </div>
+
+              <ChevronDown
+                size={16}
+                className={`text-[#7A7C99] transition-transform duration-200 shrink-0 ml-2 ${
+                  isRankDropdownOpen ? 'rotate-180 text-[#8E97FD]' : ''
+                }`}
+              />
+            </button>
+
+            {/* Custom Dropdown Menu with Medals next to each option */}
+            {isRankDropdownOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-30"
+                  onClick={() => setIsRankDropdownOpen(false)}
+                />
+
+                <div className="absolute bottom-full left-0 right-0 mb-1.5 bg-white rounded-2xl border border-[#EEF0FA] shadow-[0_12px_32px_rgba(30,31,61,0.14)] p-1.5 z-40 max-h-60 overflow-y-auto space-y-1 animate-fadeIn no-scrollbar">
+                  <div className="px-2.5 py-1 text-[10px] font-bold text-[#8E90B0] uppercase tracking-wider border-b border-[#EEF0FA] mb-1">
+                    Select Rank Title &amp; Medal
+                  </div>
+
+                  {RANK_TITLE_OPTIONS.map((opt) => {
+                    const isSelected = opt.title === rankTitle;
+                    return (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => {
+                          setRankTitle(opt.title);
+                          setIsRankDropdownOpen(false);
+                        }}
+                        className={`w-full p-2.5 rounded-xl flex items-center justify-between text-left transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#EEF0FF] text-[#1E1F3D] font-bold shadow-xs ring-1 ring-[#8E97FD]/30'
+                            : 'hover:bg-[#F4F6FB] text-[#585A7E]'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          {/* Medal image right next to title */}
+                          <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                            <img
+                              src={opt.medalIcon}
+                              alt={opt.title}
+                              className="w-5 h-5 object-contain drop-shadow-xs"
+                            />
+                          </div>
+
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <span className={`text-xs ${isSelected ? 'font-black text-[#1E1F3D]' : 'font-semibold'}`}>
+                                {opt.title}
+                              </span>
+                              <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-[#F4F6FB] text-[#8E97FD] border border-[#EEF0FA]">
+                                {opt.rankBadge}
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-[#8E90B0] truncate max-w-[210px]">
+                              {opt.description}
+                            </p>
+                          </div>
+                        </div>
+
+                        {isSelected && (
+                          <Check size={14} className="text-[#8E97FD] shrink-0 ml-2" strokeWidth={3} />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
