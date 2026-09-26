@@ -460,7 +460,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
 
                           <div className="min-w-0">
                             <div className="flex items-center gap-1.5">
-                              <span className={`text-xs ${isSelected ? 'font-black text-[#1E1F3D]' : 'font-semibold'}`}>
+                              <span className={`text-xs ${isSelected ? 'font-bold text-[#1E1F3D]' : 'font-semibold'}`}>
                                 {opt.title}
                               </span>
                               <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-[#F4F6FB] text-[#8E97FD] border border-[#EEF0FA]">

@@ -155,7 +155,7 @@ export const CouponsView: React.FC = () => {
                   </div>
 
                   {/* Discount Badge */}
-                  <span className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#8E97FD] to-[#7C82ED] text-white text-[11px] font-black shrink-0 shadow-sm">
+                  <span className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#8E97FD] to-[#7C82ED] text-white text-[11px] font-bold shrink-0 shadow-sm">
                     {cpn.discountBadge}
                   </span>
                 </div>
@@ -164,7 +164,7 @@ export const CouponsView: React.FC = () => {
                 <div className="px-5 py-3 bg-[#FAFBFD] flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-bold text-[#7A7C99]">CODE:</span>
-                    <span className="font-mono text-xs font-black text-[#1E1F3D] bg-white px-2 py-0.5 rounded border border-[#EAEFFE]">
+                    <span className="font-mono text-xs font-bold text-[#1E1F3D] bg-white px-2 py-0.5 rounded border border-[#EAEFFE]">
                       {cpn.code}
                     </span>
                     <button
@@ -204,7 +204,7 @@ export const CouponsView: React.FC = () => {
                   <h4 className="text-xs font-bold line-through text-[#7A7C99]">{cpn.title}</h4>
                   <span className="text-[10px]">{cpn.partnerName} • Used</span>
                 </div>
-                <span className="text-[10px] font-black px-2 py-0.5 rounded-md bg-[#EEF0FA] text-[#7A7C99]">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#EEF0FA] text-[#7A7C99]">
                   REDEEMED ✓
                 </span>
               </div>
@@ -277,7 +277,7 @@ export const CouponsView: React.FC = () => {
             </div>
 
             {/* Code string */}
-            <span className="font-mono text-xs font-black text-[#1E1F3D] tracking-wider bg-[#F4F6FB] px-3 py-1 rounded-md">
+            <span className="font-mono text-xs font-bold text-[#1E1F3D] tracking-wider bg-[#F4F6FB] px-3 py-1 rounded-md">
               {selectedVoucher.code}
             </span>
 

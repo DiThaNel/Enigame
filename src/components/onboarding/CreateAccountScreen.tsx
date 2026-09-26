@@ -64,7 +64,7 @@ export const CreateAccountScreen: React.FC = () => {
             onClick={() => handleSubmit()}
             className="w-full h-14 py-3.5 px-5 rounded-full bg-[#6979F8] hover:bg-[#5868EB] text-white flex items-center justify-center gap-3 font-regular text-xs tracking-widest uppercase shadow-sm transition-all active:scale-[0.99] cursor-pointer"
           >
-            <span className="w-6 h-6 rounded-full bg-white text-[#6979F8] flex items-center justify-center text-sm font-black ">
+            <span className="w-6 h-6 rounded-full bg-white text-[#6979F8] flex items-center justify-center text-sm font-bold ">
               f
             </span>
             <span>CONTINUE WITH FACEBOOK</span>

@@ -55,8 +55,8 @@ export const ChangeEmailModal: React.FC = () => {
   };
 
   return (
-    <div className="px-5 py-5 absolute inset-0 z-50 flex items-end sm:items-center justify-center bg-black/75 backdrop-blur-sm animate-fadeIn">
-      <div className="w-full bg-white rounded-t-[32px] sm:rounded-[32px] overflow-hidden flex flex-col shadow-2xl animate-slideUp">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-fadeIn">
+      <div className="w-full max-w-sm bg-white rounded-[32px] overflow-hidden flex flex-col shadow-2xl animate-scaleUp max-h-[88vh] overflow-y-auto no-scrollbar">
         {/* Header */}
         <div className="px-6 pt-5 pb-3 border-b border-[#EEF0FA] flex items-center justify-between">
           <button

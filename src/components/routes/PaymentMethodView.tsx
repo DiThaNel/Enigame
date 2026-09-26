@@ -2,8 +2,10 @@
 
 import React, { useState, useRef } from 'react';
 import { useEnigameStore } from '@/store/useEnigameStore';
+import { AppPortal } from '@/components/common/AppPortal';
 import { PaymentTransaction, PurchaseOrder, GiftRoutePass } from '@/types';
 import {
+  X,
   ChevronLeft,
   ChevronRight,
   ShieldCheck,
@@ -24,6 +26,7 @@ import {
 
 export const PaymentMethodView: React.FC = () => {
   const {
+    setCompanyModal,
     selectedRoute,
     routes,
     setRoutesViewStep,
@@ -106,7 +109,7 @@ export const PaymentMethodView: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStep, setProcessingStep] = useState('');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  const [showTermsModal, setShowTermsModal] = useState(false);
+  // showTermsModal replaced by global setCompanyModal('terms')
 
   // Calculations
   const unitPrice = activeRoute?.price || 30;
@@ -325,14 +328,7 @@ export const PaymentMethodView: React.FC = () => {
             Enter your payment details
           </p>
           <p className="text-[11px] text-white/70 mt-0.5">
-            By continuing you agree to our{' '}
-            <button
-              type="button"
-              onClick={() => setShowTermsModal(true)}
-              className="text-white font-bold underline hover:text-white/90 cursor-pointer"
-            >
-              Terms
-            </button>
+            By continuing you agree to our{' '}<button type="button" onClick={() => setCompanyModal('terms')} className="text-white font-bold underline hover:text-white/90 cursor-pointer">Terms &amp; Conditions</button>
           </p>
         </div>
       </div>
@@ -456,7 +452,7 @@ export const PaymentMethodView: React.FC = () => {
                 {activeRoute.city}, Portugal • {activeRoute.durationMinutes} min
               </p>
               <div className="flex items-center gap-2 mt-1">
-                <span className="text-xs font-black text-[#6979F8]">
+                <span className="text-xs font-bold text-[#6979F8]">
                   {unitPrice}€ {quantity > 1 ? `× ${quantity}` : ''}
                 </span>
                 {quantity > 1 && (
@@ -505,7 +501,7 @@ export const PaymentMethodView: React.FC = () => {
                   {subtotal}€
                 </span>
               )}
-              <span className="text-lg font-black text-[#1E1F3D]">
+              <span className="text-lg font-bold text-[#1E1F3D]">
                 {finalTotal}€
               </span>
             </div>
@@ -586,7 +582,7 @@ export const PaymentMethodView: React.FC = () => {
                   : 'border-[#EAEFFE] bg-white hover:border-[#6979F8]/40'
               }`}
             >
-              <span className="text-xs font-black italic text-[#1A1F71] tracking-tighter">VISA</span>
+              <span className="text-xs font-bold italic text-[#1A1F71] tracking-tighter">VISA</span>
               {selectedMethod === 'visa' && (
                 <div className="w-4 h-4 rounded-full bg-[#22C55E] flex items-center justify-center text-white ml-auto">
                   <Check size={10} strokeWidth={3} />
@@ -622,7 +618,7 @@ export const PaymentMethodView: React.FC = () => {
                   : 'border-[#EAEFFE] bg-white hover:border-[#6979F8]/40'
               }`}
             >
-              <span className="text-xs font-black text-[#E65100]">MB</span>
+              <span className="text-xs font-bold text-[#E65100]">MB</span>
               <span className="text-xs font-bold text-[#1E1F3D]">Multibanco</span>
               {selectedMethod === 'mb' && (
                 <div className="w-4 h-4 rounded-full bg-[#22C55E] flex items-center justify-center text-white ml-auto">
@@ -872,7 +868,7 @@ export const PaymentMethodView: React.FC = () => {
 
       {/* Processing Modal Overlay */}
       {isProcessing && (
-        <div className="absolute inset-0 z-50 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center p-6 animate-fadeIn">
+        <div className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center p-4 animate-fadeIn">
           <div className="bg-white rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center max-w-[300px] border border-white/40 animate-popIn">
             <div className="w-14 h-14 rounded-full bg-[#8E97FD]/15 flex items-center justify-center text-[#6979F8] mb-3">
               <Loader2 size={28} className="animate-spin" />
@@ -887,31 +883,7 @@ export const PaymentMethodView: React.FC = () => {
         </div>
       )}
 
-      {/* Terms Modal */}
-      {showTermsModal && (
-        <div className="absolute inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-white rounded-3xl p-6 shadow-2xl max-w-sm w-full flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-[#1E1F3D]">Enigame Payment Terms</h3>
-              <button
-                onClick={() => setShowTermsModal(false)}
-                className="w-7 h-7 rounded-full bg-[#F4F6FB] flex items-center justify-center text-[#8E90B0]"
-              >
-                ✕
-              </button>
-            </div>
-            <p className="text-xs text-[#585A7E] leading-relaxed">
-              All transactions in this demo application are simulated with test tokens. Unlocked routes grant unlimited access to riddles and geolocation markers. Gift codes never expire and can be redeemed in the Coupons section.
-            </p>
-            <button
-              onClick={() => setShowTermsModal(false)}
-              className="w-full py-2.5 rounded-xl bg-[#8E97FD] text-white text-xs font-bold mt-2"
-            >
-              I Understand
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Terms Modal is handled globally via CompanyInfoModal in MobileAppShell */}
     </div>
   );
 };

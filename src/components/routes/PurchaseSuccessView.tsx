@@ -140,7 +140,7 @@ export const PurchaseSuccessView: React.FC = () => {
             </div>
             <div className="flex items-baseline gap-1">
               <span className="text-[11px] text-[#8E90B0]">Total Paid:</span>
-              <span className="text-sm font-black text-[#1E1F3D]">{totalAmount}€</span>
+              <span className="text-sm font-bold text-[#1E1F3D]">{totalAmount}€</span>
             </div>
           </div>
 

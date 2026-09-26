@@ -6,7 +6,7 @@ import { RouteMapPreview } from './RouteMapPreview';
 import { PaymentMethodView } from './PaymentMethodView';
 import { PurchaseSuccessView } from './PurchaseSuccessView';
 import { PurchaseFailureView } from './PurchaseFailureView';
-import { ChevronLeft, ChevronRight, Star, Info, Check, Clock } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, Info, Check, Clock, CheckCircle2, Compass } from 'lucide-react';
 import { DIFFICULTY_LABELS, RouteDifficulty } from '@/types';
 
 export const formatRouteDuration = (minutes: number): string => {
@@ -285,7 +285,7 @@ export const RoutesCatalog: React.FC = () => {
 
                 {/* City Name at Center / Top */}
                 <div className="relative z-10 p-6 pt-9 text-center">
-                  <h2 className="text-2xl sm:text-3xl font-black text-white tracking-wide leading-tight drop-shadow-md">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-wide leading-tight drop-shadow-md">
                     {city.name}
                   </h2>
                   <p className="text-white/80 text-xs font-semibold mt-1.5 tracking-wider uppercase">
@@ -398,7 +398,7 @@ export const RoutesCatalog: React.FC = () => {
 
           {/* City Headline in Banner */}
           <div className="absolute bottom-5 left-6 right-6 z-10">
-            <h2 className="text-white text-xl sm:text-2xl font-black drop-shadow-md">
+            <h2 className="text-white text-xl sm:text-2xl font-bold drop-shadow-md">
               {selectedCity}
             </h2>
             <p className="text-white/80 text-xs font-medium mt-0.5">
@@ -587,7 +587,33 @@ export const RoutesCatalog: React.FC = () => {
     }
   };
 
+  const isRouteUnlocked = unlockedRouteIds.includes(activeRoute.id);
+
+  const handleApplyGiftCode = () => {
+    if (!giftCode.trim()) {
+      showToast('Please enter your gift or promo code.', 'error');
+      return;
+    }
+    const res = redeemPromoCode(giftCode.trim());
+    if (res.success) {
+      showToast(res.message || 'Gift code applied! Route unlocked with 100% discount!', 'success');
+      setGiftCode('');
+    } else {
+      showToast(res.message || 'Invalid or expired gift code. Please try again.', 'error');
+    }
+  };
+
   const handleCheckout = () => {
+    if (isGiftChecked && giftCode.trim()) {
+      const res = redeemPromoCode(giftCode.trim());
+      if (res.success) {
+        showToast(res.message || 'Gift code applied! Route unlocked with 100% discount!', 'success');
+        setGiftCode('');
+        return;
+      } else {
+        showToast(res.message || 'Invalid gift code. Redirecting to payment method.', 'error');
+      }
+    }
     setRoutesViewStep('payment-method');
   };
 
@@ -684,7 +710,7 @@ export const RoutesCatalog: React.FC = () => {
           </div>
         </div>
 
-        {/* Gifted Code Discount Box matching Figma */}
+        {/* Gifted Code Discount Box matching Figma 07.3 */}
         <div
           className="mt-3.5 p-3.5 rounded-2xl border border-[#8E97FD]/40 bg-[#F7F8FE] animate-card-stagger"
           style={{ animationDelay: '250ms' }}
@@ -710,15 +736,36 @@ export const RoutesCatalog: React.FC = () => {
             </span>
           </label>
 
-
           {isGiftChecked && (
-            <input
-              type="text"
-              placeholder="Promo Code"
-              value={giftCode}
-              onChange={(e) => setGiftCode(e.target.value)}
-              className="w-full h-9 mt-2.5 px-3 rounded-xl border border-[#8E97FD]/30 text-xs font-bold text-[#1E1F3D] focus:outline-none bg-white"
-            />
+            <div className="mt-2.5 flex items-center gap-2">
+              <input
+                type="text"
+                placeholder="Promo Code (e.g. IW-BRAG-841831)"
+                value={giftCode}
+                onChange={(e) => setGiftCode(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleApplyGiftCode();
+                  }
+                }}
+                className="flex-1 h-10 px-3.5 rounded-xl border border-[#8E97FD]/40 text-xs font-bold text-[#1E1F3D] placeholder-[#A5A7C4] focus:outline-none focus:border-[#8E97FD] bg-white shadow-xs uppercase font-mono tracking-wider"
+              />
+              <button
+                type="button"
+                onClick={handleApplyGiftCode}
+                className="h-10 px-4 rounded-xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-xs shadow-xs active:scale-95 transition-all cursor-pointer shrink-0"
+              >
+                Apply
+              </button>
+            </div>
+          )}
+
+          {isRouteUnlocked && (
+            <div className="mt-2.5 p-2.5 bg-[#E8F8F0] border border-[#B9E9CD] rounded-xl flex items-center gap-2 text-xs text-[#166534] font-bold animate-fadeIn">
+              <CheckCircle2 size={16} className="text-[#22C55E] shrink-0" />
+              <span>100% Discount Active: Route Unlocked!</span>
+            </div>
           )}
         </div>
 
@@ -726,7 +773,7 @@ export const RoutesCatalog: React.FC = () => {
         <button
           onClick={handleCheckout}
           style={{ animationDelay: '300ms' }}
-          className="w-full h-12 mt-4 rounded-2xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-semibold text-sm tracking-wide shadow-md shadow-indigo-300/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer animate-card-stagger"
+          className="w-full h-12 mt-4 rounded-2xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-sm tracking-wide shadow-md shadow-indigo-300/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer animate-card-stagger"
         >
           <span>Checkout</span>
           <ChevronRight size={16} />

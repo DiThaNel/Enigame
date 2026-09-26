@@ -18,6 +18,7 @@ import { PurchaseHistoryModal } from '@/components/profile/PurchaseHistoryModal'
 import { ExplorerProfileModal } from '@/components/meetup/ExplorerProfileModal';
 import { HostExpeditionModal } from '@/components/meetup/HostExpeditionModal';
 import { PhotoLightboxModal } from '@/components/common/PhotoLightboxModal';
+import { CompanyInfoModal } from '@/components/common/CompanyInfoModal';
 import { SplashScreen } from '@/components/onboarding/SplashScreen';
 import { SelectLanguageScreen } from '@/components/onboarding/SelectLanguageScreen';
 import { CreateAccountScreen } from '@/components/onboarding/CreateAccountScreen';
@@ -104,9 +105,10 @@ export const MobileAppShell: React.FC = () => {
 
       {/* Main Device Container */}
       <div
+        id="enigame-device-frame"
         className={"relative w-full overflow-hidden bg-[#F4F6FB] flex flex-col transition-all duration-300 " + (
           deviceFrame
-            ? "max-w-[420px] h-[100dvh] sm:h-[860px] sm:rounded-[50px] shadow-[0_25px_70px_rgba(0,0,0,0.6)] sm:border-[10px] sm:border-[#1F213A]"
+            ? "max-w-[420px] h-[100dvh] sm:h-[860px] sm:rounded-[50px] shadow-[0_25px_70px_rgba(0,0,0,0.6)] sm:border-[10px] sm:border-[#1F213A] sm:transform-gpu"
             : "max-w-3xl min-h-[100dvh] sm:rounded-3xl shadow-2xl"
         )}
       >
@@ -153,6 +155,7 @@ export const MobileAppShell: React.FC = () => {
             <ChangeEmailModal />
             <HostExpeditionModal />
             <PhotoLightboxModal />
+            <CompanyInfoModal />
           </>
         )}
 

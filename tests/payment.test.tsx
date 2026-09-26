@@ -104,6 +104,35 @@ describe('Enigame Payment Gateway & Checkout Flow (07.4, 07.6, 07.7)', () => {
     expect(screen.getByText(/Enter your payment details/i)).toBeInTheDocument();
   });
 
+
+  it('redeems gifted code in Route Detail before checkout and unlocks the route with 100% discount', async () => {
+    // Seed a gift route pass
+    const passCode = 'IW-PORTO-999111';
+    useEnigameStore.getState().addGiftRoutePass({
+      code: passCode,
+      routeId: 'route-braganca-medieval',
+      routeTitle: 'The Skeletons of Bragança: Uncovering a Mystery',
+      dateCreated: new Date().toISOString(),
+      isRedeemed: false,
+    });
+
+    render(<MobileAppShell />);
+
+    // Type the gift code into the promo code input before checkout
+    const promoInput = screen.getByPlaceholderText(/Promo Code/i);
+    fireEvent.change(promoInput, { target: { value: passCode } });
+
+    // Click Apply
+    const applyBtn = screen.getByRole('button', { name: /^Apply$/i });
+    fireEvent.click(applyBtn);
+
+    // Route is now unlocked with 100% discount
+    await waitFor(() => {
+      expect(screen.getByText(/100% Discount Active: Route Unlocked!/i)).toBeInTheDocument();
+      expect(useEnigameStore.getState().unlockedRouteIds).toContain('route-braganca-medieval');
+    });
+  });
+
   it('redeems gifted code in Coupons and unlocks route', () => {
     const passCode = 'IW-BRAG-778899';
     useEnigameStore.getState().addGiftRoutePass({

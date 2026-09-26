@@ -104,7 +104,7 @@ export const PurchaseHistoryModal: React.FC = () => {
                   className={order.type === 'gift' ? 'text-[#3E8BFF] stroke-[3]' : 'text-[#00B894] stroke-[3]'}
                 />
                 <span
-                  className={`text-xs font-black tracking-wider uppercase font-semibold ${
+                  className={`text-xs font-bold tracking-wider uppercase font-semibold ${
                     order.type === 'gift' ? 'text-[#3E8BFF]' : 'text-[#00B894]'
                   }`}
                 >
@@ -118,7 +118,7 @@ export const PurchaseHistoryModal: React.FC = () => {
 
             {/* Order Number & Product Codes */}
             <div>
-              <h3 className="text-lg font-black text-[#1E1F3D] tracking-tight font-semibold">
+              <h3 className="text-lg font-bold text-[#1E1F3D] tracking-tight font-semibold">
                 Order {order.orderNumber}
               </h3>
               <div className="mt-1">
@@ -129,7 +129,7 @@ export const PurchaseHistoryModal: React.FC = () => {
                   {order.productCodes.map((code, idx) => (
                     <span
                       key={idx}
-                      className="text-xs font-black text-[#4E75FF] font-mono tracking-wider hover:underline cursor-pointer"
+                      className="text-xs font-bold text-[#4E75FF] font-mono tracking-wider hover:underline cursor-pointer"
                     >
                       {code}
                     </span>
@@ -147,7 +147,7 @@ export const PurchaseHistoryModal: React.FC = () => {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#A5A7C4] block">
                   VALUE OF ITEMS
                 </span>
-                <span className="text-sm font-black text-[#4E75FF] mt-0.5 block font-semibold">
+                <span className="text-sm font-bold text-[#4E75FF] mt-0.5 block font-semibold">
                   {order.valueOfItems}
                 </span>
               </div>
@@ -156,7 +156,7 @@ export const PurchaseHistoryModal: React.FC = () => {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#A5A7C4] block">
                   QUANTITY
                 </span>
-                <span className="text-sm font-black text-[#4E75FF] mt-0.5 block font-semibold">
+                <span className="text-sm font-bold text-[#4E75FF] mt-0.5 block font-semibold">
                   {order.quantity}
                 </span>
               </div>
@@ -176,8 +176,8 @@ export const PurchaseHistoryModal: React.FC = () => {
 
       {/* Order Details Modal Drawer */}
       {selectedOrder && (
-        <div className="absolute inset-0 z-60 flex items-end justify-center bg-black/60 backdrop-blur-xs p-3 animate-fadeIn">
-          <div className="w-full bg-white rounded-[32px] p-6 shadow-2xl flex flex-col gap-4 animate-slideUp">
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeIn">
+          <div className="w-full max-w-sm bg-white rounded-[32px] p-6 shadow-2xl flex flex-col gap-4 animate-scaleUp max-h-[85vh] overflow-y-auto no-scrollbar">
             <div className="flex items-center justify-between border-b border-[#EEF0FA] pb-3">
               <div className="flex items-center gap-2">
                 <Receipt className="text-[#8E97FD]" size={20} />

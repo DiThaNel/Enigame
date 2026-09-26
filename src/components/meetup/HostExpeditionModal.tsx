@@ -34,8 +34,8 @@ export const HostExpeditionModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div className="w-full max-w-[430px] bg-white rounded-t-[36px] sm:rounded-[36px] p-6 shadow-2xl animate-slideUp">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeIn">
+      <div className="w-full max-w-sm sm:max-w-[410px] bg-white rounded-[32px] p-6 shadow-2xl animate-scaleUp max-h-[88vh] overflow-y-auto no-scrollbar">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-lg font-bold text-[#1E1F3D]">Host an Expedition</h3>

@@ -24,11 +24,11 @@ export const PhotoLightboxModal: React.FC = () => {
   return (
     <div 
       onClick={() => setLightboxPhoto(null)}
-      className="absolute inset-0 z-[95] bg-black/85 backdrop-blur-md flex items-center justify-center p-3.5 sm:p-5 animate-fadeIn select-none overflow-y-auto"
+      className="fixed inset-0 z-[95] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn select-none"
     >
       <div 
         onClick={(e) => e.stopPropagation()}
-        className="relative max-w-[390px] w-full bg-white rounded-[32px] overflow-hidden shadow-2xl animate-scaleUp flex flex-col my-auto"
+        className="relative max-w-[390px] w-full bg-white rounded-[32px] overflow-hidden shadow-2xl animate-scaleUp flex flex-col my-auto max-h-[90vh]"
       >
         {/* Close Button */}
         <button

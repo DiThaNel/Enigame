@@ -45,6 +45,7 @@ interface EnigameState {
 
   currentUser: Explorer;
   points: number;
+  rankPoints: number;
   updateProfile: (updated: Partial<Explorer>) => void;
   addPoints: (amount: number, reason: string) => void;
 
@@ -85,6 +86,8 @@ interface EnigameState {
   setEditProfileOpen: (open: boolean) => void;
   isSettingsOpen: boolean;
   setSettingsOpen: (open: boolean) => void;
+  companyModal: 'about' | 'privacy' | 'terms' | 'support' | null;
+  setCompanyModal: (modal: 'about' | 'privacy' | 'terms' | 'support' | null) => void;
   isChangePasswordOpen: boolean;
   setChangePasswordOpen: (open: boolean) => void;
   isChangeEmailOpen: boolean;
@@ -172,22 +175,29 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
 
   currentUser: CURRENT_USER,
   points: 1000,
+  rankPoints: 1000,
   updateProfile: (updated) => set((state) => ({
     currentUser: { ...state.currentUser, ...updated }
   })),
-  addPoints: (amount, reason) => set((state) => ({
-    points: state.points + amount,
-    activities: [
-      {
-        id: 'act-' + Date.now(),
-        title: reason,
-        timestamp: 'Just now',
-        pointsDelta: amount,
-        type: amount > 0 ? 'bonus' : 'redeem',
-      },
-      ...state.activities,
-    ]
-  })),
+  addPoints: (amount, reason) => set((state) => {
+    const newPoints = Math.max(0, state.points + amount);
+    const currentRank = state.rankPoints ?? Math.max(1000, state.points);
+    const newRankPoints = amount > 0 ? currentRank + amount : currentRank;
+    return {
+      points: newPoints,
+      rankPoints: newRankPoints,
+      activities: [
+        {
+          id: 'act-' + Date.now(),
+          title: reason,
+          timestamp: 'Just now',
+          pointsDelta: amount,
+          type: amount > 0 ? 'bonus' : 'redeem',
+        },
+        ...state.activities,
+      ]
+    };
+  }),
 
   routes: MOCK_ROUTES,
   activeRouteId: 'route-braganca-medieval',
@@ -200,6 +210,7 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
     set((state) => ({
       completedCheckpointIds: [...state.completedCheckpointIds, checkpointId],
       points: state.points + 100,
+      rankPoints: (state.rankPoints ?? Math.max(1000, state.points)) + 100,
       activities: [
         {
           id: 'act-' + Date.now(),
@@ -310,6 +321,8 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
   setEditProfileOpen: (open) => set({ isEditProfileOpen: open, profileViewStep: open ? 'edit-profile' : 'profile' }),
   isSettingsOpen: false,
   setSettingsOpen: (open) => set({ isSettingsOpen: open }),
+  companyModal: null,
+  setCompanyModal: (modal) => set({ companyModal: modal }),
   isChangePasswordOpen: false,
   setChangePasswordOpen: (open) => set({ isChangePasswordOpen: open }),
   isChangeEmailOpen: false,
@@ -385,6 +398,7 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
       set(s => ({
         coupons: [newCoupon, ...s.coupons],
         points: s.points + 250,
+        rankPoints: (s.rankPoints ?? Math.max(1000, s.points)) + 250,
         activities: [
           {
             id: 'act-' + Date.now(),
@@ -466,6 +480,7 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
     set(s => ({
       coupons: [genericCoupon, ...s.coupons],
       points: s.points + 100,
+      rankPoints: (s.rankPoints ?? Math.max(1000, s.points)) + 100,
       activities: [
         {
           id: 'act-' + Date.now(),

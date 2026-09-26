@@ -9,19 +9,21 @@ import { RouteStoreView } from './RouteStoreView';
 import { CouponsView } from './CouponsView';
 
 export const PointsStoreView: React.FC = () => {
-  const { points, currentUser, pointsSubView, setPointsSubView } = useEnigameStore();
+  const { points, rankPoints: storeRankPoints, currentUser, pointsSubView, setPointsSubView } = useEnigameStore();
+
+  const rankPoints = storeRankPoints ?? Math.max(1000, points);
 
   // Dynamically calculate user rank based on real points vs leaderboard
   const userRank = React.useMemo(() => {
     const list = MOCK_LEADERBOARD.map((u) =>
-      u.isCurrentUser ? { ...u, points } : u
+      u.isCurrentUser ? { ...u, points: rankPoints } : u
     );
     list.sort((a, b) => b.points - a.points);
     const foundIndex = list.findIndex(
       (u) => u.isCurrentUser || u.id === currentUser.id
     );
     return foundIndex !== -1 ? foundIndex + 1 : 8;
-  }, [points, currentUser.id]);
+  }, [rankPoints, currentUser.id]);
 
   // Sub-views routing
   if (pointsSubView === 'leaderboard') {
@@ -72,7 +74,7 @@ export const PointsStoreView: React.FC = () => {
         </div>
 
         {/* Username */}
-        <h2 className="text-base font-black text-[#1E1F3D] mt-2.5 tracking-tight font-semibold">
+        <h2 className="text-base font-bold text-[#1E1F3D] mt-2.5 tracking-tight font-semibold">
           {currentUser.name}
         </h2>
 
@@ -96,7 +98,7 @@ export const PointsStoreView: React.FC = () => {
               />
               <div className="flex flex-col items-start">
                 <span className="text-[9px] text-[#7A7C99] font-bold uppercase tracking-wider">Explorer Points</span>
-                <span className="text-sm font-black text-[#6C7BFF] tracking-wide leading-tight flex items-baseline gap-1">
+                <span className="text-sm font-bold text-[#6C7BFF] tracking-wide leading-tight flex items-baseline gap-1">
                   {points.toLocaleString()} <span className="text-[10px] font-bold text-[#6C7BFF]">Pts</span>
                 </span>
               </div>
@@ -113,7 +115,7 @@ export const PointsStoreView: React.FC = () => {
                   />
                   <div className="flex flex-col items-start">
                     <span className="text-[9px] text-[#7A7C99] font-bold uppercase tracking-wider">Rank</span>
-                    <span className="text-[11px] font-black px-2 py-0.5 rounded-full bg-[#FFB800] text-[#1E1F3D]">
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#FFB800] text-[#1E1F3D]">
                       #1 Gold
                     </span>
                   </div>
@@ -127,7 +129,7 @@ export const PointsStoreView: React.FC = () => {
                   />
                   <div className="flex flex-col items-start">
                     <span className="text-[9px] text-[#7A7C99] font-bold uppercase tracking-wider">Rank</span>
-                    <span className="text-[11px] font-black px-2 py-0.5 rounded-full bg-slate-200 text-[#1E1F3D]">
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-[#1E1F3D]">
                       #2 Silver
                     </span>
                   </div>
@@ -141,7 +143,7 @@ export const PointsStoreView: React.FC = () => {
                   />
                   <div className="flex flex-col items-start">
                     <span className="text-[9px] text-[#7A7C99] font-bold uppercase tracking-wider">Rank</span>
-                    <span className="text-[11px] font-black px-2 py-0.5 rounded-full bg-amber-700 text-white">
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-700 text-white">
                       #3 Bronze
                     </span>
                   </div>

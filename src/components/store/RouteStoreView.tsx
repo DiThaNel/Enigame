@@ -72,7 +72,7 @@ export const RouteStoreView: React.FC = () => {
         <div className="inline-flex items-center gap-2 mt-4 bg-white/20 px-4 py-1.5 rounded-full backdrop-blur-xs shadow-inner">
           <img src="/assets/StatusCoins.png" alt="Coins" className="w-4 h-4 object-contain" />
           <span className="text-xs font-bold text-white">Your Balance:</span>
-          <span className="text-xs font-black text-[#FFD269]">{points.toLocaleString()} Points</span>
+          <span className="text-xs font-bold text-[#FFD269]">{points.toLocaleString()} Points</span>
         </div>
       </div>
 
@@ -116,7 +116,7 @@ export const RouteStoreView: React.FC = () => {
                   {/* Top Badge: Unlocked status */}
                   <div className="absolute top-3 left-3">
                     {isUnlocked ? (
-                      <span className="px-3 py-1 rounded-full bg-emerald-500 text-white text-[11px] font-black flex items-center gap-1 shadow-md">
+                      <span className="px-3 py-1 rounded-full bg-emerald-500 text-white text-[11px] font-bold flex items-center gap-1 shadow-md">
                         <CheckCircle2 size={13} /> Unlocked
                       </span>
                     ) : (
@@ -128,7 +128,7 @@ export const RouteStoreView: React.FC = () => {
 
                   {/* Price Tag in Points */}
                   <div className="absolute top-3 right-3">
-                    <div className="px-3 py-1 rounded-full bg-[#1E1F3D]/80 backdrop-blur-md border border-white/20 text-white text-[11px] font-black flex items-center gap-1.5 shadow-md">
+                    <div className="px-3 py-1 rounded-full bg-[#1E1F3D]/80 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold flex items-center gap-1.5 shadow-md">
                       <Sparkles size={13} className="text-[#FFB800]" />
                       <span>{cost === 0 ? 'Free Starter' : `${cost} Pts`}</span>
                     </div>

@@ -13,6 +13,8 @@ export const RouteDetailModal: React.FC = () => {
     setActiveRouteId,
     setScannerOpen,
     unlockedRouteIds,
+    redeemPromoCode,
+    showToast,
   } = useEnigameStore();
   const [giftCode, setGiftCode] = useState('');
   const [isGiftChecked, setIsGiftChecked] = useState(true);
@@ -34,7 +36,7 @@ export const RouteDetailModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div className="w-full max-w-[390px] h-[95vh] max-h-[820px] bg-[#EEF0FA] rounded-[36px] overflow-hidden flex flex-col shadow-2xl relative animate-slideUp">
+      <div className="w-full max-w-[390px] max-h-[88vh] bg-[#EEF0FA] rounded-[36px] overflow-hidden flex flex-col shadow-2xl relative animate-scaleUp">
         {/* Castle Tower Top Background */}
         <div className="relative h-60 w-full overflow-hidden shrink-0">
           <img
@@ -123,7 +125,7 @@ export const RouteDetailModal: React.FC = () => {
                 <Check className="w-4 h-4 text-emerald-600 stroke-[3]" />
                 <span>Unlocked &amp; Ready to Explore</span>
               </div>
-              <span className="text-[10px] bg-emerald-200/70 text-emerald-800 font-black px-2.5 py-0.5 rounded-full uppercase">
+              <span className="text-[10px] bg-emerald-200/70 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full uppercase">
                 Free Access
               </span>
             </div>
@@ -151,13 +153,34 @@ export const RouteDetailModal: React.FC = () => {
               </label>
 
               {isGiftChecked && (
-                <input
-                  type="text"
-                  placeholder="ENTER PROMO CODE"
-                  value={giftCode}
-                  onChange={(e) => setGiftCode(e.target.value)}
-                  className="w-full h-10 mt-3 px-3 rounded-xl border border-[#8E97FD]/40 text-xs font-bold text-[#1E1F3D] focus:outline-none uppercase bg-white"
-                />
+                <div className="mt-3 flex items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="ENTER PROMO CODE"
+                    value={giftCode}
+                    onChange={(e) => setGiftCode(e.target.value)}
+                    className="flex-1 h-10 px-3 rounded-xl border border-[#8E97FD]/40 text-xs font-bold text-[#1E1F3D] focus:outline-none uppercase bg-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!giftCode.trim()) {
+                        showToast('Please enter your gift or promo code.', 'error');
+                        return;
+                      }
+                      const res = redeemPromoCode(giftCode.trim());
+                      if (res.success) {
+                        showToast(res.message || 'Gift code applied! Route unlocked!', 'success');
+                        setGiftCode('');
+                      } else {
+                        showToast(res.message || 'Invalid or expired gift code.', 'error');
+                      }
+                    }}
+                    className="h-10 px-4 rounded-xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-xs cursor-pointer active:scale-95 transition-all shrink-0"
+                  >
+                    Apply
+                  </button>
+                </div>
               )}
             </div>
           )}

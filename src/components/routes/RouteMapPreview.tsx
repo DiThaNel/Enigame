@@ -312,7 +312,7 @@ export const RouteMapPreview: React.FC<RouteMapPreviewProps> = ({
               style={{ top: `${wp.y}px`, left: `${wp.x}px` }}
               className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-20 pointer-events-none"
             >
-              <div className="px-1.5 py-0.5 bg-[#FFB800] text-[#1E1F3D] font-black text-[7px] rounded shadow-sm mb-0.5 tracking-wider uppercase">
+              <div className="px-1.5 py-0.5 bg-[#FFB800] text-[#1E1F3D] font-bold text-[7px] rounded shadow-sm mb-0.5 tracking-wider uppercase">
                 START
               </div>
               <div className="w-6 h-6 rounded-full bg-[#FFB800] text-white flex items-center justify-center shadow-md ring-2 ring-white">
@@ -369,7 +369,7 @@ export const RouteMapPreview: React.FC<RouteMapPreviewProps> = ({
             <div className="w-6 h-6 rounded-full bg-[#1E1F3D] text-white flex items-center justify-center shadow-md ring-2 ring-white">
               <Navigation size={10} fill="currentColor" />
             </div>
-            <div className="px-1.5 py-0.5 bg-[#1E1F3D] text-white font-black text-[7px] rounded shadow-sm mt-0.5 tracking-wider uppercase">
+            <div className="px-1.5 py-0.5 bg-[#1E1F3D] text-white font-bold text-[7px] rounded shadow-sm mt-0.5 tracking-wider uppercase">
               FINISH
             </div>
             <span className="text-[7.5px] font-bold text-[#1E1F3D] bg-white/90 px-1 py-0.5 rounded mt-0.5 shadow-sm whitespace-nowrap max-w-[80px] truncate">

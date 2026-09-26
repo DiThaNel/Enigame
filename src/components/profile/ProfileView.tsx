@@ -173,7 +173,7 @@ export const ProfileView: React.FC = () => {
         </div>
 
         {/* User Full Name */}
-        <h1 className="text-lg font-black text-[#1E1F3D] mt-3 tracking-tight font-medium">
+        <h1 className="text-lg font-bold text-[#1E1F3D] mt-3 tracking-tight font-medium">
           {currentUser.name || 'Tiana Rosser'}
         </h1>
 
@@ -273,7 +273,7 @@ export const ProfileView: React.FC = () => {
               onClick={() => setActiveTab(tab)}
               className={"text-xs font-bold transition-all relative pb-3 cursor-pointer capitalize flex flex-col items-center justify-center " + (
                 activeTab === tab
-                  ? "text-[#8E97FD] font-black"
+                  ? "text-[#8E97FD] font-bold"
                   : "text-[#A5A7C4] hover:text-[#585A7E]"
               )}
             >
@@ -293,7 +293,7 @@ export const ProfileView: React.FC = () => {
           <div className="px-5 pt-4 flex flex-col gap-3.5">
             {/* Header Row: Photos title & View mode toggle */}
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black text-[#1E1F3D] font-semibold">Photos</span>
+              <span className="text-xs font-bold text-[#1E1F3D] font-semibold">Photos</span>
               <div className="flex items-center gap-1.5 text-[#7A7C99]">
                 <button
                   onClick={() => setPhotoViewMode('list')}
@@ -384,7 +384,7 @@ export const ProfileView: React.FC = () => {
           <div className="px-5 pt-4 space-y-4">
             {/* Bio Card */}
             <div className="animate-card-stagger stagger-1 p-4 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs">
-              <span className="text-xs font-black text-[#1E1F3D] block mb-2 font-semibold">About Me</span>
+              <span className="text-xs font-bold text-[#1E1F3D] block mb-2 font-semibold">About Me</span>
               <p className="text-xs text-[#585A7E] leading-relaxed">
                 {currentUser.about || currentUser.bio || 'Passionate cartographer and mystery enthusiast based in northern Portugal. Always hunting for forgotten medieval inscriptions, subterranean passages, and local legends hidden in plain sight.'}
               </p>
@@ -392,7 +392,7 @@ export const ProfileView: React.FC = () => {
 
             {/* Interests & Tags without icons */}
             <div className="animate-card-stagger stagger-2 p-4 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs">
-              <span className="text-xs font-black text-[#1E1F3D] block mb-2.5 font-semibold">Interests &amp; Specializations</span>
+              <span className="text-xs font-bold text-[#1E1F3D] block mb-2.5 font-semibold">Interests &amp; Specializations</span>
               <div className="flex flex-wrap gap-1.5">
                 {(currentUser.interests && currentUser.interests.length > 0 
                   ? currentUser.interests 
@@ -436,7 +436,7 @@ export const ProfileView: React.FC = () => {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Award size={18} className="text-[#FFB800]" />
-                  <h3 className="text-xs font-black text-[#1E1F3D] font-semibold">Achievements &amp; Badges</h3>
+                  <h3 className="text-xs font-bold text-[#1E1F3D] font-semibold">Achievements &amp; Badges</h3>
                 </div>
                 <span className="text-[10px] font-bold text-[#8E97FD]">4 Unlocked</span>
               </div>
@@ -454,7 +454,7 @@ export const ProfileView: React.FC = () => {
 
             {/* Recent Completed Expedition */}
             <div className="animate-card-stagger stagger-2">
-              <span className="text-xs font-black text-[#1E1F3D] block mb-2 font-semibold">Latest Expedition Record</span>
+              <span className="text-xs font-bold text-[#1E1F3D] block mb-2 font-semibold">Latest Expedition Record</span>
               <div className="p-3.5 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-[#EEF0FF] flex items-center justify-center text-[#8E97FD]">
@@ -465,13 +465,13 @@ export const ProfileView: React.FC = () => {
                     <p className="text-[10px] text-[#A5A7C4]">Completed 2 days ago • 4 checkpoints</p>
                   </div>
                 </div>
-                <span className="text-xs font-black text-[#8E97FD] bg-[#F2F4FD] px-2.5 py-1 rounded-full font-semibold">+350 pts</span>
+                <span className="text-xs font-bold text-[#8E97FD] bg-[#F2F4FD] px-2.5 py-1 rounded-full font-semibold">+350 pts</span>
               </div>
             </div>
 
             {/* Visited Cities Grid matching Figma 06.3 - Meet-up (Profile/Trips) with user's assets */}
             <div className="animate-card-stagger stagger-3">
-              <span className="font-semibold text-xs font-black text-[#1E1F3D] block mb-2.5">Visited European Destinations</span>
+              <span className="font-semibold text-xs font-bold text-[#1E1F3D] block mb-2.5">Visited European Destinations</span>
               <div className="grid grid-cols-2 gap-3">
                 {completedTrips.map((trip, idx) => (
                   <div
@@ -511,8 +511,8 @@ export const ProfileView: React.FC = () => {
 
       {/* Lightbox for Photos */}
       {tripAddedAlert && (
-        <div className="absolute inset-0 z-60 bg-black/60 flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-white rounded-3xl p-6 text-center max-w-[320px] shadow-2xl flex flex-col items-center gap-3 animate-scaleUp">
+        <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-[32px] p-6 text-center max-w-xs shadow-2xl flex flex-col items-center gap-3 animate-scaleUp">
             <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center">
               <CheckCircle2 size={28} />
             </div>

@@ -237,7 +237,7 @@ export const CardShuffleRoutes: React.FC<CardShuffleRoutesProps> = ({
 
               {/* Middle Title */}
               <div className="relative z-10 px-5 text-left">
-                <h3 className="text-white text-lg sm:text-xl font-black leading-tight drop-shadow-md">
+                <h3 className="text-white text-lg sm:text-xl font-bold leading-tight drop-shadow-md">
                   {route.title}
                 </h3>
                 <p className="text-xs text-white/80 line-clamp-2 mt-1.5 font-medium leading-relaxed">

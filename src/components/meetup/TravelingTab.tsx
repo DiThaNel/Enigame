@@ -45,7 +45,7 @@ export const TravelingTab: React.FC = () => {
                   <span>{exp.date}, {exp.time}</span>
                 </div>
 
-                <span className="absolute top-3 right-3 bg-[#FFB800] text-[#1E1F3D] text-[10px] font-black px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
+                <span className="absolute top-3 right-3 bg-[#FFB800] text-[#1E1F3D] text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
                   <Trophy size={11} /> +{exp.rewardPoints} Pts
                 </span>
 

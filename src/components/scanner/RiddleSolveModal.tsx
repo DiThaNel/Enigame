@@ -58,7 +58,7 @@ export const RiddleSolveModal: React.FC = () => {
             <span className="text-xs font-bold text-[#7C82ED] uppercase tracking-wider">
               Enigma Solved!
             </span>
-            <h2 className="text-2xl font-black text-[#1E1F3D] mt-1">Checkpoint Cleared!</h2>
+            <h2 className="text-2xl font-bold text-[#1E1F3D] mt-1">Checkpoint Cleared!</h2>
             <p className="text-xs text-[#7A7C99] mt-2 px-4">
               You deciphered the secret of {activeRiddleCheckpoint.name}. Your logbook has been updated.
             </p>
@@ -87,7 +87,7 @@ export const RiddleSolveModal: React.FC = () => {
             <span className="text-[11px] font-bold text-[#7C82ED] uppercase tracking-wider">
               {activeRiddleCheckpoint.landmark}
             </span>
-            <h2 className="text-lg font-black text-[#1E1F3D] mt-1 leading-snug">
+            <h2 className="text-lg font-bold text-[#1E1F3D] mt-1 leading-snug">
               {activeRiddleCheckpoint.name}
             </h2>
 

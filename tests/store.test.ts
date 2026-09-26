@@ -6,6 +6,7 @@ describe('useEnigameStore', () => {
     // Reset points
     useEnigameStore.setState({
       points: 1000,
+      rankPoints: 1000,
       completedCheckpointIds: ['cp-1'],
       activeTab: 'home',
       meetupSubTab: 'explorers',
@@ -62,6 +63,29 @@ describe('useEnigameStore', () => {
 
     expect(success).toBe(false);
     expect(useEnigameStore.getState().points).toBe(50);
+  });
+
+  
+  it('preserves rankPoints and never decreases rank points when spending points', () => {
+    // Start with 1000 points and 1000 rankPoints
+    expect(useEnigameStore.getState().points).toBe(1000);
+    expect(useEnigameStore.getState().rankPoints).toBe(1000);
+
+    // Spend 400 points in store
+    const item = useEnigameStore.getState().storeItems[0];
+    useEnigameStore.getState().redeemStoreItem(item);
+    expect(useEnigameStore.getState().points).toBe(600);
+    expect(useEnigameStore.getState().rankPoints).toBe(1000);
+
+    // Spend 500 more points (e.g. checkout discount)
+    useEnigameStore.getState().addPoints(-500, 'Discount applied');
+    expect(useEnigameStore.getState().points).toBe(100);
+    expect(useEnigameStore.getState().rankPoints).toBe(1000);
+
+    // Earning points increases both spendable points and rank points
+    useEnigameStore.getState().addPoints(200, 'Completed mystery');
+    expect(useEnigameStore.getState().points).toBe(300);
+    expect(useEnigameStore.getState().rankPoints).toBe(1200);
   });
 
   it('updates profile info and persists in state', () => {

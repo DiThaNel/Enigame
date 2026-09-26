@@ -6,15 +6,14 @@ import { MOCK_LEADERBOARD } from '@/data/mockData';
 import { ChevronLeft, Trophy, Flame } from 'lucide-react';
 
 export const LeaderboardView: React.FC = () => {
-  const { setPointsSubView, points, currentUser } = useEnigameStore();
+  const { setPointsSubView, points, rankPoints: storeRankPoints, currentUser } = useEnigameStore();
+  const rankPoints = storeRankPoints ?? Math.max(1000, points);
   const [timeFilter, setTimeFilter] = useState<'all' | 'month' | 'week'>('all');
 
   // Dynamic leaderboard computed from current user's actual points
   const dynamicLeaderboard = React.useMemo(() => {
     const list = MOCK_LEADERBOARD.map((u) =>
-      u.isCurrentUser
-        ? { ...u, name: currentUser.name, points: points }
-        : u
+      u.isCurrentUser ? { ...u, name: currentUser.name, points: rankPoints } : u
     );
     // Sort descending by points
     list.sort((a, b) => b.points - a.points);
@@ -23,12 +22,12 @@ export const LeaderboardView: React.FC = () => {
       ...u,
       rank: idx + 1,
     }));
-  }, [points, currentUser.name]);
+  }, [rankPoints, currentUser.name]);
 
   const userIndex = dynamicLeaderboard.findIndex((u) => u.isCurrentUser);
   const currentUserRank = userIndex !== -1 ? userIndex + 1 : 8;
   const prevUser = userIndex > 0 ? dynamicLeaderboard[userIndex - 1] : null;
-  const pointsToNextRank = prevUser ? Math.max(0, prevUser.points - points) : 0;
+  const pointsToNextRank = prevUser ? Math.max(0, prevUser.points - rankPoints) : 0;
 
   return (
     <div className="w-full min-h-screen pb-28 bg-[#F4F6FB] flex flex-col animate-modal-screen select-none relative">
@@ -90,32 +89,32 @@ export const LeaderboardView: React.FC = () => {
         <div className="flex flex-col gap-2.5">
           {dynamicLeaderboard.map((user, idx) => {
             const isUser = user.isCurrentUser;
-            const userPoints = isUser ? points : user.points;
+            const userPoints = isUser ? rankPoints : user.points;
             const isFirst = user.rank === 1;
             const isSecond = user.rank === 2;
             const isThird = user.rank === 3;
 
             // Define card borders, gradient backgrounds, and medal styling for top 3
             let cardStyle = 'bg-white border-[#EAEFFE] hover:border-[#8E97FD]/40 shadow-xs';
-            let rankBadgeStyle = 'text-[#7A7C99] font-black text-xs';
+            let rankBadgeStyle = 'text-[#7A7C99] font-bold text-xs';
             let avatarRing = 'ring-0';
             let pointsTextStyle = 'text-[#1E1F3D]';
 
             if (isFirst) {
               cardStyle = 'bg-gradient-to-r from-amber-50 via-amber-100/20 to-white border-2 border-[#FFB800] shadow-[0_6px_20px_rgba(255,184,0,0.18)]';
-              rankBadgeStyle = 'bg-[#FFB800] text-[#1E1F3D] font-black text-xs px-2 py-0.5 rounded-full shadow-xs';
+              rankBadgeStyle = 'bg-[#FFB800] text-[#1E1F3D] font-bold text-xs px-2 py-0.5 rounded-full shadow-xs';
               pointsTextStyle = 'text-[#D97706]';
             } else if (isSecond) {
               cardStyle = 'bg-gradient-to-r from-slate-100 via-slate-50 to-white border-2 border-slate-300 shadow-[0_4px_16px_rgba(148,163,184,0.16)]';
-              rankBadgeStyle = 'bg-slate-300 text-[#1E1F3D] font-black text-xs px-2 py-0.5 rounded-full shadow-xs';
+              rankBadgeStyle = 'bg-slate-300 text-[#1E1F3D] font-bold text-xs px-2 py-0.5 rounded-full shadow-xs';
               pointsTextStyle = 'text-slate-700';
             } else if (isThird) {
               cardStyle = 'bg-gradient-to-r from-amber-100/40 via-amber-50/20 to-white border-2 border-amber-600/50 shadow-[0_4px_16px_rgba(217,119,6,0.14)]';
-              rankBadgeStyle = 'bg-amber-700 text-white font-black text-xs px-2 py-0.5 rounded-full shadow-xs';
+              rankBadgeStyle = 'bg-amber-700 text-white font-bold text-xs px-2 py-0.5 rounded-full shadow-xs';
               pointsTextStyle = 'text-amber-800';
             } else if (isUser) {
               cardStyle = 'bg-[#EEF0FF] border-2 border-[#8E97FD] shadow-sm ring-1 ring-[#8E97FD]/30';
-              rankBadgeStyle = 'text-[#8E97FD] font-black text-xs';
+              rankBadgeStyle = 'text-[#8E97FD] font-bold text-xs';
             }
 
             return (
@@ -190,7 +189,7 @@ export const LeaderboardView: React.FC = () => {
                   )}
 
                   <div className="flex flex-col items-end">
-                    <span className={`text-xs font-black ${pointsTextStyle}`}>
+                    <span className={`text-xs font-bold ${pointsTextStyle}`}>
                       {userPoints.toLocaleString()} <span className="text-[10px] font-bold text-[#8E97FD]">pts</span>
                     </span>
                     <span className="text-[9px] text-[#7A7C99]">{user.city.split(',')[0]}</span>
@@ -220,7 +219,7 @@ export const LeaderboardView: React.FC = () => {
           </div>
 
           <div className="bg-white/10 px-3 py-1 rounded-xl text-right">
-            <span className="text-xs font-black text-[#FFB800]">{points.toLocaleString()}</span>
+            <span className="text-xs font-bold text-[#FFB800]">{points.toLocaleString()}</span>
             <span className="text-[10px] text-white/70 ml-1">Pts</span>
           </div>
         </div>
