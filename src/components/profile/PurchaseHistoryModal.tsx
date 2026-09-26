@@ -16,7 +16,7 @@ interface PurchaseOrder {
 }
 
 export const PurchaseHistoryModal: React.FC = () => {
-  const { isPurchaseHistoryOpen, setPurchaseHistoryOpen, redeemedItemIds, storeItems } = useEnigameStore();
+  const { isPurchaseHistoryOpen, setPurchaseHistoryOpen, redeemedItemIds, storeItems, purchasedOrders } = useEnigameStore();
   const [selectedOrder, setSelectedOrder] = useState<PurchaseOrder | null>(null);
 
   if (!isPurchaseHistoryOpen) return null;
@@ -71,7 +71,7 @@ export const PurchaseHistoryModal: React.FC = () => {
     })
   }] : [];
 
-  const allOrders = [...redeemedOrders, ...defaultOrders];
+  const allOrders = [...(purchasedOrders || []), ...redeemedOrders, ...defaultOrders];
 
   return (
     <div className="absolute inset-0 z-50 bg-[#F4F6FC] flex flex-col animate-modal-screen overflow-hidden">

@@ -151,3 +151,54 @@ export interface ConversationSummary {
   hasAudio?: boolean;
   hasAttachment?: boolean;
 }
+
+export interface PurchaseOrderItem {
+  title: string;
+  category: string;
+  price: string;
+}
+
+export interface PurchaseOrder {
+  id: string;
+  orderNumber: string;
+  type: 'gift' | 'completed';
+  date: string;
+  productCodes: string[];
+  valueOfItems: string;
+  quantity: number;
+  items: PurchaseOrderItem[];
+  routeId?: string;
+  paymentMethod?: string;
+}
+
+export interface PaymentTransaction {
+  orderNumber: string;
+  routeId: string;
+  routeTitle: string;
+  city: string;
+  coverImage: string;
+  isGift: boolean;
+  giftQuantity: number;
+  giftCodes: string[];
+  pricePerUnit: number;
+  subtotal: number;
+  pointsUsed: number;
+  discountFromPoints: number;
+  totalAmount: number;
+  cardholderName: string;
+  cardLast4: string;
+  paymentMethod: 'card' | 'paypal' | 'mb' | 'amex';
+  timestamp: string;
+  status: 'success' | 'failure';
+  failureReason?: string;
+}
+
+export interface GiftRoutePass {
+  code: string;
+  routeId: string;
+  routeTitle: string;
+  dateCreated: string;
+  isRedeemed: boolean;
+  redeemedBy?: string;
+}
+

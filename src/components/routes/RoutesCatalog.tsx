@@ -3,6 +3,9 @@
 import React, { useState, useRef } from 'react';
 import { useEnigameStore } from '@/store/useEnigameStore';
 import { RouteMapPreview } from './RouteMapPreview';
+import { PaymentMethodView } from './PaymentMethodView';
+import { PurchaseSuccessView } from './PurchaseSuccessView';
+import { PurchaseFailureView } from './PurchaseFailureView';
 import { ChevronLeft, ChevronRight, Star, Info, Check, Clock } from 'lucide-react';
 import { DIFFICULTY_LABELS, RouteDifficulty } from '@/types';
 
@@ -40,6 +43,9 @@ export const RoutesCatalog: React.FC = () => {
     routes,
     routesSearchQuery,
     setRoutesSearchQuery,
+    redeemPromoCode,
+    unlockedRouteIds,
+    showToast,
   } = useEnigameStore();
 
   // Cities List for the Frame 07 Carousel with dynamic routeCount
@@ -171,6 +177,21 @@ export const RoutesCatalog: React.FC = () => {
   // STEP 1: 07 - Routes (Select City)
   // Exactly matching Figma frame 07 with the same card shuffle carousel of CITIES
   // ==========================================
+  // ==========================================
+  // PAYMENT FLOW STEPS (Figma 07.4, 07.6, 07.7)
+  // ==========================================
+  if (routesViewStep === 'payment-method') {
+    return <PaymentMethodView />;
+  }
+
+  if (routesViewStep === 'purchase-success') {
+    return <PurchaseSuccessView />;
+  }
+
+  if (routesViewStep === 'purchase-failure') {
+    return <PurchaseFailureView />;
+  }
+
   if (routesViewStep === 'select-city') {
     return (
       <div
@@ -567,8 +588,7 @@ export const RoutesCatalog: React.FC = () => {
   };
 
   const handleCheckout = () => {
-    setActiveRouteId(activeRoute.id);
-    setScannerOpen(true);
+    setRoutesViewStep('payment-method');
   };
 
   return (

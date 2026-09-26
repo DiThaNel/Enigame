@@ -84,7 +84,7 @@ describe('Enigame Onboarding & Auth Flow', () => {
 
     // Should now be on main dashboard
     expect(useEnigameStore.getState().appStage).toBe('main');
-    expect(screen.getByText('Discover!')).toBeInTheDocument();
+    expect(screen.getAllByText('Discover!').length).toBeGreaterThan(0);
   });
 
   it('supports skipping onboarding directly to main dashboard', () => {

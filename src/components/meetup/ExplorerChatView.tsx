@@ -73,7 +73,7 @@ export const ExplorerChatView: React.FC<ExplorerChatViewProps> = ({
   const messages: ChatMessage[] = (explorerChats && explorerChats[explorer.id]) || defaultMessages;
 
   const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
-    messagesEndRef.current?.scrollIntoView({ behavior });
+    messagesEndRef.current?.scrollIntoView?.({ behavior });
   };
 
   useEffect(() => {

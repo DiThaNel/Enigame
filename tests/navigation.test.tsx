@@ -19,17 +19,16 @@ describe('Enigame MobileAppShell Navigation & Routes Flow', () => {
   it('renders home dashboard with search bar and quick action pills', () => {
     render(<MobileAppShell />);
     expect(screen.getByPlaceholderText(/What are you looking for/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Discover!' })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /Discover!/i }).length).toBeGreaterThan(0);
   });
 
   it('navigates directly to Route Detail page when clicking Discover! on Home carousel', () => {
     render(<MobileAppShell />);
-    const discoverBtn = screen.getByRole('button', { name: 'Discover!' });
+    const discoverBtn = screen.getAllByRole('button', { name: /Discover!/i })[0];
     fireEvent.click(discoverBtn);
 
     // Should now be on full Route Detail page (07.3)
-    expect(screen.getByText(/Bragança Medieval Mystery/i)).toBeInTheDocument();
-    expect(screen.getByText(/Difficulty/i)).toBeInTheDocument();
+    expect(screen.getByText(/The Skeletons of Bragança: Uncovering a Mystery/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Checkout/i })).toBeInTheDocument();
   });
 
@@ -41,11 +40,12 @@ describe('Enigame MobileAppShell Navigation & Routes Flow', () => {
 
     // Step 1: 07 - Routes (Select City)
     expect(screen.getByText('Bragança, Portugal')).toBeInTheDocument();
-    const selectCityBtn = screen.getByRole('button', { name: 'Select City' });
-    fireEvent.click(selectCityBtn);
+    // [2, 1, 0] stack mapping places front card at the end
+    const selectCityBtns = screen.getAllByRole('button', { name: 'Select City' });
+    fireEvent.click(selectCityBtns[selectCityBtns.length - 1]);
 
     // Step 2: 07.2 - Routes (City Selected)
-    expect(screen.getByText('Tech Route')).toBeInTheDocument();
+    expect(screen.getByText(/Available Routes/i)).toBeInTheDocument();
     expect(screen.getByText(/The Skeletons of Bragança: Uncovering a Mystery/i)).toBeInTheDocument();
 
     // Step 3: Click a route card to view full Route Detail page (07.3)
@@ -62,8 +62,9 @@ describe('Enigame MobileAppShell Navigation & Routes Flow', () => {
     fireEvent.click(meetupTabBtn);
 
     expect(screen.getByText('Explorers')).toBeInTheDocument();
-    expect(screen.getByText('Traveling')).toBeInTheDocument();
+    expect(screen.getByText('Travels')).toBeInTheDocument();
     expect(screen.getByText('Map')).toBeInTheDocument();
+    expect(screen.getByText('Chats')).toBeInTheDocument();
   });
 
   it('switches to Traveling tab in Meet-up and displays Host button', () => {

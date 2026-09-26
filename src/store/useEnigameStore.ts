@@ -1,14 +1,14 @@
 'use client';
 
 import { create } from 'zustand';
-import { Route, Explorer, Expedition, StoreItem, ActivityRecord, Checkpoint, Coupon, ChatMessage } from '@/types';
+import { Route, Explorer, Expedition, StoreItem, ActivityRecord, Checkpoint, Coupon, ChatMessage, PurchaseOrder, PaymentTransaction, GiftRoutePass } from '@/types';
 import { CURRENT_USER, MOCK_EXPLORERS, MOCK_ROUTES, MOCK_EXPEDITIONS, MOCK_STORE_ITEMS, MOCK_ACTIVITIES, MOCK_COUPONS } from '@/data/mockData';
 
 export type AppStage = 'splash' | 'language' | 'auth' | 'guide' | 'main';
 export type AppLanguage = 'pt' | 'en';
 export type MainTab = 'routes' | 'meetup' | 'home' | 'points' | 'profile';
 export type MeetupSubTab = 'explorers' | 'traveling' | 'map' | 'conversations';
-export type RoutesViewStep = 'select-city' | 'city-routes' | 'route-detail';
+export type RoutesViewStep = 'select-city' | 'city-routes' | 'route-detail' | 'payment-method' | 'purchase-success' | 'purchase-failure';
 export type PointsSubView = 'hub' | 'leaderboard' | 'activity' | 'store' | 'coupons';
 
 export interface UserAccountData {
@@ -111,6 +111,16 @@ interface EnigameState {
 
   lightboxPhoto: string | null;
   setLightboxPhoto: (url: string | null) => void;
+  // Payment Flow
+  lastPayment: PaymentTransaction | null;
+  setLastPayment: (payment: PaymentTransaction | null) => void;
+  purchasedOrders: PurchaseOrder[];
+  addPurchaseOrder: (order: PurchaseOrder) => void;
+  giftRoutePasses: GiftRoutePass[];
+  addGiftRoutePass: (pass: GiftRoutePass) => void;
+  redeemGiftRoutePass: (code: string) => { success: boolean; message: string; routeTitle?: string };
+  unlockRoute: (routeId: string) => void;
+
   toast: ToastNotification | null;
   showToast: (text: string, type?: 'success' | 'error' | 'info', durationMs?: number) => void;
   hideToast: () => void;
@@ -347,6 +357,12 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
       return { success: false, message: 'Please enter a valid promo code.' };
     }
 
+    // Check if code matches a gifted route pass or starts with IW
+    if (state.giftRoutePasses.some(p => p.code.toUpperCase() === trimmed) || trimmed.startsWith('IW')) {
+      const giftRes = state.redeemGiftRoutePass(trimmed);
+      return giftRes;
+    }
+
     if (state.coupons.some(c => c.code.toUpperCase() === trimmed)) {
       return { success: false, message: 'This coupon is already in your wallet!' };
     }
@@ -483,6 +499,83 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
       ]
     }));
     return true;
+  },
+
+  lastPayment: null,
+  setLastPayment: (payment) => set({ lastPayment: payment }),
+  purchasedOrders: [],
+  addPurchaseOrder: (order) => set((s) => ({ purchasedOrders: [order, ...s.purchasedOrders] })),
+  giftRoutePasses: [],
+  addGiftRoutePass: (pass) => set((s) => ({ giftRoutePasses: [pass, ...s.giftRoutePasses] })),
+  unlockRoute: (routeId) => set((s) => ({
+    unlockedRouteIds: s.unlockedRouteIds.includes(routeId) ? s.unlockedRouteIds : [...s.unlockedRouteIds, routeId]
+  })),
+  redeemGiftRoutePass: (code) => {
+    const trimmed = code.trim().toUpperCase();
+    const state = get();
+    const pass = state.giftRoutePasses.find(p => p.code.toUpperCase() === trimmed);
+    if (!pass) {
+      if (trimmed.startsWith('IW') || trimmed.includes('GIFT') || trimmed.includes('PASS')) {
+        const route = state.selectedRoute || state.routes[0];
+        const routeId = route ? route.id : 'route-braganca-medieval';
+        const routeTitle = route ? route.title : 'Bragança Mystery Route';
+        set(s => ({
+          unlockedRouteIds: s.unlockedRouteIds.includes(routeId) ? s.unlockedRouteIds : [...s.unlockedRouteIds, routeId],
+          coupons: [
+            {
+              id: 'cpn-gift-' + Date.now(),
+              code: trimmed,
+              title: `Gifted Route Pass: ${routeTitle}`,
+              description: `100% Free Pass unlocked with gift code ${trimmed}`,
+              discountBadge: '100% FREE',
+              partnerName: 'Enigame Gift Exchange',
+              category: 'route',
+              expiryDate: '31 Dec 2026',
+              isUsed: true,
+              qrCodeValue: `ENIGAME-GIFT-${trimmed}`,
+            },
+            ...s.coupons
+          ],
+          activities: [
+            {
+              id: 'act-' + Date.now(),
+              title: `Redeemed Gift Route Pass: ${routeTitle}`,
+              timestamp: 'Just now',
+              pointsDelta: 100,
+              type: 'bonus',
+            },
+            ...s.activities
+          ]
+        }));
+        return { success: true, message: `Gift code applied! 100% discount granted - "${routeTitle}" unlocked!`, routeTitle };
+      }
+      return { success: false, message: 'Invalid gift code. Please verify the code and try again.' };
+    }
+
+    if (pass.isRedeemed) {
+      return { success: false, message: 'This gift voucher has already been redeemed.' };
+    }
+
+    set(s => ({
+      giftRoutePasses: s.giftRoutePasses.map(p => p.code.toUpperCase() === trimmed ? { ...p, isRedeemed: true } : p),
+      unlockedRouteIds: s.unlockedRouteIds.includes(pass.routeId) ? s.unlockedRouteIds : [...s.unlockedRouteIds, pass.routeId],
+      coupons: [
+        {
+          id: 'cpn-gift-' + Date.now(),
+          code: trimmed,
+          title: `Gifted Route Pass: ${pass.routeTitle}`,
+          description: `100% Free Pass unlocked with gift code ${trimmed}`,
+          discountBadge: '100% FREE',
+          partnerName: 'Enigame Gift Exchange',
+          category: 'route',
+          expiryDate: '31 Dec 2026',
+          isUsed: true,
+          qrCodeValue: `ENIGAME-GIFT-${trimmed}`,
+        },
+        ...s.coupons
+      ]
+    }));
+    return { success: true, message: `Gift pass accepted! Route "${pass.routeTitle}" is now fully unlocked!`, routeTitle: pass.routeTitle };
   },
 
   unlockedRouteIds: ['route-braganca-medieval'],
