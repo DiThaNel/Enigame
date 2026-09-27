@@ -242,12 +242,12 @@ export const ConversationsView: React.FC<ConversationsViewProps> = ({
                     />
                   </div>
 
-                  {/* Top-Right Ranking Medal Badge */}
-                  <div className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center pointer-events-none drop-shadow">
+                  {/* Top-Right Ranking Medal Badge with circular background like the flag */}
+                  <div className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 rounded-full overflow-hidden border border-white/80 shadow-xs flex items-center justify-center bg-white/75 backdrop-blur-xs pointer-events-none">
                     <img
                       src={chat.explorer.rankMedal || '/assets/TopPointsMedal.png'}
                       alt="Medal"
-                      className="w-4.5 h-4.5 object-contain"
+                      className="w-3.5 h-3.5 object-contain"
                     />
                   </div>
 

@@ -19,6 +19,7 @@ import { ExplorerProfileModal } from '@/components/meetup/ExplorerProfileModal';
 import { HostExpeditionModal } from '@/components/meetup/HostExpeditionModal';
 import { PhotoLightboxModal } from '@/components/common/PhotoLightboxModal';
 import { CompanyInfoModal } from '@/components/common/CompanyInfoModal';
+import { SecretWealthTitlesModal } from '@/components/store/SecretWealthTitlesModal';
 import { SplashScreen } from '@/components/onboarding/SplashScreen';
 import { SelectLanguageScreen } from '@/components/onboarding/SelectLanguageScreen';
 import { CreateAccountScreen } from '@/components/onboarding/CreateAccountScreen';
@@ -156,6 +157,7 @@ export const MobileAppShell: React.FC = () => {
             <HostExpeditionModal />
             <PhotoLightboxModal />
             <CompanyInfoModal />
+            <SecretWealthTitlesModal />
           </>
         )}
 

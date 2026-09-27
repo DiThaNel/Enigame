@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { ChevronRight, Sparkles } from 'lucide-react';
 import { useEnigameStore } from '@/store/useEnigameStore';
 import { MOCK_LEADERBOARD } from '@/data/mockData';
 import { LeaderboardView } from './LeaderboardView';
@@ -9,7 +10,7 @@ import { RouteStoreView } from './RouteStoreView';
 import { CouponsView } from './CouponsView';
 
 export const PointsStoreView: React.FC = () => {
-  const { points, rankPoints: storeRankPoints, currentUser, pointsSubView, setPointsSubView } = useEnigameStore();
+  const { points, rankPoints: storeRankPoints, currentUser, pointsSubView, setPointsSubView, setWealthTitlesModalOpen } = useEnigameStore();
 
   const rankPoints = storeRankPoints ?? Math.max(1000, points);
 
@@ -88,7 +89,11 @@ export const PointsStoreView: React.FC = () => {
           </span>
 
           {/* Points & Rank Badge Container inside floating card */}
-          <div className="w-full bg-[#F4F6FB] rounded-2xl px-3.5 py-2.5 flex items-center justify-center border border-[#EEF0FA] shadow-2xs">
+          <div
+            onClick={() => setWealthTitlesModalOpen(true)}
+            className="w-full bg-[#F4F6FB] hover:bg-[#EEF0FA] rounded-2xl px-3.5 py-2.5 flex items-center justify-center border border-[#EEF0FA] shadow-2xs cursor-pointer transition-colors group/card"
+            title="Click to view Secret Wealth Titles"
+          >
             {/* Points Info with Coin Image */}
             <div className="flex items-center gap-2 pr-3 border-r border-[#E0E3F5]">
               <img
@@ -170,69 +175,172 @@ export const PointsStoreView: React.FC = () => {
               )}
             </div>
           </div>
+
+          {/* Secret Wealth Titles interactive trigger */}
+          <button
+            type="button"
+            onClick={() => setWealthTitlesModalOpen(true)}
+            className="mt-2 text-[10px] font-bold text-[#8E97FD] hover:text-[#6979F8] flex items-center gap-1 cursor-pointer transition-colors active:scale-95 px-2.5 py-0.5 rounded-full hover:bg-[#EEF0FF]"
+          >
+            <Sparkles size={11} className="text-amber-400" />
+            <span>Secret Wealth Titles (10k, 25k, 50k, 100k)</span>
+            <ChevronRight size={10} />
+          </button>
         </div>
       </div>
 
       {/* 4 Action Cards Grid matching 08 - Points & Rewards */}
-      <div className="px-5 pt-4 pb-6 grid grid-cols-2 gap-3.5 relative z-10 flex-1">
+      <div className="px-5 pt-3.5 pb-6 grid grid-cols-2 gap-3.5 relative z-10 flex-1">
         {/* 1. Leaderboard Card */}
         <div
           onClick={() => setPointsSubView('leaderboard')}
-          className="animate-card-stagger stagger-1 bg-white rounded-[28px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#EAEFFE] flex flex-col items-center justify-center gap-3 cursor-pointer group active:scale-95 transition-all hover:shadow-md hover:border-[#8E97FD]/50"
+          className="animate-card-stagger stagger-1 bg-white rounded-[28px] p-4 shadow-[0_8px_24px_rgba(30,31,61,0.06)] border border-[#EAEFFE] hover:border-[#FFB800]/50 hover:shadow-[0_12px_28px_rgba(255,184,0,0.14)] flex flex-col items-center text-center cursor-pointer group active:scale-[0.97] transition-all duration-300 relative overflow-hidden"
         >
-          <div className="w-16 h-16 flex items-center justify-center">
+          {/* Ambient Glow */}
+          <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#FFB800]/10 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-500" />
+
+          {/* Top Micro Row: Themed Pill + Arrow */}
+          <div className="w-full flex items-center justify-between z-10 mb-2">
+            <span className="text-[9px] font-bold uppercase tracking-wider text-[#D97706] bg-[#FFF8E7] px-2 py-0.5 rounded-full border border-[#FFE299]/60 shadow-2xs">
+              Top 50
+            </span>
+            <div className="w-5 h-5 rounded-full bg-[#F4F6FB] flex items-center justify-center text-[#A5A7C4] group-hover:text-[#D97706] group-hover:bg-[#FFF8E7] transition-colors">
+              <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </div>
+
+          {/* 3D Asset Pedestal Pod */}
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#FFF9EB] via-white to-[#EEF0FA] border border-[#FFEBB3]/60 flex items-center justify-center p-2.5 my-1 shadow-2xs group-hover:scale-108 group-hover:rotate-1 transition-all duration-300">
             <img
               src="/assets/PointsLeaderboards.png"
               alt="Leaderboard"
-              className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+              className="w-full h-full object-contain drop-shadow-xs"
             />
           </div>
-          <span className="text-xs font-bold text-[#8E97FD] group-hover:text-[#7C82ED]">Leaderboard</span>
+
+          {/* Typography */}
+          <div className="mt-1 flex flex-col items-center z-10">
+            <h3 className="text-sm font-bold text-[#1E1F3D] group-hover:text-[#6979F8] transition-colors leading-tight">
+              Leaderboard
+            </h3>
+            <span className="text-[10px] font-semibold text-[#8E90B0] mt-0.5">
+              Global Rankings
+            </span>
+          </div>
         </div>
 
         {/* 2. Activity Card */}
         <div
           onClick={() => setPointsSubView('activity')}
-          className="animate-card-stagger stagger-2 bg-white rounded-[28px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#EAEFFE] flex flex-col items-center justify-center gap-3 cursor-pointer group active:scale-95 transition-all hover:shadow-md hover:border-[#8E97FD]/50"
+          className="animate-card-stagger stagger-2 bg-white rounded-[28px] p-4 shadow-[0_8px_24px_rgba(30,31,61,0.06)] border border-[#EAEFFE] hover:border-[#38BDF8]/50 hover:shadow-[0_12px_28px_rgba(56,189,248,0.14)] flex flex-col items-center text-center cursor-pointer group active:scale-[0.97] transition-all duration-300 relative overflow-hidden"
         >
-          <div className="w-16 h-16 flex items-center justify-center">
+          {/* Ambient Glow */}
+          <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#38BDF8]/10 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-500" />
+
+          {/* Top Micro Row: Themed Pill + Arrow */}
+          <div className="w-full flex items-center justify-between z-10 mb-2">
+            <span className="text-[9px] font-bold uppercase tracking-wider text-[#0284C7] bg-[#EBF5FF] px-2 py-0.5 rounded-full border border-[#BAE6FD]/60 shadow-2xs">
+              History
+            </span>
+            <div className="w-5 h-5 rounded-full bg-[#F4F6FB] flex items-center justify-center text-[#A5A7C4] group-hover:text-[#0284C7] group-hover:bg-[#EBF5FF] transition-colors">
+              <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </div>
+
+          {/* 3D Asset Pedestal Pod */}
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#F0F9FF] via-white to-[#EEF0FA] border border-[#BAE6FD]/60 flex items-center justify-center p-2.5 my-1 shadow-2xs group-hover:scale-108 group-hover:rotate-1 transition-all duration-300">
             <img
               src="/assets/PointsActivity.png"
               alt="Activity"
-              className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+              className="w-full h-full object-contain drop-shadow-xs"
             />
           </div>
-          <span className="text-xs font-bold text-[#8E97FD] group-hover:text-[#7C82ED]">Activity</span>
+
+          {/* Typography */}
+          <div className="mt-1 flex flex-col items-center z-10">
+            <h3 className="text-sm font-bold text-[#1E1F3D] group-hover:text-[#6979F8] transition-colors leading-tight">
+              Activity
+            </h3>
+            <span className="text-[10px] font-semibold text-[#8E90B0] mt-0.5">
+              Quests &amp; Points
+            </span>
+          </div>
         </div>
 
         {/* 3. Store Card */}
         <div
           onClick={() => setPointsSubView('store')}
-          className="animate-card-stagger stagger-3 bg-white rounded-[28px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#EAEFFE] flex flex-col items-center justify-center gap-3 cursor-pointer group active:scale-95 transition-all hover:shadow-md hover:border-[#8E97FD]/50"
+          className="animate-card-stagger stagger-3 bg-white rounded-[28px] p-4 shadow-[0_8px_24px_rgba(30,31,61,0.06)] border border-[#EAEFFE] hover:border-[#8E97FD]/60 hover:shadow-[0_12px_28px_rgba(142,151,253,0.18)] flex flex-col items-center text-center cursor-pointer group active:scale-[0.97] transition-all duration-300 relative overflow-hidden"
         >
-          <div className="w-16 h-16 flex items-center justify-center">
+          {/* Ambient Glow */}
+          <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#8E97FD]/12 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-500" />
+
+          {/* Top Micro Row: Themed Pill + Arrow */}
+          <div className="w-full flex items-center justify-between z-10 mb-2">
+            <span className="text-[9px] font-bold uppercase tracking-wider text-[#7C3AED] bg-[#F5F3FF] px-2 py-0.5 rounded-full border border-[#DDD6FE]/60 shadow-2xs">
+              Rewards
+            </span>
+            <div className="w-5 h-5 rounded-full bg-[#F4F6FB] flex items-center justify-center text-[#A5A7C4] group-hover:text-[#7C3AED] group-hover:bg-[#F5F3FF] transition-colors">
+              <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </div>
+
+          {/* 3D Asset Pedestal Pod */}
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#F5F3FF] via-white to-[#EEF0FA] border border-[#DDD6FE]/60 flex items-center justify-center p-2.5 my-1 shadow-2xs group-hover:scale-108 group-hover:rotate-1 transition-all duration-300">
             <img
               src="/assets/PointsStore.png"
               alt="Store"
-              className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+              className="w-full h-full object-contain drop-shadow-xs"
             />
           </div>
-          <span className="text-xs font-bold text-[#8E97FD] group-hover:text-[#7C82ED]">Store</span>
+
+          {/* Typography */}
+          <div className="mt-1 flex flex-col items-center z-10">
+            <h3 className="text-sm font-bold text-[#1E1F3D] group-hover:text-[#6979F8] transition-colors leading-tight">
+              Store
+            </h3>
+            <span className="text-[10px] font-semibold text-[#8E90B0] mt-0.5">
+              Perks &amp; Badges
+            </span>
+          </div>
         </div>
 
         {/* 4. Coupons Card */}
         <div
           onClick={() => setPointsSubView('coupons')}
-          className="animate-card-stagger stagger-4 bg-white rounded-[28px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#EAEFFE] flex flex-col items-center justify-center gap-3 cursor-pointer group active:scale-95 transition-all hover:shadow-md hover:border-[#8E97FD]/50"
+          className="animate-card-stagger stagger-4 bg-white rounded-[28px] p-4 shadow-[0_8px_24px_rgba(30,31,61,0.06)] border border-[#EAEFFE] hover:border-[#F43F5E]/50 hover:shadow-[0_12px_28px_rgba(244,63,94,0.14)] flex flex-col items-center text-center cursor-pointer group active:scale-[0.97] transition-all duration-300 relative overflow-hidden"
         >
-          <div className="w-16 h-16 flex items-center justify-center">
+          {/* Ambient Glow */}
+          <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#F43F5E]/10 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-500" />
+
+          {/* Top Micro Row: Themed Pill + Arrow */}
+          <div className="w-full flex items-center justify-between z-10 mb-2">
+            <span className="text-[9px] font-bold uppercase tracking-wider text-[#E11D48] bg-[#FFF1F2] px-2 py-0.5 rounded-full border border-[#FECDD3]/60 shadow-2xs">
+              Vouchers
+            </span>
+            <div className="w-5 h-5 rounded-full bg-[#F4F6FB] flex items-center justify-center text-[#A5A7C4] group-hover:text-[#E11D48] group-hover:bg-[#FFF1F2] transition-colors">
+              <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </div>
+
+          {/* 3D Asset Pedestal Pod */}
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#FFF1F2] via-white to-[#EEF0FA] border border-[#FECDD3]/60 flex items-center justify-center p-2.5 my-1 shadow-2xs group-hover:scale-108 group-hover:rotate-1 transition-all duration-300">
             <img
               src="/assets/PointsCoupon.png"
               alt="Coupons"
-              className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+              className="w-full h-full object-contain drop-shadow-xs"
             />
           </div>
-          <span className="text-xs font-bold text-[#8E97FD] group-hover:text-[#7C82ED]">Coupons</span>
+
+          {/* Typography */}
+          <div className="mt-1 flex flex-col items-center z-10">
+            <h3 className="text-sm font-bold text-[#1E1F3D] group-hover:text-[#6979F8] transition-colors leading-tight">
+              Coupons
+            </h3>
+            <span className="text-[10px] font-semibold text-[#8E90B0] mt-0.5">
+              Gifts &amp; Promos
+            </span>
+          </div>
         </div>
       </div>
     </div>

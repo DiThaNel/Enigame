@@ -165,12 +165,12 @@ export const ExplorerProfileView: React.FC<ExplorerProfileViewProps> = ({ explor
             alt={explorer.name}
             className="w-full h-full rounded-full object-cover bg-white"
           />
-          {/* Dynamic Medal Badge top-right */}
-          <div className="absolute -top-1.5 -right-1.5 w-7 h-7 flex items-center justify-center pointer-events-none drop-shadow">
+          {/* Dynamic Medal Badge top-right with circular background like the flag */}
+          <div className="absolute -top-1 -right-1 w-7 h-7 rounded-full overflow-hidden border border-white/80 shadow-sm flex items-center justify-center bg-white/75 backdrop-blur-xs pointer-events-none">
             <img
               src={explorer.rankMedal || '/assets/TopPointsMedal.png'}
               alt={`Rank #${explorer.rank || 1} Medal`}
-              className="w-6 h-6 object-contain"
+              className="w-5.5 h-5.5 object-contain"
             />
           </div>
           {/* Dynamic National Flag badge bottom-right */}

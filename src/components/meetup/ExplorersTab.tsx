@@ -31,12 +31,12 @@ export const ExplorersTab: React.FC = () => {
           className="w-full h-full rounded-full object-cover"
         />
 
-        {/* Dynamic Ranking Medal Badge top-right */}
-        <div className="absolute -top-1 -right-1 w-6 h-6 flex items-center justify-center pointer-events-none drop-shadow">
+        {/* Dynamic Ranking Medal Badge top-right with circular background like the flag */}
+        <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full overflow-hidden border border-white/80 shadow-sm flex items-center justify-center bg-white/75 backdrop-blur-xs pointer-events-none">
           <img
             src={exp.rankMedal || '/assets/TopPointsMedal.png'}
             alt={`Rank #${exp.rank} Medal`}
-            className="w-5 h-5 object-contain"
+            className="w-4.5 h-4.5 object-contain"
           />
         </div>
 

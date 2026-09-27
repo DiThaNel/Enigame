@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useEnigameStore } from '@/store/useEnigameStore';
+import { isWealthTitle } from '@/types';
 import { 
   ChevronLeft, 
   Edit3, 
@@ -15,6 +16,7 @@ import {
   Plus, 
   Award, 
   Compass, 
+  Crown, 
   CheckCircle2, 
   X,
   Share2
@@ -158,12 +160,12 @@ export const ProfileView: React.FC = () => {
             alt={currentUser.name}
             className="w-full h-full rounded-full object-cover bg-white"
           />
-          {/* Dynamic Equipped Medal top-right */}
-          <div className="absolute -top-1.5 -right-1.5 w-7 h-7 flex items-center justify-center pointer-events-none drop-shadow">
+          {/* Dynamic Equipped Medal top-right with circular background like the flag */}
+          <div className="absolute -top-1 -right-1 w-7 h-7 rounded-full overflow-hidden border border-white/80 shadow-sm flex items-center justify-center bg-white/75 backdrop-blur-xs pointer-events-none">
             <img
               src={currentUser.rankMedal || "/assets/StarSingle.png"}
               alt="Medal"
-              className="w-6 h-6 object-contain"
+              className="w-5.5 h-5.5 object-contain"
             />
           </div>
           {/* National flag badge matching Figma (Portugal) */}
@@ -178,7 +180,12 @@ export const ProfileView: React.FC = () => {
         </h1>
 
         {/* Equipped Rank Title */}
-        <div className="flex items-center gap-1.5 mt-0.5">
+        <div className="flex items-center gap-1.5 mt-0.5 flex-wrap justify-center">
+          {isWealthTitle(currentUser.rankTitle) && (
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-[#1E1F3D] shadow-2xs flex items-center gap-1">
+              <Crown size={10} /> Wealth Title
+            </span>
+          )}
           <span className="text-xs font-bold text-[#8E97FD]">
             {currentUser.rankTitle || 'Master Cartographer'}
           </span>

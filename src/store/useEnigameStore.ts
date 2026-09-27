@@ -88,6 +88,8 @@ interface EnigameState {
   setSettingsOpen: (open: boolean) => void;
   companyModal: 'about' | 'privacy' | 'terms' | 'support' | null;
   setCompanyModal: (modal: 'about' | 'privacy' | 'terms' | 'support' | null) => void;
+  wealthTitlesModalOpen: boolean;
+  setWealthTitlesModalOpen: (open: boolean) => void;
   isChangePasswordOpen: boolean;
   setChangePasswordOpen: (open: boolean) => void;
   isChangeEmailOpen: boolean;
@@ -323,6 +325,8 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
   setSettingsOpen: (open) => set({ isSettingsOpen: open }),
   companyModal: null,
   setCompanyModal: (modal) => set({ companyModal: modal }),
+  wealthTitlesModalOpen: false,
+  setWealthTitlesModalOpen: (open) => set({ wealthTitlesModalOpen: open }),
   isChangePasswordOpen: false,
   setChangePasswordOpen: (open) => set({ isChangePasswordOpen: open }),
   isChangeEmailOpen: false,
@@ -378,6 +382,32 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
 
     if (state.coupons.some(c => c.code.toUpperCase() === trimmed)) {
       return { success: false, message: 'This coupon is already in your wallet!' };
+    }
+
+        // Secret Wealth Titles promo codes for instant testing
+    if (trimmed === 'BLING10K' || trimmed === 'MINDFULL25K' || trimmed === 'MONEY50K' || trimmed === 'RICH100K') {
+      const bonusMap: Record<string, { points: number; title: string }> = {
+        'BLING10K': { points: 10000, title: 'Bling Bling' },
+        'MINDFULL25K': { points: 25000, title: 'Mindfull Money' },
+        'MONEY50K': { points: 50000, title: 'Got My Mind On My Money' },
+        'RICH100K': { points: 100000, title: 'Disgustingly Rich' },
+      };
+      const bonus = bonusMap[trimmed];
+      set(s => ({
+        points: s.points + bonus.points,
+        rankPoints: (s.rankPoints ?? Math.max(1000, s.points)) + bonus.points,
+        activities: [
+          {
+            id: 'act-' + Date.now(),
+            title: `Unlocked Wealth Secret Code: ${bonus.title} (+${bonus.points.toLocaleString()} Pts)`,
+            timestamp: 'Just now',
+            pointsDelta: bonus.points,
+            type: 'bonus',
+          },
+          ...s.activities
+        ]
+      }));
+      return { success: true, message: `Secret code applied! +${bonus.points.toLocaleString()} Points held in wallet! Secret title "${bonus.title}" is now available in your profile!` };
     }
 
     // Predefined coupon definitions

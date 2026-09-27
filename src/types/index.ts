@@ -202,3 +202,63 @@ export interface GiftRoutePass {
   redeemedBy?: string;
 }
 
+
+export interface HiddenWealthTitle {
+  id: string;
+  title: string;
+  requiredPoints: number;
+  badge: string;
+  description: string;
+  medalIcon: string;
+  color: string;
+}
+
+export const HIDDEN_WEALTH_TITLES: HiddenWealthTitle[] = [
+  {
+    id: 'wt-1',
+    title: 'Bling Bling',
+    requiredPoints: 10000,
+    badge: '10K Held',
+    description: 'Unlocked by holding 10,000+ current spendable Explorer Points in your wallet.',
+    medalIcon: '/assets/StatusCoins.png',
+    color: '#FFB800',
+  },
+  {
+    id: 'wt-2',
+    title: 'Mindfull Money',
+    requiredPoints: 25000,
+    badge: '25K Held',
+    description: 'Unlocked by holding 25,000+ current spendable Explorer Points in your wallet.',
+    medalIcon: '/assets/StatusCoins.png',
+    color: '#38BDF8',
+  },
+  {
+    id: 'wt-3',
+    title: 'Got My Mind On My Money',
+    requiredPoints: 50000,
+    badge: '50K Held',
+    description: 'Unlocked by holding 50,000+ current spendable Explorer Points in your wallet.',
+    medalIcon: '/assets/StatusCoins.png',
+    color: '#8E97FD',
+  },
+  {
+    id: 'wt-4',
+    title: 'Disgustingly Rich',
+    requiredPoints: 100000,
+    badge: '100K Held',
+    description: 'Unlocked by holding 100,000+ current spendable Explorer Points in your wallet.',
+    medalIcon: '/assets/TopPointsMedal.png',
+    color: '#E11D48',
+  },
+];
+
+export const isWealthTitle = (title?: string): boolean => {
+  if (!title) return false;
+  return HIDDEN_WEALTH_TITLES.some(w => w.title.toLowerCase() === title.toLowerCase());
+};
+
+export const getWealthTitleRequirement = (title?: string): number | null => {
+  if (!title) return null;
+  const found = HIDDEN_WEALTH_TITLES.find(w => w.title.toLowerCase() === title.toLowerCase());
+  return found ? found.requiredPoints : null;
+};

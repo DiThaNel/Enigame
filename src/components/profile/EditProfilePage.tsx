@@ -9,7 +9,9 @@ import {
   MapPin, 
   Quote, 
   Check, 
-  Plus 
+  Plus, 
+  Lock, 
+  Crown 
 } from 'lucide-react';
 
 const AVAILABLE_INTEREST_OPTIONS = [
@@ -33,9 +35,47 @@ export interface RankTitleOption {
   rankBadge: string;
   medalIcon: string;
   description: string;
+  isSecret?: boolean;
+  minHeldPoints?: number;
 }
 
 export const RANK_TITLE_OPTIONS: RankTitleOption[] = [
+  {
+    id: 'rt-secret-1',
+    title: 'Bling Bling',
+    rankBadge: '10K Held',
+    medalIcon: '/assets/StatusCoins.png',
+    description: 'Requires holding 10,000+ current spendable points in your wallet',
+    isSecret: true,
+    minHeldPoints: 10000,
+  },
+  {
+    id: 'rt-secret-2',
+    title: 'Mindfull Money',
+    rankBadge: '25K Held',
+    medalIcon: '/assets/StatusCoins.png',
+    description: 'Requires holding 25,000+ current spendable points in your wallet',
+    isSecret: true,
+    minHeldPoints: 25000,
+  },
+  {
+    id: 'rt-secret-3',
+    title: 'Got My Mind On My Money',
+    rankBadge: '50K Held',
+    medalIcon: '/assets/StatusCoins.png',
+    description: 'Requires holding 50,000+ current spendable points in your wallet',
+    isSecret: true,
+    minHeldPoints: 50000,
+  },
+  {
+    id: 'rt-secret-4',
+    title: 'Disgustingly Rich',
+    rankBadge: '100K Held',
+    medalIcon: '/assets/TopPointsMedal.png',
+    description: 'Requires holding 100,000+ current spendable points in your wallet',
+    isSecret: true,
+    minHeldPoints: 100000,
+  },
   {
     id: 'rt-1',
     title: 'Grand Alchemist',
@@ -113,7 +153,7 @@ interface EditProfilePageProps {
 }
 
 export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
-  const { currentUser, updateProfile, setProfileViewStep, setEditProfileOpen, showToast } = useEnigameStore();
+  const { currentUser, updateProfile, setProfileViewStep, setEditProfileOpen, showToast, points } = useEnigameStore();
 
   const [name, setName] = useState(currentUser.name || 'Tiana Rosser');
   const [nickname, setNickname] = useState(currentUser.nickname || 'Tiana Rosser');
@@ -432,7 +472,83 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
                     Select Rank Title &amp; Medal
                   </div>
 
-                  {RANK_TITLE_OPTIONS.map((opt) => {
+                  {/* Section 1: Secret Wealth Titles (Current Points Held) */}
+                  <div className="px-2 py-1 bg-amber-50 rounded-lg border border-amber-200 flex items-center justify-between my-1">
+                    <span className="text-[9px] font-bold text-amber-700 uppercase tracking-wider flex items-center gap-1">
+                      <Crown size={11} className="text-amber-500" /> Secret Wealth Titles
+                    </span>
+                    <span className="text-[9px] font-bold text-amber-600">
+                      {points.toLocaleString()} Pts Held
+                    </span>
+                  </div>
+
+                  {RANK_TITLE_OPTIONS.filter(o => o.isSecret).map((opt) => {
+                    const isSelected = opt.title === rankTitle;
+                    const isUnlocked = points >= (opt.minHeldPoints || 0);
+
+                    return (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => {
+                          if (isUnlocked) {
+                            setRankTitle(opt.title);
+                            setIsRankDropdownOpen(false);
+                          } else {
+                            showToast(`"${opt.title}" is locked! You must hold at least ${opt.minHeldPoints?.toLocaleString()} Points in your wallet (Current: ${points.toLocaleString()} Pts).`, 'info');
+                          }
+                        }}
+                        className={`w-full p-2.5 rounded-xl flex items-center justify-between text-left transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#FFFBEB] text-[#1E1F3D] font-bold shadow-xs ring-1 ring-amber-400'
+                            : isUnlocked
+                            ? 'hover:bg-amber-50/50 text-[#1E1F3D] border border-amber-200/60 bg-amber-50/20'
+                            : 'bg-gray-50/80 text-gray-400 opacity-75'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className={`w-6 h-6 flex items-center justify-center shrink-0 rounded-lg ${isUnlocked ? 'bg-amber-100/60' : 'bg-gray-200/60'}`}>
+                            <img
+                              src={opt.medalIcon}
+                              alt={opt.title}
+                              className={`w-5 h-5 object-contain ${!isUnlocked ? 'grayscale opacity-50' : 'drop-shadow-xs'}`}
+                            />
+                          </div>
+
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className={`text-xs ${isSelected ? 'font-bold text-[#1E1F3D]' : isUnlocked ? 'font-bold text-[#1E1F3D]' : 'font-medium text-gray-500'}`}>
+                                {opt.title}
+                              </span>
+                              <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-bold border ${
+                                isUnlocked
+                                  ? 'bg-amber-100 text-amber-800 border-amber-300'
+                                  : 'bg-gray-100 text-gray-400 border-gray-200'
+                              }`}>
+                                {isUnlocked ? 'UNLOCKED' : opt.rankBadge}
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-[#8E90B0] truncate max-w-[210px]">
+                              {isUnlocked ? opt.description : `Hold ${opt.minHeldPoints?.toLocaleString()} Pts (${points.toLocaleString()} / ${opt.minHeldPoints?.toLocaleString()})`}
+                            </p>
+                          </div>
+                        </div>
+
+                        {isSelected ? (
+                          <Check size={14} className="text-amber-500 shrink-0 ml-2" strokeWidth={3} />
+                        ) : !isUnlocked ? (
+                          <Lock size={12} className="text-gray-400 shrink-0 ml-2" />
+                        ) : null}
+                      </button>
+                    );
+                  })}
+
+                  {/* Section 2: Standard Rank & Progression Titles */}
+                  <div className="px-2.5 py-1 text-[10px] font-bold text-[#8E90B0] uppercase tracking-wider border-t border-[#EEF0FA] mt-2 mb-1">
+                    Standard Explorer Rank Titles
+                  </div>
+
+                  {RANK_TITLE_OPTIONS.filter(o => !o.isSecret).map((opt) => {
                     const isSelected = opt.title === rankTitle;
                     return (
                       <button
@@ -449,7 +565,6 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = ({ onBack }) => {
                         }`}
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
-                          {/* Medal image right next to title */}
                           <div className="w-6 h-6 flex items-center justify-center shrink-0">
                             <img
                               src={opt.medalIcon}
