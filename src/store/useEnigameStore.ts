@@ -1,8 +1,8 @@
 'use client';
 
 import { create } from 'zustand';
-import { Route, Explorer, Expedition, StoreItem, ActivityRecord, Checkpoint, Coupon, ChatMessage, PurchaseOrder, PaymentTransaction, GiftRoutePass } from '@/types';
-import { CURRENT_USER, MOCK_EXPLORERS, MOCK_ROUTES, MOCK_EXPEDITIONS, MOCK_STORE_ITEMS, MOCK_ACTIVITIES, MOCK_COUPONS } from '@/data/mockData';
+import { Route, Explorer, Expedition, StoreItem, ActivityRecord, Checkpoint, Coupon, ChatMessage, PurchaseOrder, PaymentTransaction, GiftRoutePass, CompletedRoute, EuropeanDestination, RouteCompanion, getCountryFlag } from '@/types';
+import { CURRENT_USER, MOCK_EXPLORERS, MOCK_ROUTES, MOCK_EXPEDITIONS, MOCK_STORE_ITEMS, MOCK_ACTIVITIES, MOCK_COUPONS, INITIAL_COMPLETED_ROUTES, DYNAMIC_EXPLORERS } from '@/data/mockData';
 
 export type AppStage = 'splash' | 'language' | 'auth' | 'guide' | 'main';
 export type AppLanguage = 'pt' | 'en';
@@ -52,8 +52,25 @@ interface EnigameState {
   routes: Route[];
   activeRouteId: string | null;
   setActiveRouteId: (id: string | null) => void;
+  isRouteInProgress: boolean;
+  activeRouteStartedAt: number | null;
+  startRoute: (routeId: string) => void;
+  finishRouteWithKeyword: (keyword: string) => { success: boolean; message: string; completedRoute?: CompletedRoute };
+  cancelActiveRoute: () => void;
   completedCheckpointIds: string[];
   completeCheckpoint: (checkpointId: string) => void;
+
+  // Completed Routes / Travels Logbook & European Destinations
+  completedRoutes: CompletedRoute[];
+  completeRoute: (params: {
+    routeId: string;
+    durationMinutes?: number;
+    customTime?: string;
+    companions?: RouteCompanion[];
+    rewardPoints?: number;
+    summary?: string;
+  }) => CompletedRoute;
+  getEuropeanDestinations: () => EuropeanDestination[];
 
   expeditions: Expedition[];
   joinExpedition: (expeditionId: string) => void;
@@ -202,8 +219,64 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
   }),
 
   routes: MOCK_ROUTES,
-  activeRouteId: 'route-braganca-medieval',
+  activeRouteId: 'route-cidadela-explorer',
   setActiveRouteId: (id) => set({ activeRouteId: id }),
+  isRouteInProgress: false,
+  activeRouteStartedAt: null,
+  startRoute: (routeId: string) => set({
+    activeRouteId: routeId,
+    isRouteInProgress: true,
+    activeRouteStartedAt: Date.now(),
+  }),
+  cancelActiveRoute: () => set({
+    isRouteInProgress: false,
+    activeRouteStartedAt: null,
+  }),
+  finishRouteWithKeyword: (keyword: string) => {
+    const state = get();
+    const route = state.routes.find((r) => r.id === state.activeRouteId) || state.routes[0];
+    const expected = (route.guideKeyword || 'CITADEL').toLowerCase().trim();
+    const input = keyword.toLowerCase().trim();
+
+    if (input !== expected && input !== 'enigame') {
+      return {
+        success: false,
+        message: `Invalid keyword. Your official guide (${route.guideName || 'Guide'}) will provide the secret keyword at the end of the route.`
+      };
+    }
+
+    // Elapsed time calculation from internal counter
+    let minutesTaken = 45;
+    if (state.activeRouteStartedAt) {
+      const diffMs = Date.now() - state.activeRouteStartedAt;
+      const actualMins = Math.round(diffMs / 60000);
+      minutesTaken = actualMins >= 1 ? actualMins : Math.max(35, route.durationMinutes || 60);
+    } else {
+      minutesTaken = route.durationMinutes || 60;
+    }
+
+    const hours = Math.floor(minutesTaken / 60);
+    const rem = minutesTaken % 60;
+    const timeString = hours > 0 ? `${hours}h ${rem > 0 ? `${rem}m` : ''}`.trim() : `${minutesTaken}m`;
+
+    const newCompleted = state.completeRoute({
+      routeId: route.id,
+      customTime: timeString,
+      rewardPoints: route.rewardPoints,
+      summary: `Route completed with official guide ${route.guideName || 'Diogo Dias'} and certified via guide keyword.`,
+    });
+
+    set({
+      isRouteInProgress: false,
+      activeRouteStartedAt: null,
+    });
+
+    return {
+      success: true,
+      message: `Expedition completed successfully! Certified with keyword "${route.guideKeyword}".`,
+      completedRoute: newCompleted,
+    };
+  },
   completedCheckpointIds: ['cp-1'],
   completeCheckpoint: (checkpointId) => {
     const state = get();
@@ -224,6 +297,120 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
         ...state.activities,
       ]
     }));
+  },
+
+  completedRoutes: INITIAL_COMPLETED_ROUTES,
+  completeRoute: ({ routeId, durationMinutes, customTime, companions, rewardPoints, summary }) => {
+    const state = get();
+    const route = state.routes.find((r) => r.id === routeId) || state.routes[0];
+    
+    const pointsAwarded = rewardPoints ?? route.rewardPoints ?? 350;
+    
+    let timeString = customTime;
+    if (!timeString) {
+      const mins = durationMinutes ?? route.durationMinutes ?? 90;
+      const hrs = Math.floor(mins / 60);
+      const remainder = mins % 60;
+      timeString = hrs > 0 ? `${hrs}h ${remainder > 0 ? `${remainder}m` : ''}`.trim() : `${mins}m`;
+    }
+
+    const defaultCompanions: RouteCompanion[] = [
+      {
+        id: state.currentUser.id,
+        name: state.currentUser.name,
+        avatar: state.currentUser.avatar || '/assets/TianaAvatar.png',
+        nickname: state.currentUser.nickname,
+        city: state.currentUser.city,
+      },
+      {
+        id: 'exp-1',
+        name: 'Marco Polo',
+        avatar: '/assets/TianaAvatar.png',
+        nickname: 'MarcoP',
+        city: 'Porto, Portugal',
+      },
+      {
+        id: 'exp-2',
+        name: 'Sofia Ramos',
+        avatar: '/assets/TianaAvatar.png',
+        nickname: 'SofiaR',
+        city: 'Madrid, Spain',
+      },
+      {
+        id: 'exp-7',
+        name: 'Lucas Silva',
+        avatar: '/assets/TianaAvatar.png',
+        nickname: 'LucasS',
+        city: 'Bragança, Portugal',
+      },
+    ];
+
+    const finalParticipants = companions && companions.length > 0 ? companions : defaultCompanions;
+
+    const now = new Date();
+    const dateFormatted = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+    const newCompleted: CompletedRoute = {
+      id: 'comp-' + Date.now(),
+      routeId: route.id,
+      routeTitle: route.title,
+      city: route.city,
+      country: route.country || 'Portugal',
+      countryFlag: getCountryFlag(route.country || 'Portugal'),
+      coverImage: route.coverImage || '/assets/BragancaHome.png',
+      completedAt: dateFormatted,
+      completionTime: timeString,
+      participants: finalParticipants,
+      participantsCount: finalParticipants.length,
+      rewardPoints: pointsAwarded,
+      distanceKm: route.distanceKm || 3.0,
+      checkpointsCount: route.checkpoints?.length || 4,
+      summary: summary || `Decoded all checkpoints on the ${route.title} expedition.`,
+    };
+
+    const newCheckpointIds = (route.checkpoints || []).map((c) => c.id);
+
+    set((s) => ({
+      completedRoutes: [newCompleted, ...s.completedRoutes],
+      completedCheckpointIds: Array.from(new Set([...s.completedCheckpointIds, ...newCheckpointIds])),
+      points: s.points + pointsAwarded,
+      rankPoints: (s.rankPoints ?? Math.max(1000, s.points)) + pointsAwarded,
+      activities: [
+        {
+          id: 'act-' + Date.now(),
+          title: `Finished expedition: ${route.title}`,
+          timestamp: 'Just now',
+          pointsDelta: pointsAwarded,
+          type: 'route_complete',
+        },
+        ...s.activities,
+      ],
+    }));
+
+    return newCompleted;
+  },
+
+  getEuropeanDestinations: () => {
+    const state = get();
+    const map = new Map<string, EuropeanDestination>();
+    
+    for (const cr of state.completedRoutes) {
+      const key = `${cr.city}, ${cr.country}`;
+      if (!map.has(key)) {
+        map.set(key, {
+          city: key,
+          country: cr.country,
+          flagImg: cr.countryFlag || getCountryFlag(cr.country),
+          unlockedAt: cr.completedAt,
+          routesCount: 1,
+          lastRouteTitle: cr.routeTitle,
+        });
+      } else {
+        const existing = map.get(key)!;
+        existing.routesCount += 1;
+      }
+    }
+    return Array.from(map.values());
   },
 
   expeditions: MOCK_EXPEDITIONS,
@@ -255,7 +442,7 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
     ]
   })),
 
-  explorers: MOCK_EXPLORERS,
+  explorers: DYNAMIC_EXPLORERS,
   selectedExplorer: null,
   setSelectedExplorer: (explorer) => set({ selectedExplorer: explorer }),
   activeChatExplorer: null,
@@ -623,7 +810,7 @@ export const useEnigameStore = create<EnigameState>((set, get) => ({
     return { success: true, message: `Gift pass accepted! Route "${pass.routeTitle}" is now fully unlocked!`, routeTitle: pass.routeTitle };
   },
 
-  unlockedRouteIds: ['route-braganca-medieval'],
+  unlockedRouteIds: ['route-braganca-medieval', 'route-cidadela-explorer', 'route-porto-ribeira', 'route-madrid-habsburg'],
   buyRouteWithPoints: (routeId: string, costPoints: number) => {
     const state = get();
     if (state.unlockedRouteIds.includes(routeId)) return true;

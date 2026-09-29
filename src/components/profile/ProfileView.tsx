@@ -17,7 +17,6 @@ import {
   Award, 
   Compass, 
   Crown, 
-  CheckCircle2, 
   X,
   Share2
 } from 'lucide-react';
@@ -37,12 +36,13 @@ export const ProfileView: React.FC = () => {
     setPurchaseHistoryOpen,
     setActiveTab: setNavActiveTab,
     points,
-    activities
+    activities,
+    getEuropeanDestinations,
+    completedRoutes,
   } = useEnigameStore();
 
   const [activeTab, setActiveTab] = useState<'instagram' | 'about' | 'trips'>('instagram');
   const [photoViewMode, setPhotoViewMode] = useState<'grid' | 'list'>('grid');
-  const [tripAddedAlert, setTripAddedAlert] = useState(false);
 
   // Reliable Gallery Photos using local assets and verified travel images
   const [galleryPhotos, setGalleryPhotos] = useState<Array<{ id: string; url: string; caption: string }>>([
@@ -83,17 +83,9 @@ export const ProfileView: React.FC = () => {
     return <EditProfilePage onBack={() => setProfileViewStep('profile')} />;
   }
 
-  // Completed Trips matching Figma 06.3 - Meet-up (Profile/Trips) using user's flag assets
-  const completedTrips = [
-    { city: 'Lisbon, Portugal', flagImg: '/assets/PT.png' },
-    { city: 'Berlin, Germany', flagImg: '/assets/GER.png' },
-    { city: 'Paris, France', flagImg: '/assets/FR.png' },
-    { city: 'Lisbon, Portugal', flagImg: '/assets/PT.png' },
-    { city: 'London, UK', flagImg: '/assets/UK.png' },
-    { city: 'Washintong D.C, USA', flagImg: '/assets/USA.png' },
-    { city: 'Madrid, Spain', flagImg: '/assets/ES.png' },
-    { city: 'Rome, Italy', flagImg: '/assets/IT.png' }
-  ];
+  // Completed European destinations derived automatically from finished routes (manual adding disabled)
+  const completedTrips = getEuropeanDestinations();
+  const latestExpedition = completedRoutes[0];
 
   const handleAddPhoto = () => {
     const fallbackOptions = [
@@ -459,86 +451,96 @@ export const ProfileView: React.FC = () => {
               </div>
             </div>
 
-            {/* Recent Completed Expedition */}
+            {/* Recent Completed Expedition synced with completedRoutes */}
             <div className="animate-card-stagger stagger-2">
               <span className="text-xs font-bold text-[#1E1F3D] block mb-2 font-semibold">Latest Expedition Record</span>
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#EEF0FF] flex items-center justify-center text-[#8E97FD]">
-                    <Compass size={20} />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-xs text-[#1E1F3D] ">Bragança Medieval Mystery</p>
-                    <p className="text-[10px] text-[#A5A7C4]">Completed 2 days ago • 4 checkpoints</p>
-                  </div>
-                </div>
-                <span className="text-xs font-bold text-[#8E97FD] bg-[#F2F4FD] px-2.5 py-1 rounded-full font-semibold">+350 pts</span>
-              </div>
-            </div>
-
-            {/* Visited Cities Grid matching Figma 06.3 - Meet-up (Profile/Trips) with user's assets */}
-            <div className="animate-card-stagger stagger-3">
-              <span className="font-semibold text-xs font-bold text-[#1E1F3D] block mb-2.5">Visited European Destinations</span>
-              <div className="grid grid-cols-2 gap-3">
-                {completedTrips.map((trip, idx) => (
-                  <div
-                    key={idx}
-                    style={{ animationDelay: `${(idx % 6) * 45 + 100}ms` }}
-                    className="animate-card-stagger p-3 bg-[#6C7BFF] hover:bg-[#5D6DFF] text-white rounded-[20px] shadow-sm flex items-center gap-2.5 transition-all active:scale-95 cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 shadow-xs border border-white/25">
-                      <img 
-                        src={trip.flagImg} 
-                        alt={trip.city} 
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src = '/assets/PT.png';
-                        }}
-                        className="w-full h-full object-cover" 
-                      />
+              {latestExpedition ? (
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs flex items-center justify-between">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-xl bg-[#EEF0FF] flex items-center justify-center text-[#8E97FD] shrink-0">
+                      <Compass size={20} />
                     </div>
-                    <span className="text-xs font-bold truncate tracking-wide">{trip.city}</span>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-xs text-[#1E1F3D] truncate">{latestExpedition.routeTitle}</p>
+                      <p className="text-[10px] text-[#A5A7C4] truncate">
+                        Completed {latestExpedition.completedAt} • {latestExpedition.checkpointsCount} checkpoints • {latestExpedition.completionTime}
+                      </p>
+                    </div>
                   </div>
-                ))}
-              </div>
+                  <span className="text-xs font-bold text-[#8E97FD] bg-[#F2F4FD] px-2.5 py-1 rounded-full font-semibold shrink-0">
+                    +{latestExpedition.rewardPoints} pts
+                  </span>
+                </div>
+              ) : (
+                <div className="p-3 bg-white rounded-2xl border border-[#EEF0FA] text-center text-xs text-[#8E90B0]">
+                  No expeditions completed yet.
+                </div>
+              )}
             </div>
 
-            {/* Add a Trip button matching Figma Frame 09.1 - Trips */}
-            <div className="flex justify-center pt-2 animate-card-stagger stagger-4">
-              <button
-                onClick={() => setTripAddedAlert(true)}
-                className="px-7 py-2.5 rounded-full bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-xs shadow-md shadow-indigo-200 flex items-center gap-2 active:scale-95 transition-all cursor-pointer"
-              >
-                <Plus size={16} />
-                <span>Add a trip</span>
-              </button>
+            {/* Visited European Destinations (Auto-derived from completed routes - manual adding disabled) */}
+            <div className="animate-card-stagger stagger-3">
+              <div className="flex items-center justify-between mb-2.5">
+                <span className="font-semibold text-xs font-bold text-[#1E1F3D]">Visited European Destinations</span>
+                <span className="text-[10px] font-bold text-[#6C7BFF] bg-[#EEF0FF] px-2 py-0.5 rounded-full">
+                  {completedTrips.length} {completedTrips.length === 1 ? 'Destination' : 'Destinations'}
+                </span>
+              </div>
+
+              {completedTrips.length === 0 ? (
+                <div className="p-5 bg-white rounded-2xl border border-[#EEF0FA] text-center flex flex-col items-center">
+                  <p className="text-xs text-[#7A7C99] font-medium">No European destinations unlocked yet.</p>
+                  <p className="text-[11px] text-[#A5A7C4] mt-1">Complete routes in European cities to log destinations automatically here.</p>
+                  <button
+                    onClick={() => setNavActiveTab('routes')}
+                    className="mt-3 px-4 py-1.5 rounded-xl bg-[#8E97FD] text-white text-xs font-bold shadow-xs active:scale-95 transition-all"
+                  >
+                    Browse Routes
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-3">
+                  {completedTrips.map((trip, idx) => (
+                    <div
+                      key={idx}
+                      style={{ animationDelay: `${(idx % 6) * 45 + 100}ms` }}
+                      className="animate-card-stagger p-3 bg-[#6C7BFF] hover:bg-[#5D6DFF] text-white rounded-[20px] shadow-sm flex items-center gap-2.5 transition-all active:scale-95"
+                    >
+                      <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 shadow-xs border border-white/25">
+                        <img 
+                          src={trip.flagImg} 
+                          alt={trip.city} 
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = '/assets/PT.png';
+                          }}
+                          className="w-full h-full object-cover" 
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="text-xs font-bold truncate tracking-wide block">{trip.city}</span>
+                        <span className="text-[9.5px] text-indigo-100 font-medium block">
+                          {trip.routesCount} {trip.routesCount === 1 ? 'route' : 'routes'} done
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Informative Note: Manual adding is disabled per user specifications */}
+              <div className="mt-3 p-3 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs text-left flex items-start gap-2.5">
+                <span className="text-sm">🔒</span>
+                <div>
+                  <p className="text-[11px] font-bold text-[#1E1F3D]">Auto-Logged via Expeditions</p>
+                  <p className="text-[10px] text-[#7A7C99] leading-snug mt-0.5">
+                    European destinations are unlocked automatically based on the country where your completed routes took place. Manual trip additions are disabled.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         )}
       </div>
-
-      {/* Lightbox for Photos */}
-      {tripAddedAlert && (
-        <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-white rounded-[32px] p-6 text-center max-w-xs shadow-2xl flex flex-col items-center gap-3 animate-scaleUp">
-            <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center">
-              <CheckCircle2 size={28} />
-            </div>
-            <h4 className="font-bold text-[#1E1F3D] text-sm">New Trip Logged!</h4>
-            <p className="text-xs text-[#585A7E]">
-              Browse the Routes catalog to start an expedition and log a new European city.
-            </p>
-            <button
-              onClick={() => {
-                setTripAddedAlert(false);
-                setNavActiveTab('routes');
-              }}
-              className="w-full py-2.5 rounded-xl bg-[#8E97FD] text-white text-xs font-bold cursor-pointer"
-            >
-              Go to Routes
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

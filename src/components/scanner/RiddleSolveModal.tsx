@@ -6,7 +6,16 @@ import { Sparkles, CheckCircle2, Trophy, HelpCircle, ArrowRight, X } from 'lucid
 import confetti from 'canvas-confetti';
 
 export const RiddleSolveModal: React.FC = () => {
-  const { activeRiddleCheckpoint, setActiveRiddleCheckpoint, completeCheckpoint } = useEnigameStore();
+  const { 
+    activeRiddleCheckpoint, 
+    setActiveRiddleCheckpoint, 
+    completeCheckpoint,
+    activeRouteId,
+    completeRoute,
+    setActiveTab,
+    setMeetupSubTab,
+    showToast
+  } = useEnigameStore();
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showHint, setShowHint] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -73,9 +82,24 @@ export const RiddleSolveModal: React.FC = () => {
                 setActiveRiddleCheckpoint(null);
                 setIsSuccess(false);
               }}
-              className="w-full h-12 rounded-2xl bg-gradient-to-r from-[#7C82ED] to-[#6C5CE7] text-white font-bold text-xs mt-6 shadow-md shadow-indigo-300/40 hover:opacity-95 active:scale-95 transition-all"
+              className="w-full h-11 rounded-2xl bg-gradient-to-r from-[#7C82ED] to-[#6C5CE7] text-white font-bold text-xs mt-5 shadow-md shadow-indigo-300/40 hover:opacity-95 active:scale-95 transition-all"
             >
               Continue Route
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveRiddleCheckpoint(null);
+                setIsSuccess(false);
+                completeRoute({ routeId: activeRouteId || 'route-braganca-medieval' });
+                showToast('Expedition complete! Logged in Travels & European Destinations', 'success');
+                setActiveTab('meetup');
+                setMeetupSubTab('traveling');
+              }}
+              className="w-full h-11 rounded-2xl bg-[#EEF0FF] hover:bg-[#DCE2FE] text-[#6C7BFF] font-bold text-xs mt-2.5 transition-all cursor-pointer flex items-center justify-center gap-1.5"
+            >
+              <CheckCircle2 size={15} />
+              <span>Finish Route &amp; Save to Travels</span>
             </button>
           </div>
         ) : (

@@ -67,17 +67,124 @@ export const ExplorerProfileView: React.FC<ExplorerProfileViewProps> = ({ explor
     }
   ]);
 
-  // Completed Trips matching Figma 06.3 - Meet-up (Profile/Trips)
-  const completedTrips = [
-    { city: 'Lisbon, Portugal', flagImg: '/assets/PT.png' },
-    { city: 'Berlin, Germany', flagImg: '/assets/GER.png' },
-    { city: 'Paris, France', flagImg: '/assets/FR.png' },
-    { city: 'Porto, Portugal', flagImg: '/assets/PT.png' },
-    { city: 'London, UK', flagImg: '/assets/UK.png' },
-    { city: 'Madrid, Spain', flagImg: '/assets/ES.png' },
-    { city: 'Rome, Italy', flagImg: '/assets/IT.png' },
-    { city: 'Bragança, Portugal', flagImg: '/assets/PT.png' }
-  ];
+  // Distinct European destinations tailored per explorer (not all cities for all users)
+  const completedTrips = (() => {
+    const name = explorer.name.toLowerCase();
+    if (name.includes('marco polo')) {
+      return [
+        { city: 'Porto, Portugal', flagImg: '/assets/PT.png' },
+        { city: 'Lisboa, Portugal', flagImg: '/assets/PT.png' },
+        { city: 'Rome, Italy', flagImg: '/assets/IT.png' },
+      ];
+    }
+    if (name.includes('sofia ramos')) {
+      return [
+        { city: 'Madrid, Spain', flagImg: '/assets/ES.png' },
+        { city: 'Bragança, Portugal', flagImg: '/assets/PT.png' },
+      ];
+    }
+    if (name.includes('camille')) {
+      return [
+        { city: 'Paris, France', flagImg: '/assets/FR.png' },
+        { city: 'Lyon, France', flagImg: '/assets/FR.png' },
+      ];
+    }
+    if (name.includes('hans')) {
+      return [
+        { city: 'Berlin, Germany', flagImg: '/assets/GER.png' },
+        { city: 'Munich, Germany', flagImg: '/assets/GER.png' },
+      ];
+    }
+    if (name.includes('arthur')) {
+      return [
+        { city: 'London, UK', flagImg: '/assets/UK.png' },
+        { city: 'Bragança, Portugal', flagImg: '/assets/PT.png' },
+      ];
+    }
+    if (name.includes('matteo') || name.includes('chiara')) {
+      return [
+        { city: 'Rome, Italy', flagImg: '/assets/IT.png' },
+        { city: 'Florence, Italy', flagImg: '/assets/IT.png' },
+      ];
+    }
+    if (name.includes('lucas silva')) {
+      return [
+        { city: 'Bragança, Portugal', flagImg: '/assets/PT.png' },
+        { city: 'Porto, Portugal', flagImg: '/assets/PT.png' },
+      ];
+    }
+    if (name.includes('elena')) {
+      return [
+        { city: 'Lisboa, Portugal', flagImg: '/assets/PT.png' },
+        { city: 'Madrid, Spain', flagImg: '/assets/ES.png' },
+      ];
+    }
+    if (name.includes('diego')) {
+      return [
+        { city: 'Barcelona, Spain', flagImg: '/assets/ES.png' },
+        { city: 'Bragança, Portugal', flagImg: '/assets/PT.png' },
+      ];
+    }
+    if (name.includes('liam')) {
+      return [
+        { city: 'Coimbra, Portugal', flagImg: '/assets/PT.png' },
+        { city: 'Bragança, Portugal', flagImg: '/assets/PT.png' },
+      ];
+    }
+    if (name.includes('sara')) {
+      return [
+        { city: 'Bragança, Portugal', flagImg: '/assets/PT.png' },
+        { city: 'Porto, Portugal', flagImg: '/assets/PT.png' },
+      ];
+    }
+    return [
+      { city: explorer.city || 'Portugal', flagImg: explorer.countryFlag || '/assets/PT.png' }
+    ];
+  })();
+
+  const latestRecord = (() => {
+    const name = explorer.name.toLowerCase();
+    if (name.includes('marco polo')) {
+      return {
+        title: 'Ribeira Wine Vaults & Hidden Alleys',
+        subtitle: 'Completed 1 day ago • 4 checkpoints • 1h 30m',
+        points: 320
+      };
+    }
+    if (name.includes('sofia ramos')) {
+      return {
+        title: 'Madrid Habsburg Secrets & Royal Gardens',
+        subtitle: 'Completed 3 days ago • 4 checkpoints • 1h 35m',
+        points: 380
+      };
+    }
+    if (name.includes('camille')) {
+      return {
+        title: 'Parisian Gothic Crypts & Seine Enigmas',
+        subtitle: 'Completed 4 days ago • 5 checkpoints • 1h 50m',
+        points: 490
+      };
+    }
+    if (name.includes('hans')) {
+      return {
+        title: 'Berlin Spandau Citadel & Cold War Relics',
+        subtitle: 'Completed 2 days ago • 3 checkpoints • 1h 25m',
+        points: 340
+      };
+    }
+    if (name.includes('matteo') || name.includes('chiara')) {
+      return {
+        title: 'Imperial Rome & Centurion Relics',
+        subtitle: 'Completed 5 days ago • 4 checkpoints • 1h 45m',
+        points: 460
+      };
+    }
+    return {
+      title: 'Bragança Medieval Mystery Route',
+      subtitle: 'Completed 2 days ago • 4 checkpoints • 1h 45m',
+      points: 350
+    };
+  })();
 
   const handleWave = () => {
     setHasWaved(true);
@@ -466,17 +573,19 @@ export const ExplorerProfileView: React.FC<ExplorerProfileViewProps> = ({ explor
                     <Compass size={20} />
                   </div>
                   <div>
-                    <p className="font-semibold text-xs text-[#1E1F3D]">Bragança Citadel Discovery</p>
-                    <p className="text-[10px] text-[#A5A7C4]">Completed recently • 4 checkpoints</p>
+                    <p className="font-semibold text-xs text-[#1E1F3D]">{latestRecord.title}</p>
+                    <p className="text-[10px] text-[#A5A7C4]">{latestRecord.subtitle}</p>
                   </div>
                 </div>
-                <span className="text-xs font-bold text-[#8E97FD] bg-[#F2F4FD] px-2.5 py-1 rounded-full font-semibold">+350 pts</span>
+                <span className="text-xs font-bold text-[#8E97FD] bg-[#F2F4FD] px-2.5 py-1 rounded-full font-semibold">+{latestRecord.points} pts</span>
               </div>
             </div>
 
             {/* Visited Cities Grid matching Figma 06.3 */}
             <div className="animate-card-stagger stagger-3">
-              <span className="font-semibold text-xs font-bold text-[#1E1F3D] block mb-2.5">Visited European Destinations</span>
+              <span className="font-semibold text-xs font-bold text-[#1E1F3D] block mb-2.5">
+                Visited European Destinations ({completedTrips.length})
+              </span>
               <div className="grid grid-cols-2 gap-3">
                 {completedTrips.map((trip, idx) => (
                   <div

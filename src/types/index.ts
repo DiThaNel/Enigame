@@ -38,6 +38,9 @@ export interface Route {
   isPromoted?: boolean;
   checkpoints: Checkpoint[];
   description: string;
+  guideName?: string;
+  guideAvatar?: string;
+  guideKeyword?: string;
 }
 
 export interface Explorer {
@@ -63,6 +66,53 @@ export interface Explorer {
   rankMedal?: string;
   points?: number;
 }
+
+export interface RouteCompanion {
+  id: string;
+  name: string;
+  avatar: string;
+  nickname?: string;
+  city?: string;
+}
+
+export interface CompletedRoute {
+  id: string;
+  routeId: string;
+  routeTitle: string;
+  city: string;
+  country: string;
+  countryFlag: string;
+  coverImage: string;
+  completedAt: string; // La fecha
+  completionTime: string; // Tiempo que tomó terminarla (ej. "1h 45m")
+  participants: RouteCompanion[]; // Con qué usuarios la hizo
+  participantsCount: number; // Cantidad de personas
+  rewardPoints: number; // Los puntos que dio
+  distanceKm: number;
+  checkpointsCount: number;
+  summary?: string;
+}
+
+export interface EuropeanDestination {
+  city: string;
+  country: string;
+  flagImg: string;
+  unlockedAt: string;
+  routesCount: number;
+  lastRouteTitle?: string;
+}
+
+export const getCountryFlag = (country: string = ''): string => {
+  const c = country.toLowerCase().trim();
+  if (c.includes('portugal') || c === 'pt') return '/assets/PT.png';
+  if (c.includes('spain') || c.includes('españa') || c === 'es') return '/assets/ES.png';
+  if (c.includes('france') || c.includes('francia') || c === 'fr') return '/assets/FR.png';
+  if (c.includes('germany') || c.includes('alemania') || c === 'ger' || c === 'de') return '/assets/GER.png';
+  if (c.includes('italy') || c.includes('italia') || c === 'it') return '/assets/IT.png';
+  if (c.includes('united kingdom') || c.includes('uk') || c.includes('reino unido') || c.includes('england')) return '/assets/UK.png';
+  if (c.includes('usa') || c.includes('united states') || c.includes('estados unidos')) return '/assets/USA.png';
+  return '/assets/PT.png';
+};
 
 export interface Expedition {
   id: string;

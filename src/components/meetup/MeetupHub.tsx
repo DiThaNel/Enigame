@@ -89,7 +89,7 @@ export const MeetupHub: React.FC = () => {
     },
     { 
       id: 'map', 
-      label: 'Map', 
+      label: 'Maps', 
       icon: <Compass size={15} /> 
     },
     { 

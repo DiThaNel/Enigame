@@ -75,6 +75,26 @@ export const RoutesCatalog: React.FC = () => {
       cityKey: 'Sintra',
       image: '/assets/HomeImage.png',
     },
+    {
+      name: 'Madrid, Spain',
+      cityKey: 'Madrid',
+      image: '/assets/HomeImage.png',
+    },
+    {
+      name: 'Paris, France',
+      cityKey: 'Paris',
+      image: '/assets/ExperiencesCarousel.png',
+    },
+    {
+      name: 'Rome, Italy',
+      cityKey: 'Rome',
+      image: '/assets/RoutesImageCarousel.png',
+    },
+    {
+      name: 'Berlin, Germany',
+      cityKey: 'Berlin',
+      image: '/assets/BragancaHome.png',
+    },
   ];
 
   const cities = baseCities.map(c => ({
