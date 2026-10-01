@@ -378,9 +378,6 @@ export const MapRadarTab: React.FC = () => {
                 <span className="text-xs font-bold text-[#1E1F3D]">
                   Ready Expeditions ({unstartedPurchasedRoutes.length})
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-[#EEF0FF] text-[#7C82ED] font-bold text-[10px]">
-                  Swipe &amp; Choose
-                </span>
               </div>
 
               {unstartedPurchasedRoutes.length > 1 && (

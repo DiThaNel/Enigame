@@ -38,8 +38,8 @@ interface EnigameState {
   selectedCity: string;
   setSelectedCity: (city: string) => void;
   selectedRoute: Route | null;
-  routesReturnTab: 'home' | 'routes';
-  viewRouteDetail: (route: Route, fromTab?: 'home' | 'routes') => void;
+  routesReturnTab: 'home' | 'routes' | 'points';
+  viewRouteDetail: (route: Route, fromTab?: 'home' | 'routes' | 'points') => void;
   routesSearchQuery: string;
   setRoutesSearchQuery: (query: string) => void;
 

@@ -6,8 +6,9 @@ import { RouteMapPreview } from './RouteMapPreview';
 import { PaymentMethodView } from './PaymentMethodView';
 import { PurchaseSuccessView } from './PurchaseSuccessView';
 import { PurchaseFailureView } from './PurchaseFailureView';
-import { ChevronLeft, ChevronRight, Star, Info, Check, Clock, CheckCircle2, Compass } from 'lucide-react';
-import { DIFFICULTY_LABELS, RouteDifficulty } from '@/types';
+import { ChevronLeft, ChevronRight, Star, Info, Check, Clock, CheckCircle2, Compass, Sparkles, Unlock } from 'lucide-react';
+import { DIFFICULTY_LABELS, RouteDifficulty, Route } from '@/types';
+import { UnlockRouteModal } from '../store/UnlockRouteModal';
 
 export const formatRouteDuration = (minutes: number): string => {
   if (minutes === 60) return '1 Hour';
@@ -45,6 +46,11 @@ export const RoutesCatalog: React.FC = () => {
     setRoutesSearchQuery,
     redeemPromoCode,
     unlockedRouteIds,
+    setPointsSubView,
+    points,
+    buyRouteWithPoints,
+    startRoute,
+    setMeetupSubTab,
     showToast,
   } = useEnigameStore();
 
@@ -112,6 +118,7 @@ export const RoutesCatalog: React.FC = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState<'All' | RouteDifficulty>('All');
   const [giftCode, setGiftCode] = useState('');
   const [isGiftChecked, setIsGiftChecked] = useState(true);
+  const [isUnlockModalOpen, setIsUnlockModalOpen] = useState(false);
 
   // Horizontal Drag-to-slide Ref & Handlers for Difficulty Filter
   const filterTrackRef = useRef<HTMLDivElement>(null);
@@ -602,9 +609,20 @@ export const RoutesCatalog: React.FC = () => {
     if (routesReturnTab === 'home') {
       setActiveTab('home');
       setRoutesViewStep('select-city');
+    } else if (routesReturnTab === 'points') {
+      setActiveTab('points');
+      setPointsSubView('store');
     } else {
       setRoutesViewStep('city-routes');
     }
+  };
+
+  const getRoutePointCost = (rt: Route) => {
+    if (rt.id === 'route-braganca-medieval') return 0;
+    if (rt.difficulty === 1) return 400;
+    if (rt.difficulty === 2) return 550;
+    if (rt.difficulty === 3) return 700;
+    return 850;
   };
 
   const isRouteUnlocked = unlockedRouteIds.includes(activeRoute.id);
@@ -648,15 +666,22 @@ export const RoutesCatalog: React.FC = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/10 to-black/40" />
 
-        {/* Top Header with Back button */}
-        <div className="absolute top-4 left-4 z-20">
+        {/* Top Header with Back button and optional store context pill */}
+        <div className="absolute top-4 left-4 right-4 z-20 flex items-center justify-between">
           <button
             onClick={handleBackFromDetail}
-            className="w-9 h-9 rounded-full bg-white/80 backdrop-blur-md text-[#1E1F3D] flex items-center justify-center hover:bg-white transition-all shadow-sm cursor-pointer"
+            className="w-9 h-9 rounded-full bg-white/80 backdrop-blur-md text-[#1E1F3D] flex items-center justify-center hover:bg-white transition-all shadow-sm cursor-pointer active:scale-95"
             aria-label="Back"
           >
             <ChevronLeft size={22} />
           </button>
+
+          {routesReturnTab === 'points' && (
+            <div className="px-3.5 py-1 rounded-full bg-black/45 backdrop-blur-md text-white text-xs font-semibold flex items-center gap-1.5 border border-white/20 shadow-sm animate-fadeIn">
+              <Sparkles size={13} className="text-[#FFD269]" />
+              <span>Route Explorer Store</span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -789,16 +814,73 @@ export const RoutesCatalog: React.FC = () => {
           )}
         </div>
 
-        {/* Checkout Button matching Figma Frame 07.3 */}
-        <button
-          onClick={handleCheckout}
-          style={{ animationDelay: '300ms' }}
-          className="w-full h-12 mt-4 rounded-2xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-sm tracking-wide shadow-md shadow-indigo-300/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer animate-card-stagger"
-        >
-          <span>Checkout</span>
-          <ChevronRight size={16} />
-        </button>
+        {/* Action Buttons */}
+        {routesReturnTab === 'points' && !isRouteUnlocked && (
+          <div className="flex flex-col gap-2.5 mt-4 animate-card-stagger" style={{ animationDelay: '300ms' }}>
+            <button
+              onClick={() => setIsUnlockModalOpen(true)}
+              className="w-full h-12 rounded-2xl bg-gradient-to-r from-[#6979F8] to-[#8E97FD] hover:opacity-95 text-white font-bold text-sm tracking-wide shadow-md shadow-indigo-300/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <Sparkles size={16} className="text-[#FFD269]" />
+              <span>Unlock with Points</span>
+            </button>
+
+            <button
+              onClick={handleCheckout}
+              className="w-full h-12 rounded-2xl bg-gradient-to-r from-[#6979F8] to-[#8E97FD] hover:opacity-95 text-white font-bold text-sm tracking-wide shadow-md shadow-indigo-300/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>Buy with Card</span>
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
+
+        {isRouteUnlocked && (
+          <div className="flex flex-col gap-2 mt-4 animate-card-stagger" style={{ animationDelay: '300ms' }}>
+            <button
+              onClick={() => {
+                startRoute(activeRoute.id);
+                setActiveTab('meetup');
+                setMeetupSubTab('map');
+                showToast(`"${activeRoute.title}" started! Live expedition map active.`, 'success');
+              }}
+              className="w-full h-12 rounded-2xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-sm tracking-wide shadow-md shadow-indigo-300/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <Unlock size={16} />
+              <span>Start Exploration</span>
+            </button>
+
+            {routesReturnTab === 'points' && (
+              <button
+                onClick={() => {
+                  setActiveTab('points');
+                  setPointsSubView('store');
+                }}
+                className="w-full h-12 rounded-2xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-sm tracking-wide shadow-md shadow-indigo-300/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Return to Route Store</span>
+              </button>
+            )}
+          </div>
+        )}
+
+        {routesReturnTab !== 'points' && !isRouteUnlocked && (
+          <button
+            onClick={handleCheckout}
+            style={{ animationDelay: '300ms' }}
+            className="w-full h-12 mt-4 rounded-2xl bg-[#8E97FD] hover:bg-[#7C82ED] text-white font-bold text-sm tracking-wide shadow-md shadow-indigo-300/40 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer animate-card-stagger"
+          >
+            <span>Checkout</span>
+            <ChevronRight size={16} />
+          </button>
+        )}
       </div>
+
+      {/* Unlock Confirmation Modal with Points Pricing */}
+      <UnlockRouteModal
+        route={isUnlockModalOpen ? activeRoute : null}
+        onClose={() => setIsUnlockModalOpen(false)}
+      />
     </div>
   );
 };

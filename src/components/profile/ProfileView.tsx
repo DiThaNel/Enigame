@@ -529,7 +529,6 @@ export const ProfileView: React.FC = () => {
 
               {/* Informative Note: Manual adding is disabled per user specifications */}
               <div className="mt-3 p-3 bg-white rounded-2xl border border-[#EEF0FA] shadow-xs text-left flex items-start gap-2.5">
-                <span className="text-sm">🔒</span>
                 <div>
                   <p className="text-[11px] font-bold text-[#1E1F3D]">Auto-Logged via Expeditions</p>
                   <p className="text-[10px] text-[#7A7C99] leading-snug mt-0.5">
